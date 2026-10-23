@@ -11,8 +11,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3",
-            "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/archive_transcript.py"],
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/archive_transcript.mjs"],
             "async": true
           }
         ]
@@ -23,8 +23,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3",
-            "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/archive_transcript.py"],
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/archive_transcript.mjs"],
             "timeout": 30
           }
         ]
