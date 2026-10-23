@@ -36,3 +36,12 @@ No fix or regression result is claimed. See `docs/VERIFICATION.md` for observed 
 ## Phase 2 follow-up — 23 October 2026
 
 Token tests are now executable; only the 22 factory/sale placeholders remain skipped. This issue remains open for the unrelated frontend, full deployment, root typecheck and Foundry evidence pipeline. Phase 2 runs Hardhat directly and stores command logs under `docs/evidence/phase2/`; see `docs/phase2-implementation.md`.
+
+## Phase 3 follow-up — 23 October 2026
+
+`scripts/deploy.ts` and `scripts/setupDemo.ts` now run under Hardhat 3 (`network.getOrCreate()`) and complete on the in-process network (`docs/evidence/phase3/deploy-local.log`, `setupDemo.log`). The factory/sale placeholders are replaced by 48 executing tests. Still open:
+- No Sepolia deployment has been attempted.
+- The Sepolia config has one signer, but `setupDemo.ts` needs three.
+- No `localhost` network is configured for a persistent node.
+- `scripts/evidence.sh` still requires `forge`.
+- Root typecheck has not been addressed.

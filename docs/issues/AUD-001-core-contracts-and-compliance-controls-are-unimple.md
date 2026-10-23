@@ -36,3 +36,7 @@ No fix or regression result is claimed. See `docs/VERIFICATION.md` for observed 
 ## Phase 2 follow-up — 23 October 2026
 
 The token portion is now implemented under the later Phase 2 requirements, with the transfer bypass verified in AUD-004. This issue remains open because factory and sale functions belong to Phase 3 and remain placeholders. Pause/freeze/forced-transfer features from the historical spec are outside the current Phase 2 scope. See `docs/phase2-implementation.md`.
+
+## Phase 3 follow-up — 23 October 2026
+
+AssetFactory and AssetSale are now implemented under `docs/spec/phase3-requirements.md` (commit e407edf), covering authorisation, creation, registry, allocation, buying, withdrawal and close/recover. `npx hardhat test` reports 99 passing, 0 pending (`docs/evidence/phase3/test-full.log`). This issue remains open only for pause, freeze and forced transfer (spec-v1 §4–6, invariants 5–6), which await a team decision. See `docs/phase3-implementation.md`.
