@@ -122,7 +122,7 @@ Every external function, who may call it, preconditions, effects, events emitted
 
 Properties that must hold after any sequence of calls. These become invariant and unit tests.
 
-1. **Whitelist invariant**: every address with a non-zero CPT balance is on the whitelist. (`balanceOf(addr) > 0 → whitelist[addr] == true`)
+1. **Eligibility invariant** (restated by AUD-005): every token movement — `transfer`, `transferFrom`, a sale purchase — has a whitelisted sender and a whitelisted recipient. A holder whose eligibility is revoked keeps their balance but can neither send nor receive, nor buy, until re-approved. *Superseded wording, kept for audit comparison: "every address with a non-zero CPT balance is on the whitelist (`balanceOf(addr) > 0 → whitelist[addr] == true`)". That cannot hold since Phase 2 §2.3, which requires revocation to preserve balances.*
 2. **Supply invariant**: `totalSupply()` equals the sum of all individual balances at all times.
 3. **Sale proceeds invariant**: ETH held by AssetSale equals the total ETH paid by buyers minus total ETH withdrawn by the issuer.
 4. **Transfer gate invariant**: no transfer to a non-whitelisted address ever succeeds; every such attempt reverts.

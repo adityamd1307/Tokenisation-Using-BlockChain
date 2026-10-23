@@ -317,7 +317,8 @@ describe("AssetSale — Phase 3", function () {
       await check();
     });
 
-    it("invariants 1 and 2: every holder is whitelisted and supply equals the sum of balances", async function () {
+    // Without revocations every holder is eligible; the restated invariant 1 is tested in AUD-005.
+    it("invariant 2: supply equals the sum of balances, and holders are eligible absent revocation", async function () {
       const { token, sale, issuer, investor, investor2 } = await networkHelpers.loadFixture(afterPurchase);
       await sale.connect(investor2).buyTokens(40n, { value: 40n * PRICE });
       await token.connect(investor).transfer(investor2.address, 10n);
