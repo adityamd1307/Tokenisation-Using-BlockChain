@@ -2,6 +2,8 @@
 
 Status: FROZEN. No `TODO(decision)` markers remain.
 
+Phase 2 update (23 October 2026): the user's later [Phase 2 requirements](phase2-requirements.md) govern token implementation where they differ from this historical specification. In particular, AccessControl delegates compliance administration, revoking eligibility preserves existing balances, and pause/freeze/forced transfer are not implemented in this phase. See [implementation decisions](../phase2-implementation.md) for the exact API and scope. The original requirements below remain preserved for audit comparison.
+
 How this version was produced: human decisions, with AI-assisted research. The research sessions are logged in `docs/ai-logs/INDEX.md`. Changes from `spec-v0.md` are explained in section 10.
 
 ## 1. Problem and trust model

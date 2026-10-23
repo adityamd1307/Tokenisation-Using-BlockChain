@@ -1,0 +1,10 @@
+Running Mocha tests
+
+
+  AssetToken AUD-004 regression
+    ✔ rejects a transfer to an unapproved investor without changing balances (430ms)
+
+
+  1 passing (432ms)
+
+
