@@ -1,0 +1,192 @@
+$ npx hardhat test --coverage
+
+
+Compiled 5 Solidity files with solc 0.8.24 (evm target: shanghai)
+
+Running Solidity tests
+
+
+Running Mocha tests
+
+
+  AssetFactory — Phase 3
+    deployment
+      √ deploys with correct admin address and an empty registry (687ms)
+      √ rejects a zero admin (94ms)
+    issuer authorisation
+      √ admin can authorise an issuer (38ms)
+      √ authorising an already-authorised issuer or the zero address reverts (114ms)
+      √ admin can revoke an issuer (47ms)
+      √ revoking an address that is not authorised reverts
+      √ non-admin cannot authorise or revoke an issuer (39ms)
+    asset creation
+      √ authorised issuer can create an asset (deploys AssetToken + AssetSale) (131ms)
+      √ created asset is recorded in the registry with full metadata and tokenToSale (154ms)
+      √ issuer creates two different assets that are registered independently (119ms)
+      √ unauthorised address, including the admin, cannot create an asset
+      √ createAsset with unitPriceWei == 0 reverts
+      √ createAsset with totalSupply == 0 reverts
+      √ getAsset reverts for an ID that was never assigned (214ms)
+      √ rejects an out-of-range assetType
+    revocation scope
+      √ revoked issuer cannot create new assets but existing contracts keep operating (518ms)
+    issuer isolation
+      √ issuer A cannot whitelist investors on issuer B's token (92ms)
+      √ issuer A cannot allocate, withdraw, close or recover on issuer B's sale (167ms)
+
+  AssetSale — Phase 3
+    deployment
+      √ deploys with correct assetToken, pricePerToken, and issuer (321ms)
+      √ rejects a zero token, zero issuer, or zero price (98ms)
+      √ exposes no function to change the price after creation
+    allocation
+      √ issuer can allocate tokens (whitelist sale, approve, allocate) (169ms)
+      √ allocate reverts until the issuer whitelists the sale contract
+      √ allocate without an approval reverts
+      √ non-issuer cannot allocate (226ms)
+      √ allocate with insufficient issuer balance reverts
+      √ allocate of zero reverts
+    buying (instant subscription flow)
+      √ whitelisted investor buys 100 tokens with exact ETH payment (93ms)
+      √ investor underpays: reverts
+      √ investor overpays: reverts
+      √ unapproved investor attempts purchase: reverts
+      √ revoked investor cannot buy (46ms)
+      √ investor buys more than inventory: reverts
+      √ buying the entire inventory succeeds and leaves nothing for sale (159ms)
+      √ buy of zero quantity reverts
+      √ rejects plain ETH sent outside buyTokens
+    proceeds
+      √ issuer can withdraw ETH proceeds after a purchase (337ms)
+      √ non-issuer withdraws proceeds: reverts
+      √ withdrawProceeds with zero balance reverts
+      √ invariant 8: a re-entrant contract issuer is paid exactly once and the balance is zero (360ms)
+      √ a failed payout reverts and leaves the proceeds claimable (179ms)
+    closing and inventory recovery
+      √ issuer can close the sale, after which buying and allocating revert (353ms)
+      √ recoverUnsoldTokens reverts while the sale is open
+      √ issuer recovers all unsold inventory after closing and can still withdraw proceeds (106ms)
+      √ non-issuer cannot close the sale or recover inventory
+    invariants
+      √ invariant 3: sale ETH balance equals tokens sold times pricePerToken minus withdrawals (263ms)
+      √ invariant 2: supply equals the sum of balances, and holders are eligible absent revocation (482ms)
+    Phase 3 lifecycle demonstration
+      √ create 10,000 CPT, whitelist sale, deposit 5,000, investor pays 0.1 ETH for 100 CPT (39ms)
+
+  AssetToken AUD-004 regression
+    √ rejects a transfer to an unapproved investor without changing balances (98ms)
+
+  AssetToken — Phase 2
+    A — deployment and fixed supply
+      √ sets the name, symbol, and whole-unit decimals (77ms)
+      √ mints exactly 10,000 whole units to the designated issuer
+      √ emits the standard mint Transfer from the zero address
+      √ whitelists the issuer and leaves other addresses, including zero, ineligible
+      √ grants the issuer the administrator and compliance roles
+      √ rejects a zero issuer
+      √ rejects a zero supply (54ms)
+      √ exposes no mint or burn entry point, even to the administrator
+      √ assigns supply and roles to the issuer instead of a different deploying account (78ms)
+      √ supports construction by a contract without granting that contract authority (101ms)
+    B — whitelist and role administration
+      √ approves investors B and C with publicly readable status (38ms)
+      √ emits investor, status, and operator on approval and revocation (65ms)
+      √ rejects unauthorised whitelist update approved=true
+      √ rejects a zero investor when approved=true
+      √ rejects unauthorised whitelist update approved=false (119ms)
+      √ rejects a zero investor when approved=false
+      √ treats repeated status updates as no-ops without duplicate events (135ms)
+      √ revokes a funded investor without confiscation, burning, or Transfer events (140ms)
+      √ delegates compliance and records the actual delegate as operator (41ms)
+      √ prevents unauthorised accounts from granting themselves compliance authority
+      √ prevents compliance-only delegates from granting roles
+      √ removes compliance authority immediately when the role is revoked (51ms)
+      √ requires compliance authority even for an administrator whose compliance role was revoked (53ms)
+    C — direct transfers and revocation
+      √ transfers 100 units to B and emits the standard Transfer event (38ms)
+      √ rejects an unapproved recipient and preserves balances and supply (134ms)
+      √ allows B to transfer 20 units to approved C
+      √ rejects a revoked sender even when the recipient is approved (53ms)
+      √ rejects transfers into a revoked holder with a positive balance (41ms)
+      √ rejects transfers when both holder and recipient are ineligible
+      √ restores sending and receiving after reapproval (80ms)
+      √ applies the same eligibility requirements to the issuer (82ms)
+    D — approvals and delegated transfers
+      √ creates and replaces allowances with standard Approval events (66ms)
+      √ allows an unwhitelisted spender to transfer between approved holders (49ms)
+      √ rolls back balances and allowance for an ineligible delegated recipient
+      √ checks the actual holder and rolls back allowance when that holder is revoked (86ms)
+      √ preserves the standard insufficient-allowance error and unchanged state
+      √ preserves approvals and approval revocation for ineligible wallets (514ms)
+      √ preserves unlimited allowances across successful transfers (43ms)
+      √ rolls back allowance spending when the delegated holder has insufficient balance (206ms)
+    E — edge cases, contract holders, and instance isolation
+      √ rejects a direct transfer exceeding the balance (212ms)
+      √ permits a zero-value transfer between eligible accounts and emits Transfer (193ms)
+      √ enforces both eligibility checks even for zero-value transfers
+      √ allows zero-value delegated transfers but still checks holder eligibility (66ms)
+      √ preserves standard zero-recipient errors for direct and delegated transfers (68ms)
+      √ preserves standard errors for a zero spender or a zero delegated owner
+      √ supports self-transfers without altering balance or supply (80ms)
+      √ allows an approved smart-contract holder to receive and forward inventory (234ms)
+      √ isolates roles, whitelist, allowances, balances, and supply across assets (449ms)
+      √ conserves supply across deterministic transfers, revocation, and failures (238ms)
+    Local demonstration
+      √ demonstrates CPT issuance, unapproved D rejection, and final balances 9,900 / 80 / 20 (108ms)
+
+  Phase 3 audit-1 regressions
+    AUD-005 invariant 1 through a revocation
+      √ a revoked holder keeps its balance but cannot send, receive or buy until re-approved (444ms)
+    AUD-006 issuer admin role cannot be removed
+      1) the issuer cannot renounce DEFAULT_ADMIN_ROLE
+      2) a delegated administrator cannot revoke the issuer's DEFAULT_ADMIN_ROLE but can drop its own
+      3) compliance stays revocable, and the issuer can always restore it and recover locked inventory
+
+
+  100 passing (12s)
+  3 failing
+
+  1) Phase 3 audit-1 regressions
+       AUD-006 issuer admin role cannot be removed
+         the issuer cannot renounce DEFAULT_ADMIN_ROLE:
+     AssertionError: Expected transaction to be reverted
+      at async Context.<anonymous> (test\Phase3.regression.test.ts:55:7)
+
+  2) Phase 3 audit-1 regressions
+       AUD-006 issuer admin role cannot be removed
+         a delegated administrator cannot revoke the issuer's DEFAULT_ADMIN_ROLE but can drop its own:
+     AssertionError: Expected transaction to be reverted
+      at async Context.<anonymous> (test\Phase3.regression.test.ts:65:7)
+
+  3) Phase 3 audit-1 regressions
+       AUD-006 issuer admin role cannot be removed
+         compliance stays revocable, and the issuer can always restore it and recover locked inventory:
+     AssertionError: Expected transaction to be reverted
+      at async Context.<anonymous> (test\Phase3.regression.test.ts:83:7)
+
+
+
+
+100 passing (100 mocha)
+3 failing (3 mocha)
+
+Saved html report to C:\Users\laksh\OneDrive - Nanyang Technological University\NTU\Y4S1\SC4053\Project\coverage\html
+╔════════════════════════════════════════════════════════════════════════════════════╗
+║                                  Coverage Report                                   ║
+╚════════════════════════════════════════════════════════════════════════════════════╝
+╔════════════════════════════════════════════════════════════════════════════════════╗
+║ File Coverage                                                                      ║
+╟───────────────────────────────────────────┬────────┬─────────────┬─────────────────╢
+║ File Path                                 │ Line % │ Statement % │ Uncovered Lines ║
+╟───────────────────────────────────────────┼────────┼─────────────┼─────────────────╢
+║ contracts\AssetToken.sol                  │ 100.00 │ 100.00      │ -               ║
+║ contracts\AssetFactory.sol                │ 100.00 │ 100.00      │ -               ║
+║ contracts\AssetSale.sol                   │ 100.00 │ 100.00      │ -               ║
+║ contracts\test\AssetTokenHarness.sol      │ 100.00 │ 100.00      │ -               ║
+║ contracts\test\AssetSaleIssuerHarness.sol │ 92.31  │ 92.86       │ 38              ║
+╟───────────────────────────────────────────┼────────┼─────────────┼─────────────────╢
+║ Total                                     │ 99.25  │ 99.17       │                 ║
+╚═══════════════════════════════════════════╧════════╧═════════════╧═════════════════╝
+
+
+Test run failed
