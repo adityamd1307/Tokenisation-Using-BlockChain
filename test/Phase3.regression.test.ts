@@ -44,4 +44,53 @@ describe("Phase 3 audit-1 regressions", function () {
       expect(await token.balanceOf(investor.address)).to.equal(9n);
     });
   });
+
+  // AUD-006 (audit-1 F-05), decision D6: the issuer always holds DEFAULT_ADMIN_ROLE.
+  describe("AUD-006 issuer admin role cannot be removed", function () {
+    it("the issuer cannot renounce DEFAULT_ADMIN_ROLE", async function () {
+      const { token, issuer } = await networkHelpers.loadFixture(fundedSale);
+      const admin = await token.DEFAULT_ADMIN_ROLE();
+      // Behaviour first (awaited, so a non-reverting tx is mined inside this test), then the error name.
+      const renounce = token.renounceRole(admin, issuer.address);
+      await expect(renounce).to.revert(ethers);
+      await expect(renounce).to.be.revertedWithCustomError(token, "IssuerAdminRoleLocked");
+      expect(await token.hasRole(admin, issuer.address)).to.equal(true);
+    });
+
+    it("a delegated administrator cannot revoke the issuer's DEFAULT_ADMIN_ROLE but can drop its own", async function () {
+      const { token, issuer, outsider } = await networkHelpers.loadFixture(fundedSale);
+      const admin = await token.DEFAULT_ADMIN_ROLE();
+      await token.grantRole(admin, outsider.address);
+      const revoke = token.connect(outsider).revokeRole(admin, issuer.address);
+      await expect(revoke).to.revert(ethers);
+      await expect(revoke).to.be.revertedWithCustomError(token, "IssuerAdminRoleLocked");
+      await token.connect(outsider).renounceRole(admin, outsider.address);
+      expect(await token.hasRole(admin, outsider.address)).to.equal(false);
+      expect(await token.hasRole(admin, issuer.address)).to.equal(true);
+    });
+
+    it("compliance stays revocable, and the issuer can always restore it and recover locked inventory", async function () {
+      const { token, sale, issuer, outsider } = await networkHelpers.loadFixture(fundedSale);
+      const admin = await token.DEFAULT_ADMIN_ROLE();
+      const compliance = await token.COMPLIANCE_ROLE();
+      const saleAddress = await sale.getAddress();
+      // Audit probe P4: de-whitelist the sale, lose compliance, try to drop admin, close.
+      await token.setWhitelisted(saleAddress, false);
+      await token.grantRole(admin, outsider.address);
+      await token.connect(outsider).revokeRole(compliance, issuer.address);
+      expect(await token.hasRole(compliance, issuer.address)).to.equal(false);
+      const renounce = token.renounceRole(admin, issuer.address);
+      await expect(renounce).to.revert(ethers);
+      await expect(renounce).to.be.revertedWithCustomError(token, "IssuerAdminRoleLocked");
+      await sale.closeSale();
+      await expect(sale.recoverUnsoldTokens())
+        .to.be.revertedWithCustomError(token, "SenderNotWhitelisted").withArgs(saleAddress);
+
+      // The issuer still holds admin, so it can restore compliance and recover.
+      await token.grantRole(compliance, issuer.address);
+      await token.setWhitelisted(saleAddress, true);
+      await sale.recoverUnsoldTokens();
+      expect(await token.balanceOf(issuer.address)).to.equal(10_000n);
+    });
+  });
 });
