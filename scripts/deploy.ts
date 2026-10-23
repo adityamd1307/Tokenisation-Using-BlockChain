@@ -1,33 +1,37 @@
-// Deploy script — Phase 3 will implement this fully.
-// Usage: hardhat run scripts/deploy.ts --network hardhatMainnet
-//        hardhat run scripts/deploy.ts --network sepolia
+// Deploys the AssetFactory (spec-v1 §4; Phase 3 §3.1) with the first signer as platform admin.
+// Usage: npx hardhat run scripts/deploy.ts --network hardhatMainnet   (in-process, throwaway)
+//        npx hardhat run scripts/deploy.ts --network sepolia
+// On persistent (HTTP) networks the address is written to frontend/src/config/addresses.json (spec-v1 §7).
 
-import hre from "hardhat";
-import fs from "fs";
-import path from "path";
+import { network } from "hardhat";
+import fs from "node:fs";
+import path from "node:path";
 
-async function main() {
-  const [admin, issuer] = await hre.network.provider.request({
-    method: "eth_accounts",
-    params: [],
-  }) as string[];
+const { ethers, networkName, networkConfig } = await network.getOrCreate();
+const [admin] = await ethers.getSigners();
+const { chainId } = await ethers.provider.getNetwork();
 
-  console.log("Deploying with admin:", admin);
-  console.log("Network:", hre.network.name);
+console.log(`Network: ${networkName} (chain ${chainId})`);
+console.log(`Admin:   ${admin.address}`);
 
-  // TODO (Phase 3): deploy AssetFactory, create demo assets, write addresses to config
-  // const factory = await hre.ethers.deployContract("AssetFactory", [admin]);
-  // await factory.waitForDeployment();
-  // console.log("AssetFactory deployed to:", await factory.getAddress());
+const factory = await ethers.deployContract("AssetFactory", [admin.address]);
+await factory.waitForDeployment();
+const factoryAddress = await factory.getAddress();
+const deployBlock = (await factory.deploymentTransaction()?.wait())?.blockNumber ?? null;
+console.log(`AssetFactory deployed to: ${factoryAddress}`);
 
-  // const addresses = { AssetFactory: await factory.getAddress() };
-  // fs.writeFileSync(
-  //   path.join("frontend", "src", "config", "addresses.json"),
-  //   JSON.stringify(addresses, null, 2)
-  // );
+if (networkConfig.type === "http") {
+  const file = path.join("frontend", "src", "config", "addresses.json");
+  const addresses = {
+    note: "Populated by scripts/deploy.ts after deployment. Do not edit by hand.",
+    network: networkName,
+    chainId: Number(chainId),
+    AssetFactory: factoryAddress,
+    admin: admin.address,
+    deployBlock,
+  };
+  fs.writeFileSync(file, JSON.stringify(addresses, null, 2) + "\n");
+  console.log(`Wrote ${file}`);
+} else {
+  console.log("In-process network: addresses.json not updated (the deployment ends with this script).");
 }
-
-main().catch((err) => {
-  console.error(err);
-  process.exitCode = 1;
-});
