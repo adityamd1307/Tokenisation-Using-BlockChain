@@ -1,0 +1,25 @@
+﻿
+Compiled 5 Solidity files with solc 0.8.24 (evm target: shanghai)
+
+Running Mocha tests
+
+
+  AUDIT PROBE (throwaway)
+    √ P1 forced ETH (selfdestruct/coinbase, simulated with setBalance) breaks invariant 3 and is unrecoverable (490ms)
+    √ P2 invariant 1 is violated by design: a revoked buyer holds tokens while not whitelisted
+    √ P3 issuer drift: after role hand-over, token.issuer/sale.issuer still name X but X has no compliance power
+    √ P4 renouncing every role permanently locks inventory once the sale is de-whitelisted
+    √ P5 de-whitelisted sale: buyer gets an opaque token error, not a sale error
+    √ P6 tokens sent directly to the sale become inventory with no Allocated event
+    √ P7 admin can authorise itself and become an issuer/holder (spec-v1 §3 says admin cannot hold tokens)
+    √ P8 overflowing price*quantity panics instead of IncorrectPayment (55ms)
+    √ P9 rogue AssetSale for a registered token can be deployed outside the factory
+      createAsset gasUsed: 2779238
+      factory deploy gasUsed: 4902786
+    √ P10 gas: createAsset cost
+
+
+  10 passing (711ms)
+
+
+

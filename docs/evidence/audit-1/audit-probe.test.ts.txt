@@ -1,0 +1,127 @@
+// THROWAWAY audit probe. Each test asserts the CURRENT (problematic) behaviour,
+// so passing == finding confirmed. Deleted after the run.
+import { expect } from "chai";
+import { network } from "hardhat";
+
+const { ethers, networkHelpers } = await network.create();
+const PRICE = ethers.parseEther("0.001");
+
+async function funded() {
+  const [admin, issuer, investor, delegate, other] = await ethers.getSigners();
+  const factory = await ethers.deployContract("AssetFactory", [admin.address]);
+  await factory.authorizeIssuer(issuer.address);
+  await factory.connect(issuer).createAsset("Campus Property Token", "CPT", "d", 0n, 10_000n, PRICE);
+  const a = await factory.getAsset(0n);
+  const token = await ethers.getContractAt("AssetToken", a.tokenContract, issuer);
+  const sale = await ethers.getContractAt("AssetSale", a.saleContract, issuer);
+  await token.setWhitelisted(a.saleContract, true);
+  await token.approve(a.saleContract, 5_000n);
+  await sale.allocate(5_000n);
+  await token.setWhitelisted(investor.address, true);
+  return { factory, token, sale, admin, issuer, investor, delegate, other };
+}
+
+describe("AUDIT PROBE (throwaway)", function () {
+  it("P1 forced ETH (selfdestruct/coinbase, simulated with setBalance) breaks invariant 3 and is unrecoverable", async function () {
+    const { sale, investor } = await networkHelpers.loadFixture(funded);
+    await sale.connect(investor).buyTokens(100n, { value: 100n * PRICE });
+    const addr = await sale.getAddress();
+    await networkHelpers.setBalance(addr, 100n * PRICE + 1n);
+    await sale.withdrawProceeds();
+    expect(await sale.unclaimedProceeds()).to.equal(0n);
+    expect(await ethers.provider.getBalance(addr)).to.equal(1n); // stuck forever; invariant 3 balance check fails
+    await expect(sale.withdrawProceeds()).to.be.revertedWithCustomError(sale, "NoProceeds");
+  });
+
+  it("P2 invariant 1 is violated by design: a revoked buyer holds tokens while not whitelisted", async function () {
+    const { token, sale, investor } = await networkHelpers.loadFixture(funded);
+    await sale.connect(investor).buyTokens(10n, { value: 10n * PRICE });
+    await token.setWhitelisted(investor.address, false);
+    expect(await token.balanceOf(investor.address)).to.equal(10n);
+    expect(await token.isWhitelisted(investor.address)).to.equal(false);
+  });
+
+  it("P3 issuer drift: after role hand-over, token.issuer/sale.issuer still name X but X has no compliance power", async function () {
+    const { token, sale, issuer, delegate, investor } = await networkHelpers.loadFixture(funded);
+    const ADMIN = await token.DEFAULT_ADMIN_ROLE();
+    const COMP = await token.COMPLIANCE_ROLE();
+    await token.grantRole(ADMIN, delegate.address);
+    await token.grantRole(COMP, delegate.address);
+    await token.renounceRole(COMP, issuer.address);
+    await token.renounceRole(ADMIN, issuer.address);
+    expect(await token.issuer()).to.equal(issuer.address);
+    expect(await sale.issuer()).to.equal(issuer.address);
+    // delegate (never deployed anything) de-whitelists the sale and the issuer
+    await token.connect(delegate).setWhitelisted(await sale.getAddress(), false);
+    await token.connect(delegate).setWhitelisted(issuer.address, false);
+    await sale.closeSale();
+    await expect(sale.recoverUnsoldTokens()).to.be.revertedWithCustomError(token, "SenderNotWhitelisted");
+    await expect(token.setWhitelisted(issuer.address, true)).to.be.revertedWithCustomError(token, "AccessControlUnauthorizedAccount");
+    void investor;
+  });
+
+  it("P4 renouncing every role permanently locks inventory once the sale is de-whitelisted", async function () {
+    const { token, sale, issuer } = await networkHelpers.loadFixture(funded);
+    await token.setWhitelisted(await sale.getAddress(), false);
+    await token.renounceRole(await token.COMPLIANCE_ROLE(), issuer.address);
+    await token.renounceRole(await token.DEFAULT_ADMIN_ROLE(), issuer.address);
+    await sale.closeSale();
+    await expect(sale.recoverUnsoldTokens()).to.be.revertedWithCustomError(token, "SenderNotWhitelisted");
+    expect(await token.balanceOf(await sale.getAddress())).to.equal(5_000n); // no path out
+  });
+
+  it("P5 de-whitelisted sale: buyer gets an opaque token error, not a sale error", async function () {
+    const { token, sale, investor } = await networkHelpers.loadFixture(funded);
+    await token.setWhitelisted(await sale.getAddress(), false);
+    await expect(sale.connect(investor).buyTokens(1n, { value: PRICE }))
+      .to.be.revertedWithCustomError(token, "SenderNotWhitelisted");
+  });
+
+  it("P6 tokens sent directly to the sale become inventory with no Allocated event", async function () {
+    const { token, sale, issuer } = await networkHelpers.loadFixture(funded);
+    const tx = token.transfer(await sale.getAddress(), 7n);
+    await expect(tx).not.to.emit(sale, "Allocated");
+    expect(await sale.availableTokens()).to.equal(5_007n);
+    void issuer;
+  });
+
+  it("P7 admin can authorise itself and become an issuer/holder (spec-v1 §3 says admin cannot hold tokens)", async function () {
+    const { factory, admin } = await networkHelpers.loadFixture(funded);
+    await factory.authorizeIssuer(admin.address);
+    await factory.connect(admin).createAsset("A", "A", "", 0n, 1n, 1n);
+    const t = await ethers.getContractAt("AssetToken", (await factory.getAsset(1n)).tokenContract);
+    expect(await t.balanceOf(admin.address)).to.equal(1n);
+  });
+
+  it("P8 overflowing price*quantity panics instead of IncorrectPayment", async function () {
+    const [admin, issuer, investor] = await ethers.getSigners();
+    const factory = await ethers.deployContract("AssetFactory", [admin.address]);
+    await factory.authorizeIssuer(issuer.address);
+    await factory.connect(issuer).createAsset("X", "X", "", 0n, 10n, ethers.MaxUint256 / 2n + 1n);
+    const a = await factory.getAsset(0n);
+    const token = await ethers.getContractAt("AssetToken", a.tokenContract, issuer);
+    const sale = await ethers.getContractAt("AssetSale", a.saleContract, issuer);
+    await token.setWhitelisted(a.saleContract, true);
+    await token.setWhitelisted(investor.address, true);
+    await token.approve(a.saleContract, 10n);
+    await sale.allocate(10n);
+    await expect(sale.connect(investor).buyTokens(2n, { value: 0n })).to.be.revertedWithPanic(0x11);
+  });
+
+  it("P9 rogue AssetSale for a registered token can be deployed outside the factory", async function () {
+    const { token, other } = await networkHelpers.loadFixture(funded);
+    const rogue = await ethers.deployContract("AssetSale", [await token.getAddress(), 1n, other.address]);
+    expect(await rogue.assetToken()).to.equal(await token.getAddress());
+    expect(await rogue.issuer()).to.not.equal(await token.issuer());
+  });
+
+  it("P10 gas: createAsset cost", async function () {
+    const [admin, issuer] = await ethers.getSigners();
+    const factory = await ethers.deployContract("AssetFactory", [admin.address]);
+    await factory.authorizeIssuer(issuer.address);
+    const r = await (await factory.connect(issuer).createAsset("Campus Property Token", "CPT", "Fictional campus real estate fund", 0n, 10_000n, PRICE)).wait();
+    console.log("      createAsset gasUsed:", r!.gasUsed.toString());
+    const f = await (await factory.deploymentTransaction()!.wait())!;
+    console.log("      factory deploy gasUsed:", f.gasUsed.toString());
+  });
+});
