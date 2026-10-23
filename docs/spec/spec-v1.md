@@ -88,6 +88,8 @@ State variables:
 
 **Subscription flow**: instant. `buy` reverts if the caller is not whitelisted or if the contract holds fewer tokens than requested; otherwise the transfer is immediate with no approval queue.
 
+**Reentrancy requirement**: `withdrawProceeds` must use the checks-effects-interactions pattern — zero the internal ETH balance before calling out — or apply a reentrancy guard. An issuer whose address is a contract could otherwise re-enter and drain more ETH than owed.
+
 ## 5. Functions
 
 Every external function, who may call it, preconditions, effects, events emitted, and what must revert.
@@ -95,17 +97,17 @@ Every external function, who may call it, preconditions, effects, events emitted
 | Function | Caller | Preconditions | Effects | Event | Reverts if |
 |---|---|---|---|---|---|
 | `AssetFactory.authoriseIssuer(address)` | admin | — | `authorisedIssuers[addr] = true` | `IssuerAuthorised(addr)` | caller != admin; addr already authorised |
-| `AssetFactory.deauthoriseIssuer(address)` | admin | addr is authorised | `authorisedIssuers[addr] = false` | `IssuerDeauthorised(addr)` | caller != admin; addr not authorised |
+| `AssetFactory.deauthoriseIssuer(address)` | admin | addr is authorised | `authorisedIssuers[addr] = false` | `IssuerDeauthorised(addr)` | caller != admin; addr not authorised. **Note**: deauthorisation prevents future calls to `createAsset` only. Existing deployed AssetToken and AssetSale contracts continue operating; the admin cannot revoke an issuer's authority over contracts they have already deployed. |
 | `AssetFactory.createAsset(name, symbol, supply, priceWei)` | authorised issuer | priceWei > 0; supply > 0 | deploys AssetToken, mints supply to issuer; deploys AssetSale; records both in registry | `AssetCreated(token, sale, issuer)` | caller not authorised |
 | `AssetToken.addToWhitelist(address)` | issuer | — | `whitelist[addr] = true` | `Whitelisted(addr)` | caller != issuer |
-| `AssetToken.removeFromWhitelist(address)` | issuer | addr has zero balance | `whitelist[addr] = false` | `RemovedFromWhitelist(addr)` | caller != issuer; addr has non-zero balance |
+| `AssetToken.removeFromWhitelist(address)` | issuer | addr has zero balance | `whitelist[addr] = false` | `RemovedFromWhitelist(addr)` | caller != issuer; addr has non-zero balance. **Recovery flow when addr is frozen**: issuer must (1) call `forcedTransfer(addr, safeAddr, balance)` to empty addr's holdings, then (2) call `removeFromWhitelist(addr)`. |
 | `AssetToken.transfer(to, amount)` | token holder | `whitelist[to]`; `!paused`; `!frozen[from]`; `!frozen[to]` | standard ERC-20 transfer | `Transfer(from, to, amount)` | any precondition false |
 | `AssetToken.transferFrom(from, to, amount)` | approved spender | same as transfer | same as transfer | `Transfer` | any precondition false |
 | `AssetToken.pause()` | issuer | `!paused` | `paused = true` | `Paused()` | caller != issuer; already paused |
 | `AssetToken.unpause()` | issuer | `paused` | `paused = false` | `Unpaused()` | caller != issuer; not paused |
 | `AssetToken.freeze(address)` | issuer | `!frozen[addr]` | `frozen[addr] = true` | `Frozen(addr)` | caller != issuer; already frozen |
 | `AssetToken.unfreeze(address)` | issuer | `frozen[addr]` | `frozen[addr] = false` | `Unfrozen(addr)` | caller != issuer; not frozen |
-| `AssetToken.forcedTransfer(from, to, amount)` | issuer | `whitelist[to]`; `!paused`; `!frozen[to]` | transfers regardless of `frozen[from]` | `ForcedTransfer(from, to, amount)` | caller != issuer; preconditions on `to` false |
+| `AssetToken.forcedTransfer(from, to, amount)` | issuer | `whitelist[to]`; `!frozen[to]` | transfers regardless of `frozen[from]` and regardless of `paused` — this is the issuer's emergency recovery mechanism | `ForcedTransfer(from, to, amount)` | caller != issuer; `to` not whitelisted; `to` is frozen |
 | `AssetSale.allocate(uint256 amount)` | issuer | issuer ERC-20 balance >= amount; issuer has approved AssetSale | transfers tokens from issuer to AssetSale | `Allocated(amount)` | caller != issuer; balance insufficient |
 | `AssetSale.buy(uint256 amount)` | investor | `whitelist[msg.sender]`; `msg.value == amount * priceWei`; AssetSale token balance >= amount | transfers tokens to buyer; ETH held in contract | `Purchased(buyer, amount)` | any precondition false |
 | `AssetSale.withdrawProceeds()` | issuer | ETH balance > 0 | sends full ETH balance to issuer | `ProceedsWithdrawn(amount)` | caller != issuer; no ETH to withdraw |
@@ -121,6 +123,7 @@ Properties that must hold after any sequence of calls. These become invariant an
 5. **Pause invariant**: when `paused == true`, no `transfer` or `transferFrom` succeeds (except `forcedTransfer` by issuer).
 6. **Freeze invariant**: when `frozen[addr] == true`, `addr` cannot send tokens via `transfer` or `transferFrom`.
 7. **Issuer isolation invariant**: address X can only call `addToWhitelist`, `pause`, `freeze`, `forcedTransfer`, `allocate`, or `withdrawProceeds` on an AssetToken / AssetSale that X deployed.
+8. **Reentrancy invariant**: after `withdrawProceeds` completes, the ETH balance tracked by AssetSale is zero, regardless of any re-entrant calls made during the ETH send. Implementation must zero the balance before the external call.
 
 ## 7. Frontend
 
@@ -157,7 +160,7 @@ Each page connects via MetaMask using ethers.js `BrowserProvider`. Deployed cont
 - Network: Sepolia testnet (chain ID 11155111) for integration; Hardhat local network (chain ID 31337) for development
 - Token decimals: 0 — whole units only, consistent with fractional-unit model where each token represents one equal share
 - Test wallets: three Hardhat accounts (index 0 = admin, 1 = issuer, 2 = investor) for local tests; three MetaMask burner wallets on Sepolia for demo
-- Toolchain: Node.js ≥ 18, Hardhat 2.x, OpenZeppelin Contracts 5.x, ethers.js 6.x
+- Toolchain: Node.js ≥ 18, Hardhat 3.x (installed: 3.21.0), OpenZeppelin Contracts 5.x (installed: 5.6.1), ethers.js 6.x
 - Frontend: React 18, Vite, ethers.js 6.x
 - `.env` holds `TESTNET_RPC_URL`, `PRIVATE_KEY`, `ETHERSCAN_API_KEY` — never committed
 
@@ -166,7 +169,7 @@ Each page connects via MetaMask using ethers.js `BrowserProvider`. Deployed cont
 | Change | Why | AI influence |
 |---|---|---|
 | Narrowed scope to one real-estate fund + one digital asset | Keeps MVP deliverable within project timeline | No |
-| Defined three concrete contracts (AssetToken, AssetFactory, AssetSale) | Makes responsibilities and security boundaries explicit | AI research session 2026-10-23 (docs/ai-logs/exports/2026-10-23-claude-ai-research.md) |
+| Defined three concrete contracts (AssetToken, AssetFactory, AssetSale) | Makes responsibilities and security boundaries explicit | No — human design decision (Phase 1 roadmap) |
 | Fixed sale price set at deployment (not issuer-set NAV) | Eliminates price oracle dependency; simplifies MVP | No |
 | Instant subscription flow (not request-and-approve) | Reduces contract complexity; investor experience is clearer | No |
 | Whitelist + pause + freeze + forced transfer as in-scope features | Directly addresses the "permissioning and compliance" requirement from v0 | No |
