@@ -1,0 +1,77 @@
+Running Mocha tests
+
+
+  AssetToken — Phase 2
+    A — deployment and fixed supply
+      ✔ sets the name, symbol, and whole-unit decimals (53ms)
+      ✔ mints exactly 10,000 whole units to the designated issuer
+      ✔ emits the standard mint Transfer from the zero address
+      ✔ whitelists the issuer and leaves other addresses, including zero, ineligible
+      ✔ grants the issuer the administrator and compliance roles
+      ✔ rejects a zero issuer
+      ✔ rejects a zero supply
+      ✔ exposes no mint or burn entry point, even to the administrator
+      ✔ assigns supply and roles to the issuer instead of a different deploying account
+      ✔ supports construction by a contract without granting that contract authority
+    B — whitelist and role administration
+      ✔ approves investors B and C with publicly readable status
+      ✔ emits investor, status, and operator on approval and revocation
+      ✔ rejects unauthorised whitelist update approved=true
+      ✔ rejects a zero investor when approved=true
+      ✔ rejects unauthorised whitelist update approved=false
+      ✔ rejects a zero investor when approved=false
+      ✔ treats repeated status updates as no-ops without duplicate events
+      ✔ revokes a funded investor without confiscation, burning, or Transfer events
+      ✔ delegates compliance and records the actual delegate as operator
+      ✔ prevents unauthorised accounts from granting themselves compliance authority
+      ✔ prevents compliance-only delegates from granting roles
+      ✔ removes compliance authority immediately when the role is revoked
+      ✔ requires compliance authority even for an administrator whose compliance role was revoked
+    C — direct transfers and revocation
+      ✔ transfers 100 units to B and emits the standard Transfer event
+      ✔ rejects an unapproved recipient and preserves balances and supply
+      ✔ allows B to transfer 20 units to approved C
+      ✔ rejects a revoked sender even when the recipient is approved
+      ✔ rejects transfers into a revoked holder with a positive balance
+      ✔ rejects transfers when both holder and recipient are ineligible
+      ✔ restores sending and receiving after reapproval
+      ✔ applies the same eligibility requirements to the issuer
+    D — approvals and delegated transfers
+      ✔ creates and replaces allowances with standard Approval events
+      ✔ allows an unwhitelisted spender to transfer between approved holders
+      ✔ rolls back balances and allowance for an ineligible delegated recipient
+      ✔ checks the actual holder and rolls back allowance when that holder is revoked
+      ✔ preserves the standard insufficient-allowance error and unchanged state
+      ✔ preserves approvals and approval revocation for ineligible wallets
+      ✔ preserves unlimited allowances across successful transfers
+      ✔ rolls back allowance spending when the delegated holder has insufficient balance
+    E — edge cases, contract holders, and instance isolation
+      ✔ rejects a direct transfer exceeding the balance
+      ✔ permits a zero-value transfer between eligible accounts and emits Transfer
+      ✔ enforces both eligibility checks even for zero-value transfers
+      ✔ allows zero-value delegated transfers but still checks holder eligibility
+      ✔ preserves standard zero-recipient errors for direct and delegated transfers
+      1) preserves standard zero-spender and zero-sender errors
+      ✔ supports self-transfers without altering balance or supply
+      ✔ allows an approved smart-contract holder to receive and forward inventory
+      ✔ isolates roles, whitelist, allowances, balances, and supply across assets
+      ✔ conserves supply across deterministic transfers, revocation, and failures
+    Local demonstration
+      ✔ demonstrates CPT issuance, unapproved D rejection, and final balances 9,900 / 80 / 20
+
+  AssetToken AUD-004 regression
+    ✔ rejects a transfer to an unapproved investor without changing balances
+
+
+  50 passing (297ms)
+  1 failing
+
+  1) AssetToken — Phase 2
+       E — edge cases, contract holders, and instance isolation
+         preserves standard zero-spender and zero-sender errors:
+     AssertionError: Expected transaction to be reverted with custom error 'ERC20InvalidSender', but it reverted with custom error 'ERC20InvalidApprover'
+      at async Context.<anonymous> (test/AssetToken.test.ts:424:7)
+
+
+
+

@@ -17,6 +17,7 @@ dist/
 artifacts/
 coverage/
 typechain-types/
+types/ethers-contracts/
 
 # Evidence kit source (unzipped; files already copied to repo root)
 sc4053-evidence-kit/

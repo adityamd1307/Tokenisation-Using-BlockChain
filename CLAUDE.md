@@ -45,4 +45,4 @@ In "Why the AI made the mistake", only state what the transcript or code shows. 
 
 Append a rule here each time an audit finding shows the AI making a mistake it could repeat. Every rule must cite the issue it came from. This section is part of our specification engineering evidence, so never delete old rules; mark them superseded instead.
 
-- (none yet)
+- AUD-004: A whitelist mapping alone does not restrict ERC-20 movement. Enforce sender and recipient eligibility in OpenZeppelin's transfer hook and execute a direct-transfer regression; skipped tests are not passing behavioral evidence. Apply the latest explicit requirements when revocation semantics differ from the historical spec.
