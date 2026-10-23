@@ -159,11 +159,15 @@ The pre-implementation `npm test` baseline completed with **0 passing and 41 pen
 | `npx hardhat test mocha --no-compile test/AssetToken.regression.test.ts` against the original token | Expected regression failure: 0 passing, 1 failing | [before.log](evidence/phase2/before.log) |
 | `npx hardhat test mocha --no-compile test/AssetToken.regression.test.ts` against the fixed token | Passed: 1 passing, 0 failing | [regression-after.log](evidence/phase2/regression-after.log) |
 
-TBD: insert final full-suite and focused Phase 2 commands, exit codes, passing/failing/pending counts, and captured logs after validation finishes. Pending tests are not executed tests. In this toolchain, Hardhat's aggregate summary can count skipped Mocha cases; the Mocha `passing` and `pending` lines are the evidence for actual execution.
+**Full suite (filled in retroactively on 23 October 2026, after audit-1 F-13).** This section was left as a TBD by the Phase 2 session. Two problems:
+- `phase2.log` is byte-identical to `phase2-first-run.log`, which shows **50 passing / 1 failing**. So no green full-suite run of the Phase 2 code had been recorded.
+- To fill the gap, the Phase 3 session checked out the committed Phase 2 code (`4faf156`, merged in PR #2 `e3d0cc4`) in a clean worktree and ran `npx hardhat test`. Result: exit code 0, **51 passing, 22 pending, 0 failing** ([retro-4faf156-full-suite.log](evidence/phase2/retro-4faf156-full-suite.log)).
+
+The 22 pending tests were the factory and sale placeholders, which were not executed. Pending tests are not executed tests. Hardhat's aggregate line ("73 passing") counts skipped Mocha cases, so the Mocha `passing` and `pending` lines are the evidence for what actually ran.
 
 ### Demonstration
 
-TBD: insert final demonstration command and output log. The required verified balances are issuer `9900`, investor B `80`, investor C `20`, and total supply `10000`. Before investor C is approved, the attempted transfer from B to unapproved investor D must revert with balances unchanged.
+The demonstration is the Mocha test "demonstrates CPT issuance, unapproved D rejection, and final balances 9,900 / 80 / 20" in `test/AssetToken.test.ts`. It passes in the retroactive run above. It asserts issuer `9900`, investor B `80`, investor C `20` and total supply `10000`, and that the B → D transfer reverts with balances unchanged before C is approved. No separate script output was captured in Phase 2.
 
 ## Audit evidence and genuine findings
 
@@ -186,4 +190,10 @@ The prior [whole-project verification](VERIFICATION.md) identified additional in
 
 ## Phase 2 acceptance status
 
-TBD: complete only after successful compilation, Phase 2 test execution, full repository regression run, and demonstration. Explicitly separate Phase 2 results from later-phase skipped tests and pre-existing application/tooling failures.
+Filled in retroactively; see the full-suite note above.
+- **Satisfied at `4faf156`:**
+  - compilation
+  - all 51 AssetToken tests, including the AUD-004 regression and the demonstration (0 failing)
+  - the Phase 2 scope boundaries: no factory, sale or frontend code
+- **Not satisfied at the time:** a recorded green full-suite log, and committed regression-then-fix evidence. AUD-004's test and fix landed together in `4faf156`; see AUD-004.
+- **Outside Phase 2:** the 22 factory and sale placeholders were pending, not executed. They were implemented in Phase 3.

@@ -35,7 +35,7 @@ Requirements: [phase3-requirements.md](spec/phase3-requirements.md), including u
 - `assetToken`, `issuer` and `pricePerToken` are `immutable`, so there is no way to change the price after creation (Phase 3 §3.3; tested).
 - `assetToken` is typed `AssetToken` rather than the brief's `IERC20` because `buyTokens` must read `isWhitelisted`. The ABI is the same either way: an address getter.
 - **Reentrancy (invariant 8):** proceeds are tracked in `unclaimedProceeds`. `withdrawProceeds` zeroes it before the `.call`.
-- **No `receive`/`fallback`:** plain ETH sends revert, so ETH can only arrive through `buyTokens` and invariant 3 holds.
+- **No `receive`/`fallback`:** plain ETH sends revert. *Corrected after audit-1 F-08:* the original note claimed that ETH could therefore only arrive through `buyTokens` and invariant 3 held. That is false. `selfdestruct` and coinbase rewards can force ETH into the contract, where it was stuck. Fixed in AUD-007.
 - `SafeERC20` is used for token movements, which is standard practice. AssetToken reverts on failure anyway.
 
 ## Tests
@@ -79,8 +79,9 @@ These were caught before commit, in test code or test design, so no AUD issue wa
 
 - **Factory size:** 22,557 bytes deployed with the optimiser off, against the EIP-170 limit of 24,576 ([bytecode-sizes.txt](evidence/phase3/bytecode-sizes.txt)). It fits, but little headroom remains. The `production` build profile enables the optimiser.
 - **Standalone sales:** a standalone `AssetSale` can be deployed by anyone against any token. Its constructor does not check `issuer_ == token.issuer()`. The factory registry is the source of truth for legitimate sales. Such a contract can only sell inventory that its own "issuer" approved to it.
-- **Whitelist dependencies:** the issuer can de-whitelist the sale contract, which halts buying and recovery. The issuer can also de-whitelist themselves, which blocks recovery. Both can be undone by the issuer, who holds `COMPLIANCE_ROLE`.
+- **Whitelist dependencies:** the issuer can de-whitelist the sale contract, which halts buying and recovery. The issuer can also de-whitelist themselves, which blocks recovery. *Corrected after audit-1 F-05:* the original note said "both can be undone by the issuer, who holds `COMPLIANCE_ROLE`". That assumed the issuer keeps the role, but the issuer could renounce it or have it revoked, which permanently locks the inventory. Fixed in AUD-006.
 - **Sepolia demo:** `setupDemo.ts` needs three signers, but `hardhat.config.ts` configures one `PRIVATE_KEY` for Sepolia. Multi-wallet testnet runs belong to Phase 5.
-- **No `localhost` network:** `hardhat.config.ts` defines no `localhost` network for a persistent `hardhat node`, which the Phase 4 frontend will need.
+- **`localhost` network:** *corrected after audit-1 F-16.* The original note said no `localhost` network existed. That is wrong: Hardhat 3 adds `localhost` at `http://localhost:8545` when the config omits it (`network-manager/hook-handlers/config.js`). `deploy.ts --network localhost` against `npx hardhat node` will therefore write `addresses.json`.
 - **Out of scope:** pause, freeze and forced transfer (spec-v1 §4) are still not implemented, pending a team decision. AUD-001 stays open for them.
-- **`scripts/evidence.sh` was not run.** It requires `forge`, which this Hardhat project does not use.
+- **`scripts/evidence.sh` was not run** during Phase 3, because it required `forge`. It has since been ported to Hardhat 3 (audit-1 F-13).
+- **The invariant-1 test checked a weaker property than its name** (audit-1 F-04). It never exercised a revocation, and since Phase 2 a revoked holder legitimately keeps their balance. Addressed in AUD-005.

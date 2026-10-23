@@ -42,6 +42,7 @@ Token tests are now executable; only the 22 factory/sale placeholders remain ski
 `scripts/deploy.ts` and `scripts/setupDemo.ts` now run under Hardhat 3 (`network.getOrCreate()`) and complete on the in-process network (`docs/evidence/phase3/deploy-local.log`, `setupDemo.log`). The factory/sale placeholders are replaced by 48 executing tests. Still open:
 - No Sepolia deployment has been attempted.
 - The Sepolia config has one signer, but `setupDemo.ts` needs three.
-- No `localhost` network is configured for a persistent node.
-- `scripts/evidence.sh` still requires `forge`.
-- Root typecheck has not been addressed.
+- ~~No `localhost` network is configured for a persistent node.~~ Wrong (audit-1 F-16): Hardhat 3 provides `localhost` by default.
+- ~~`scripts/evidence.sh` still requires `forge`.~~ It has been ported to Hardhat 3: compile, test, gas-stats, coverage, with Slither optional. Each step logs its command and the run records the commit SHA.
+- ~~Root typecheck has not been addressed.~~ `npx tsc --noEmit` now exits 0. The frontend is excluded until Vite provides its own tsconfig in Phase 4.
+- Still open: Sepolia deployment, and multiple Sepolia signers for `setupDemo.ts`.

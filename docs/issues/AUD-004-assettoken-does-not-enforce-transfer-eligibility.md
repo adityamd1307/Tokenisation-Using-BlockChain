@@ -2,16 +2,16 @@
 
 | Field | Value |
 |---|---|
-| Status | fixed in working tree; uncommitted as requested |
+| Status | fixed (committed in 4faf156, merged to main by PR #2 e3d0cc4; see "Post-commit correction") |
 | Severity | high |
 | Category | access control / logic |
 | Found by (method) | source review and executed regression test |
 | Found by (person) | Codex, at user direction |
 | Location | contracts/AssetToken.sol, inherited ERC-20 transfer path |
-| AI session that produced the original code | Not established |
+| AI session that produced the original code | Claude Code Phase 1 setup session e2c8deac (claude-sonnet-4-6). The stub was written at `phase1-setup.txt:1417–1425` and committed as `f09926f ai: contract stubs` |
 | Baseline commit | c5042157a38fdd04d56162deefcd67ca49023cd8 |
-| Regression test commit | None: user prohibited commits |
-| Fix commit | None: user prohibited commits |
+| Regression test commit | 4faf156, in the same commit as the fix; not committed separately |
+| Fix commit | 4faf156 (merged by e3d0cc4) |
 
 ## What is wrong
 
@@ -41,3 +41,11 @@ The later user requirements explicitly allow revoking an existing holder, supers
 - Initial test setup error: [`test-harness-initial-error.log`](../evidence/phase2/test-harness-initial-error.log), superseded by the corrected before/after runs above.
 - Complete Phase 2 coverage and full-suite outcomes: [`phase2-implementation.md`](../phase2-implementation.md).
 - Slither/testnet: not run; not claimed. The existing Foundry-based evidence runner was not used for this Hardhat change. Logs and source snapshots replace commit-based evidence because the user explicitly requested no commits.
+
+## Post-commit correction — 23 October 2026 (audit-1 F-02, F-14)
+
+The fields above were written while the fix sat uncommitted. They are now corrected:
+
+- **Workflow deviation.** The CLAUDE.md workflow asks for two separate commits: a failing `test(AUD-004)`, then a `fix(AUD-004)`. Neither exists. The regression test, the fix, the evidence logs, this file and the CLAUDE.md rule all arrived together in `4faf156` ("initial commit", no prefix), merged by PR #2 (`e3d0cc4`). So git history alone cannot show the test failing before the fix. The before/after logs above are the only evidence of that, and they record no commit.
+- **Origin of the code.** The Phase 1 transcript shows Claude Code writing the stub with the comment "Full implementation in Phase 2" (`phase1-setup.txt:1425`). The missing transfer hook was a deliberate placeholder, not a mistake the Phase 1 AI made while trying to implement the feature. The finding still matters: the placeholder compiled and its tests were all skipped, so nothing flagged the gap.
+- **Full-suite evidence.** Item 7 of the evidence list above points to `phase2-implementation.md`, whose full-suite section was a TBD. It has now been filled from a retroactive run at `4faf156`: 51 passing, 0 failing ([retro-4faf156-full-suite.log](../evidence/phase2/retro-4faf156-full-suite.log)).
