@@ -1,0 +1,2175 @@
+ ▐▛███▛█   Claude Code v2.1.309
+▝▜██████▀  Sonnet 4.6 · Claude Pro
+ ▝▝   ▝▝   ~\OneDrive - Nanyang Technological University\NTU\Y4S1\SC4053\Pr…
+
+  √ Using flicker-free rendering · if you want to go back, use /tui default
+    · Click to move your cursor in the text input
+    · Click to expand collapsed tool results
+    · By default, text auto-copies when you select it (/config to change)
+    · Hold Shift while selecting to use your terminal's native copy instead
+
+  Get to finished work sooner with Opus 5.5. Switch anytime with /model.
+
+> /model                                                                        
+  ⎿  Set model to Opus 4.7 (1M context) (default)
+
+> Read the Project/sc4053-evidence-kit. Understand the project and what is to   
+  be done.                                                                      
+
+● Please run /login · API Error: 401 OAuth access token is invalid.
+
+✻ Brewed for 2s · done 1:16 PM
+
+> /login                                                                        
+  ⎿  Login successful
+
+> Read the Project/sc4053-evidence-kit. Understand the project and what is to   
+  be done.                                                                      
+
+● I'll explore the evidence kit directory to understand the project.
+
+  Searched for 2 patterns, ran 2 shell commands (ctrl+o to expand)
+
+● The evidence kit is a ZIP file. Let me extract and read it.
+
+  Searched for 3 patterns, read 13 files, ran 2 shell commands (ctrl+o to expand)
+
+● Let me also check the hooks directory and the README.
+
+  Searched for 1 pattern, read 3 files (ctrl+o to expand)
+
+● Now I have a complete picture of the project. Let me save this to memory and
+  give you a summary.
+
+  Recalled 1 memory, wrote 1 memory (ctrl+o to expand)
+
+> I recommend splitting the project into 6 sequential phases, where each phase  
+  produces a working, testable component before the group proceeds to the next. 
+                                                                                
+  The idea is to build the platform incrementally: first create an asset token, 
+  then introduce compliance, then let issuers create and sell assets, and       
+  finally integrate everything into a usable dApp.                              
+                                                                                
+  This approach also fits the SC4053 assignment, particularly its requirements  
+  for smart-contract testing, AI-assisted development, security analysis, and   
+  the AI Audit Report.                                                          
+                                                                                
+  Project Implementation Roadmap                                                
+                                                                                
+  Phase 1 — Foundation & Architecture                                           
+                                                                                
+  Start here                                                                    
+                                                                                
+  Requirements, project setup, smart-contract design                            
+                                                                                
+  Phase 2 — Asset Tokenisation & Compliance                                     
+                                                                                
+  ERC-20 tokens, ownership, issuer permissions, whitelisting                    
+                                                                                
+  Phase 3 — Asset Registry & Primary Issuance                                   
+                                                                                
+  Multiple assets, fixed-price purchases, ETH settlement                        
+                                                                                
+  Phase 4 — Frontend & Wallet Integration                                       
+                                                                                
+  React dashboards, MetaMask, buy and transfer workflows                        
+                                                                                
+  Phase 5 — End-to-End Integration & Testing                                    
+                                                                                
+  Full scenarios, security edge cases, testnet deployment                       
+                                                                                
+  Phase 6 — Security Audit & Final Submission                                   
+                                                                                
+  Vulnerability remediation, AI Audit Report, final demo                        
+                                                                                
+  Key rule: Do not proceed to the next phase until the previous phase's         
+  acceptance criteria have been satisfied.                                      
+                                                                                
+  Phase 1 — Project Foundation and Architecture                                 
+  Deliverable: Agreed specification + development environment                   
+                                                                                
+  Objective: Define exactly how the application will work before implementing   
+  any Solidity code.                                                            
+                                                                                
+  Task 1.1 — Finalise project boundaries                                        
+                                                                                
+  Build a platform supporting two categories of simulated assets:               
+                                                                                
+  Asset type                                                                    
+                                                                                
+                                                                                
+                                                                                
+  Example                                                                       
+                                                                                
+                                                                                
+                                                                                
+  Representation                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+  Real-world asset                                                              
+                                                                                
+                                                                                
+                                                                                
+  Fictional real estate investment fund                                         
+                                                                                
+                                                                                
+                                                                                
+  ERC-20 tokens representing fractional interests                               
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+  Digital asset                                                                 
+                                                                                
+                                                                                
+                                                                                
+  Fictional digital licensing revenue pool                                      
+                                                                                
+                                                                                
+                                                                                
+  ERC-20 tokens representing fractional interests                               
+                                                                                
+  For the MVP, both asset categories use the same underlying ERC-20             
+  architecture. Only their descriptions and metadata differ. Tokenising unique  
+  NFTs or enforcing actual intellectual-property rights is out of scope.        
+                                                                                
+  Choose a concrete demonstration asset:                                        
+                                                                                
+  Example: Campus Property Fund                                                 
+                                                                                
+  Property                                                                      
+                                                                                
+                                                                                
+                                                                                
+  Value                                                                         
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+  Token name                                                                    
+                                                                                
+                                                                                
+                                                                                
+  Campus Property Token                                                         
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+  Symbol                                                                        
+                                                                                
+                                                                                
+                                                                                
+  CPT                                                                           
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+  Total supply                                                                  
+                                                                                
+                                                                                
+                                                                                
+  10,000 CPT                                                                    
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+  Token decimals                                                                
+                                                                                
+                                                                                
+                                                                                
+  0 (whole units)                                                               
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+  Initial sale price                                                            
+                                                                                
+                                                                                
+                                                                                
+  0.001 testnet ETH / token                                                     
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+  Issuer                                                                        
+                                                                                
+                                                                                
+                                                                                
+  MetaMask Wallet A                                                             
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+  Investor 1                                                                    
+                                                                                
+                                                                                
+                                                                                
+  MetaMask Wallet B                                                             
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+  Investor 2                                                                    
+                                                                                
+                                                                                
+                                                                                
+  MetaMask Wallet C                                                             
+                                                                                
+  With this arrangement, each token represents one of 10,000 equal units in the 
+  fictional fund. The fixed testnet ETH price is purely for demonstration.      
+                                                                                
+  Task 1.2 — Define the system's actors                                         
+                                                                                
+  The application will have three roles.                                        
+                                                                                
+  Actor                                                                         
+                                                                                
+                                                                                
+                                                                                
+  Permissions                                                                   
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+  Platform administrator                                                        
+                                                                                
+                                                                                
+                                                                                
+  Authorise issuer wallets                                                      
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+  Authorised issuer                                                             
+                                                                                
+                                                                                
+                                                                                
+  Create assets, set sale prices during creation, whitelist investors, allocate 
+  tokens for sale and withdraw proceeds                                         
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+  Investor                                                                      
+                                                                                
+                                                                                
+                                                                                
+  Browse assets, buy tokens, view balances and transfer holdings to other       
+  approved investors                                                            
+                                                                                
+  An issuer should not automatically be able to control another issuer's        
+  assets.                                                                       
+                                                                                
+  Task 1.3 — Design smart-contract architecture                                 
+                                                                                
+  Agree on the contracts before coding.                                         
+                                                                                
+  Smart contract                                                                
+                                                                                
+                                                                                
+                                                                                
+  Responsibilities                                                              
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+  AssetToken.sol                                                                
+                                                                                
+                                                                                
+                                                                                
+  ERC-20 token implementation, token balances, whitelisting and transfer        
+  restrictions                                                                  
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+  AssetFactory.sol                                                              
+                                                                                
+                                                                                
+                                                                                
+  Authorise issuers, deploy asset contracts and maintain the asset registry     
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+  AssetSale.sol                                                                 
+                                                                                
+                                                                                
+                                                                                
+  Hold sale inventory, accept fixed-price ETH payments and distribute tokens    
+                                                                                
+  The key design choice is to deploy one AssetToken and one AssetSale instance  
+  per asset, with a central factory recording them.                             
+                                                                                
+  Task 1.4 — Initialise development environment                                 
+                                                                                
+  Use the following project structure:                                          
+                                                                                
+  rwa-tokenisation/                                                             
+  │                                                                             
+  ├── contracts/                                                                
+  │   ├── AssetToken.sol                                                        
+  │   ├── AssetFactory.sol                                                      
+  │   └── AssetSale.sol                                                         
+  │                                                                             
+  ├── test/                                                                     
+  │   ├── AssetToken.test.js                                                    
+  │   ├── AssetFactory.test.js                                                  
+  │   └── AssetSale.test.js                                                     
+  │                                                                             
+  ├── scripts/                                                                  
+  │   ├── deploy.js                                                             
+  │   └── setupDemo.js                                                          
+  │                                                                             
+  ├── frontend/                                                                 
+  │   └── src/                                                                  
+  │       ├── components/                                                       
+  │       ├── pages/                                                            
+  │       ├── hooks/                                                            
+  │       └── config/                                                           
+  │                                                                             
+  ├── docs/                                                                     
+  │   ├── specification.md                                                      
+  │   ├── architecture.md                                                       
+  │   ├── ai-prompt-log.md                                                      
+  │   └── audit-findings.md                                                     
+  │                                                                             
+  └── README.md                                                                 
+                                                                                
+  Set up Git, Node.js, Hardhat, OpenZeppelin contracts, React and ethers.js.    
+  Establish coding conventions and how contract ABIs and deployed addresses     
+  will be shared with the frontend.                                             
+                                                                                
+  Phase 1 completion checklist                                                  
+  Project requirements and asset examples are finalised.                        
+  Contract responsibilities and permissions are documented.                     
+  Hardhat compiles a sample Solidity contract.                                  
+  React frontend runs locally.                                                  
+  All team members can clone and run the repository.                            
+  Initial specification is saved before AI-generated implementation begins.     
+                                                                                
+  At the end of Phase 1: You have a working development environment and a       
+  precise blueprint, but no product functionality yet.. This is Phase 1 of the  
+  project. Do this                                                              
+
+  Wrote 1 memory (ctrl+o to expand)
+
+● Now I have a full understanding of the project. Let me check the current state
+  and what tooling is available before proceeding with Phase 1.
+
+  Read 1 file, ran 1 shell command (ctrl+o to expand)
+
+● Forge is not installed — the evidence kit pipeline needs it, but Phase 1 uses
+  Hardhat, which is available. I'll set up the evidence kit structure and
+  Hardhat toolchain together.
+
+  Before I ask about one conflict: the evidence kit pipeline (evidence.sh, the
+  grading scripts) requires Foundry (forge), but your Phase 1 roadmap specifies
+  Hardhat. These are different smart-contract toolchains.
+
+● User answered Claude's questions:
+  ⎿  · The evidence kit's evidence.sh grading scripts run `forge build`, `forge 
+     test`, and `forge coverage` — these are Foundry-only commands. Your Phase 1
+     roadmap specifies Hardhat. Which toolchain should we use for 
+     smart-contract compilation and testing? → Hardhat
+
+● User chose Hardhat. Now I'll write the plan.
+
+● Updated plan
+  ⎿  /plan to preview
+  ⎿  User rejected Claude's plan:
+     ╭─────────────────────────────────────────────────────────────────────────╮
+     │ Phase 1 — Project Foundation and Architecture                           │
+     │                                                                         │
+     │ Context                                                                 │
+     │                                                                         │
+     │ SC4053 NTU project: tokenised-asset dApp + AI Audit Report. The         │
+     │ evidence kit (now extracted to sc4053-evidence-kit/) provides the       │
+     │ grading scaffold (issue tracking, evidence runs, AI session logging).   │
+     │ The user confirmed Hardhat as the smart-contract toolchain (not         │
+     │ Foundry), so the evidence.sh forge-based pipeline is retained in docs/  │
+     │ but won't produce live CI output; grading evidence will come from       │
+     │ Hardhat test logs and manual exports.                                   │
+     │                                                                         │
+     │ Phase 1 goal: freeze spec-v1.md, copy the evidence kit into the repo    │
+     │ root, initialise Hardhat, and commit the empty-contracts skeleton so    │
+     │ every later phase starts from a reviewable baseline.                    │
+     │                                                                         │
+     │ ---                                                                     │
+     │                                                                         │
+     │ Step 1 — Copy evidence kit to repo root                                 │
+     │                                                                         │
+     │ Copy all files from sc4053-evidence-kit/ into the repo root (same tree, │
+     │ no subfolder rename). Files to copy:                                    │
+     │ - .claude/ (hooks + settings.json)                                      │
+     │ - docs/ (spec, ai-logs, issues, evidence, report)                       │
+     │ - scripts/evidence.sh, scripts/new-issue.sh                             │
+     │ - .env.example                                                          │
+     │ - .gitignore (merge with any existing)                                  │
+     │ - CLAUDE.md                                                             │
+     │ - SETUP.md                                                              │
+     │ - slither.config.json                                                   │
+     │                                                                         │
+     │ Critical: do NOT delete sc4053-evidence-kit/ yet — copy first, verify,  │
+     │ then it can be left or deleted.                                         │
+     │                                                                         │
+     │ ---                                                                     │
+     │                                                                         │
+     │ Step 2 — Fill in spec-v0.md                                             │
+     │                                                                         │
+     │ Edit docs/spec/spec-v0.md:                                              │
+     │ Date written: 23 October 2026                                           │
+     │ Written by: Chordia Laksh                                               │
+     │                                                                         │
+     │ ---                                                                     │
+     │                                                                         │
+     │ Step 3 — First commit + tag                                             │
+     │                                                                         │
+     │ git add docs/spec/spec-v0.md                                            │
+     │ git commit -m "docs: spec v0 (pre-AI proposal)"                         │
+     │ git tag spec-v0                                                         │
+     │                                                                         │
+     │ Then:                                                                   │
+     │ git add -A                                                              │
+     │ git commit -m "chore: evidence pipeline"                                │
+     │                                                                         │
+     │ ---                                                                     │
+     │                                                                         │
+     │ Step 4 — Fill in spec-v1.md (freeze it)                                 │
+     │                                                                         │
+     │ Replace every TODO(decision) with the Phase 1 decisions below. Every    │
+     │ section must be written so the spec has no TODO(decision) markers       │
+     │ remaining.                                                              │
+     │                                                                         │
+     │ Section 1 — Problem and trust model                                     │
+     │                                                                         │
+     │ - Problem: real-world asset ownership is opaque, settlement slow, and   │
+     │   compliance manual.                                                    │
+     │ - Why blockchain: immutable on-chain ownership record, programmable     │
+     │   transfer rules (whitelist), atomic settlement via smart contract      │
+     │   removes counterparty risk.                                            │
+     │ - Trust model: the issuer is trusted to correctly describe the          │
+     │   off-chain asset; the on-chain token is a share register only — the    │
+     │   legal claim sits off-chain.                                           │
+     │ - Out of trust scope: oracle price accuracy, issuer solvency.           │
+     │                                                                         │
+     │ Section 2 — Asset and scope                                             │
+     │                                                                         │
+     │ Instrument: fictional real estate investment fund — Campus Property     │
+     │ Fund.                                                                   │
+     │                                                                         │
+     │ ┌────────────────────┬───────────────────────────┐                      │
+     │ │       Field        │           Value           │                      │
+     │ ├────────────────────┼───────────────────────────┤                      │
+     │ │ Token name         │ Campus Property Token     │                      │
+     │ ├────────────────────┼───────────────────────────┤                      │
+     │ │ Symbol             │ CPT                       │                      │
+     │ ├────────────────────┼───────────────────────────┤                      │
+     │ │ Total supply       │ 10 000 CPT                │                      │
+     │ ├────────────────────┼───────────────────────────┤                      │
+     │ │ Token decimals     │ 0 (whole units)           │                      │
+     │ ├────────────────────┼───────────────────────────┤                      │
+     │ │ Initial sale price │ 0.001 testnet ETH / token │                      │
+     │ ├────────────────────┼───────────────────────────┤                      │
+     │ │ Issuer             │ MetaMask Wallet A         │                      │
+     │ ├────────────────────┼───────────────────────────┤                      │
+     │ │ Investor 1         │ MetaMask Wallet B         │                      │
+     │ ├────────────────────┼───────────────────────────┤                      │
+     │ │ Investor 2         │ MetaMask Wallet C         │                      │
+     │ └────────────────────┴───────────────────────────┘                      │
+     │                                                                         │
+     │ A second demo asset (Digital Licensing Revenue Pool / DLP) reuses the   │
+     │ same contracts with different metadata.                                 │
+     │                                                                         │
+     │ Section 3 — Roles                                                       │
+     │                                                                         │
+     │ ┌─────────────┬──────────────────────────────────────────┬───────────── │
+     │ ───┐                                                                    │
+     │ │    Actor    │                   Can                    │     Cannot   │
+     │   │                                                                     │
+     │ ├─────────────┼──────────────────────────────────────────┼───────────── │
+     │ ───┤                                                                    │
+     │ │ Platform    │ authorise/deauthorise issuer wallets     │ hold tokens, │
+     │   │                                                                     │
+     │ │ admin       │                                          │ buy assets   │
+     │   │                                                                     │
+     │ ├─────────────┼──────────────────────────────────────────┼───────────── │
+     │ ───┤                                                                    │
+     │ │             │ create assets, set sale price at         │ control      │
+     │   │                                                                     │
+     │ │ Authorised  │ creation, whitelist investors, allocate  │ another      │
+     │   │                                                                     │
+     │ │ issuer      │ tokens to sale, withdraw ETH proceeds,   │ issuer's     │
+     │   │                                                                     │
+     │ │             │ freeze individual investor               │ assets       │
+     │   │                                                                     │
+     │ ├─────────────┼──────────────────────────────────────────┼───────────── │
+     │ ───┤                                                                    │
+     │ │             │ connect wallet, buy tokens from          │              │
+     │   │                                                                     │
+     │ │ Investor    │ whitelisted sale, transfer tokens to     │ buy if not   │
+     │   │                                                                     │
+     │ │             │ other whitelisted investors, view own    │ whitelisted  │
+     │   │                                                                     │
+     │ │             │ balance                                  │              │
+     │   │                                                                     │
+     │ └─────────────┴──────────────────────────────────────────┴───────────── │
+     │ ───┘                                                                    │
+     │                                                                         │
+     │ Section 4 — Contracts and state                                         │
+     │                                                                         │
+     │ AssetToken.sol                                                          │
+     │ - ERC-20 implementation (OpenZeppelin ERC20 base)                       │
+     │ - State: mapping(address => bool) public whitelist, address public      │
+     │   issuer, bool public paused, mapping(address => bool) public frozen    │
+     │ - Calls: none external                                                  │
+     │ - Price model: fixed price set at deployment (stored in AssetSale, not  │
+     │   AssetToken)                                                           │
+     │ - Extra features in scope: whitelist (required to receive/send), pause  │
+     │   (issuer can halt all transfers), freeze (issuer can freeze one        │
+     │   address), forced transfer (issuer can move tokens from frozen         │
+     │   address)                                                              │
+     │ - Out of scope: redemption, yield, NAV oracle                           │
+     │                                                                         │
+     │ AssetFactory.sol                                                        │
+     │ - State: mapping(address => bool) public authorisedIssuers, address[]   │
+     │   public assets, mapping(address => address) public tokenToSale         │
+     │ - Calls: deploys AssetToken and AssetSale                               │
+     │ - Admin: platform admin address set in constructor                      │
+     │                                                                         │
+     │ AssetSale.sol                                                           │
+     │ - State: AssetToken public token, uint256 public priceWei, address      │
+     │   public issuer                                                         │
+     │ - DvP design: escrow — issuer calls allocate(amount) to transfer tokens │
+     │   in; investor calls buy(amount) payable; ETH held in contract; issuer  │
+     │   calls withdrawProceeds().                                             │
+     │ - Subscription flow: instant — buy reverts if investor not whitelisted, │
+     │   otherwise transfers tokens and holds ETH immediately.                 │
+     │                                                                         │
+     │ Section 5 — Functions (key ones)                                        │
+     │                                                                         │
+     │ Function: AssetFactory.authoriseIssuer(addr)                            │
+     │ Who: admin                                                              │
+     │ Preconditions: addr not yet authorised                                  │
+     │ Effects: adds to authorisedIssuers                                      │
+     │ Reverts if: caller != admin                                             │
+     │ ────────────────────────────────────────                                │
+     │ Function: AssetFactory.createAsset(name, symbol, supply, priceWei)      │
+     │ Who: authorised issuer                                                  │
+     │ Preconditions: issuer is authorised                                     │
+     │ Effects: deploys AssetToken + AssetSale, mints supply to issuer,        │
+     │ records in                                                              │
+     │ registry                                                                │
+     │ Reverts if: caller not authorised                                       │
+     │ ────────────────────────────────────────                                │
+     │ Function: AssetToken.addToWhitelist(addr)                               │
+     │ Who: issuer                                                             │
+     │ Preconditions: —                                                        │
+     │ Effects: whitelist[addr] = true                                         │
+     │ Reverts if: caller != issuer                                            │
+     │ ────────────────────────────────────────                                │
+     │ Function: AssetToken.transfer(to, amount)                               │
+     │ Who: token holder                                                       │
+     │ Preconditions: to is whitelisted, not paused, neither party frozen      │
+     │ Effects: standard ERC-20 transfer                                       │
+     │ Reverts if: any precondition false                                      │
+     │ ────────────────────────────────────────                                │
+     │ Function: AssetSale.allocate(amount)                                    │
+     │ Who: issuer                                                             │
+     │ Preconditions: issuer holds >= amount tokens                            │
+     │ Effects: transfers tokens into AssetSale                                │
+     │ Reverts if: caller != issuer                                            │
+     │ ────────────────────────────────────────                                │
+     │ Function: AssetSale.buy(amount)                                         │
+     │ Who: investor                                                           │
+     │ Preconditions: investor is whitelisted, msg.value == amount * priceWei, │
+     │ enough                                                                  │
+     │ tokens in sale                                                          │
+     │ Effects: transfers tokens to investor, holds ETH                        │
+     │ Reverts if: any precondition false                                      │
+     │ ────────────────────────────────────────                                │
+     │ Function: AssetSale.withdrawProceeds()                                  │
+     │ Who: issuer                                                             │
+     │ Preconditions: —                                                        │
+     │ Effects: sends ETH balance to issuer                                    │
+     │ Reverts if: caller != issuer                                            │
+     │ ────────────────────────────────────────                                │
+     │ Function: AssetToken.pause() / unpause()                                │
+     │ Who: issuer                                                             │
+     │ Preconditions: —                                                        │
+     │ Effects: paused flag                                                    │
+     │ Reverts if: caller != issuer                                            │
+     │ ────────────────────────────────────────                                │
+     │ Function: AssetToken.freeze(addr) / unfreeze(addr)                      │
+     │ Who: issuer                                                             │
+     │ Preconditions: —                                                        │
+     │ Effects: frozen flag                                                    │
+     │ Reverts if: caller != issuer                                            │
+     │                                                                         │
+     │ Section 6 — Invariants                                                  │
+     │                                                                         │
+     │ 1. Every address with a non-zero CPT balance is on the AssetToken       │
+     │    whitelist.                                                           │
+     │ 2. AssetToken.totalSupply() equals the sum of all balances.             │
+     │ 3. ETH held by AssetSale equals (tokens sold from AssetSale) ×          │
+     │    priceWei, minus any withdrawn proceeds.                              │
+     │ 4. No non-whitelisted address ever receives a token transfer (reverts   │
+     │    at ERC-20 hook level).                                               │
+     │ 5. Only the issuer who deployed an AssetToken can modify its whitelist, │
+     │    paused state, or frozen addresses.                                   │
+     │                                                                         │
+     │ Section 7 — Frontend                                                    │
+     │                                                                         │
+     │ Three pages:                                                            │
+     │ - Admin dashboard: list of authorised issuers, button to                │
+     │   authorise/remove.                                                     │
+     │ - Issuer dashboard: create new asset (form), list own assets,           │
+     │   per-asset: allocate tokens to sale, whitelist investor address, view  │
+     │   proceeds, withdraw.                                                   │
+     │ - Investor dashboard: list of available assets (from factory registry), │
+     │   buy tokens (enter amount, pay ETH), view own balances, transfer to    │
+     │   another address.                                                      │
+     │                                                                         │
+     │ Each screen connects via MetaMask (ethers.js BrowserProvider).          │
+     │                                                                         │
+     │ Section 8 — Out of scope                                                │
+     │                                                                         │
+     │ - NFT-based unique assets — out of scope for MVP simplicity             │
+     │ - Redemption / buyback — out of scope                                   │
+     │ - Yield / dividend distribution — out of scope                          │
+     │ - NAV oracle / price updates after creation — out of scope              │
+     │ - Multi-jurisdiction compliance rules beyond a single whitelist — out   │
+     │   of scope                                                              │
+     │ - Actual legal enforceability of the on-chain record — out of scope     │
+     │                                                                         │
+     │ Section 9 — Assumptions                                                 │
+     │                                                                         │
+     │ - Network: Sepolia testnet (chain ID 11155111)                          │
+     │ - Decimals: 0 (whole tokens only, matches fractional-unit model)        │
+     │ - Test wallets: three Hardhat accounts in local network; three MetaMask │
+     │   burner wallets on Sepolia                                             │
+     │ - Node.js >= 18, Hardhat 2.x, OpenZeppelin Contracts 5.x                │
+     │ - Frontend: React 18, ethers.js 6.x, Vite                               │
+     │                                                                         │
+     │ Section 10 — Changes from v0                                            │
+     │                                                                         │
+     │ Change: Narrowed to one real estate fund + one digital asset            │
+     │ Why: MVP focus                                                          │
+     │ AI influence: No                                                        │
+     │ ────────────────────────────────────────                                │
+     │ Change: Three concrete contracts (Token, Factory, Sale)                 │
+     │ Why: Clarifies separation of concerns                                   │
+     │ AI influence: AI research session 2026-10-23                            │
+     │ (exports/2026-10-23-claude-ai-research.md)                              │
+     │ ────────────────────────────────────────                                │
+     │ Change: Fixed price model (not NAV)                                     │
+     │ Why: Simplicity for MVP                                                 │
+     │ AI influence: No                                                        │
+     │ ────────────────────────────────────────                                │
+     │ Change: Instant subscription (not request-and-approve)                  │
+     │ Why: Reduces contract complexity                                        │
+     │ AI influence: No                                                        │
+     │ ────────────────────────────────────────                                │
+     │ Change: Whitelist + pause + freeze as in-scope features                 │
+     │ Why: Matches institutional compliance requirement from v0               │
+     │ AI influence: No                                                        │
+     │                                                                         │
+     │ ---                                                                     │
+     │                                                                         │
+     │ Step 5 — npm init + Hardhat + OpenZeppelin                              │
+     │                                                                         │
+     │ Run in repo root:                                                       │
+     │ npm init -y                                                             │
+     │ npm install --save-dev hardhat @nomicfoundation/hardhat-toolbox         │
+     │ npm install @openzeppelin/contracts                                     │
+     │ npx hardhat init   # choose "Create a JavaScript project", accept       │
+     │ defaults                                                                │
+     │                                                                         │
+     │ hardhat.config.js networks: local hardhat network + Sepolia (RPC URL    │
+     │ from .env).                                                             │
+     │                                                                         │
+     │ Update .gitignore to include node_modules/, cache/, artifacts/,         │
+     │ coverage/, .env.                                                        │
+     │                                                                         │
+     │ ---                                                                     │
+     │                                                                         │
+     │ Step 6 — Create contract skeleton files                                 │
+     │                                                                         │
+     │ Create stub files (empty but compilable) in contracts/:                 │
+     │                                                                         │
+     │ contracts/AssetToken.sol — ERC-20 stub (imports OpenZeppelin ERC20,     │
+     │ constructor, empty body)                                                │
+     │ contracts/AssetFactory.sol — stub (constructor with admin address)      │
+     │ contracts/AssetSale.sol — stub (constructor with token address and      │
+     │ priceWei)                                                               │
+     │                                                                         │
+     │ These stubs must compile with npx hardhat compile. Full implementations │
+     │ come in Phase 2.                                                        │
+     │                                                                         │
+     │ ---                                                                     │
+     │                                                                         │
+     │ Step 7 — Create test, scripts, frontend stubs                           │
+     │                                                                         │
+     │ - test/AssetToken.test.js — empty describe block, it.skip placeholders  │
+     │ - test/AssetFactory.test.js — same                                      │
+     │ - test/AssetSale.test.js — same                                         │
+     │ - scripts/deploy.js — commented-out deploy scaffold                     │
+     │ - scripts/setupDemo.js — commented-out demo scaffold                    │
+     │ - frontend/ — npm create vite@latest frontend -- --template react (or   │
+     │   just mkdir + package.json stub)                                       │
+     │                                                                         │
+     │ ---                                                                     │
+     │                                                                         │
+     │ Step 8 — Commit                                                         │
+     │                                                                         │
+     │ git add docs/spec/spec-v1.md                                            │
+     │ git commit -m "docs: spec v1 frozen — Campus Property Fund, fixed       │
+     │ price, instant subscription"                                            │
+     │                                                                         │
+     │ git add -A                                                              │
+     │ git commit -m "chore: hardhat toolchain, OpenZeppelin 5.x, contract     │
+     │ stubs"                                                                  │
+     │                                                                         │
+     │ Then push.                                                              │
+     │                                                                         │
+     │ ---                                                                     │
+     │                                                                         │
+     │ Verification                                                            │
+     │                                                                         │
+     │ Phase 1 completion criteria:                                            │
+     │ - [ ] git tag spec-v0 exists and points to spec-v0.md commit            │
+     │ - [ ] docs/spec/spec-v1.md has zero TODO(decision) markers              │
+     │ - [ ] npx hardhat compile exits 0 (contracts compile)                   │
+     │ - [ ] npx hardhat test runs (all tests skip/pass, none error)           │
+     │ - [ ] ls frontend/ is non-empty                                         │
+     │ - [ ] All team members can git clone && npm install && npx hardhat      │
+     │   compile                                                               │
+     │                                                                         │
+     │ ---                                                                     │
+     │                                                                         │
+     │ Notes                                                                   │
+     │                                                                         │
+     │ - The scripts/evidence.sh file calls forge which is not installed. It   │
+     │   is kept for the grading scaffold but will only work if Foundry is     │
+     │   installed later. The report should note Hardhat as the primary        │
+     │   testing toolchain.                                                    │
+     │ - CLAUDE.md rule: do not write contract code until spec-v1 has no       │
+     │   TODO(decision) — satisfied by Step 4 before Step 6.                   │
+     ╰─────────────────────────────────────────────────────────────────────────╯
+
+> /exit                                                                         
+  ⎿  Goodbye!
+
+> /effort                                                                       
+  ⎿  Set effort level to high (saved as your default for new sessions):
+     Comprehensive implementation with extensive testing and documentation ·
+     burns fastest — medium handles most tasks
+
+> Review and verify the plan.                                                   
+
+● Let me read the plan and cross-check it against the evidence kit requirements
+  and Phase 1 spec.
+
+  Read 1 file (ctrl+o to expand)
+
+● Let me verify the plan against all requirements — CLAUDE.md rules, SETUP.md
+  steps, Phase 1 spec, and current repo state.
+  Searched for 2 patterns, read 1 file, ran 1 shell command (ctrl+o to expand)
+
+● I've verified the plan against all sources. Here are the findings:
+
+  ---
+
+  Plan Verification
+
+  Overall: The plan is structurally sound and covers all Phase 1 requirements.
+  Six issues need fixing before execution.
+
+  ---
+
+  Issues Found
+
+  1. .claude/ merge conflict (Step 1)
+  The repo root already has .claude/settings.local.json (with a forge *
+  permission entry). Copying the evidence kit's .claude/settings.json + hooks/
+  must go alongside it — not overwrite settings.local.json. The plan says "copy
+  .claude/" which would silently clobber the existing file.
+
+  2. git add -A stages sc4053-evidence-kit/ (Step 3)
+  After copying files to repo root, the source subdirectory sc4053-evidence-kit/
+  still exists and git add -A will commit it (17 MB of zip + extracted
+  content). Need to add sc4053-evidence-kit/ and sc4053-evidence-kit.zip to
+  .gitignore before that commit.
+
+  3. Wrong commit prefix for contract stubs (Step 8)
+  CLAUDE.md defines ai: for "code generated by an AI tool." The contract stubs
+  will be Claude-generated, so the commit should be ai: contract stubs — 
+  AssetToken, AssetFactory, AssetSale — not chore:. The toolchain setup
+  (package.json, hardhat.config.js) remains chore:.
+
+  4. npx hardhat init creates Lock.sol sample (Step 5)
+  Hardhat's init creates contracts/Lock.sol, test/Lock.js and
+  ignition/modules/Lock.js. These need to be deleted before committing (same
+  pattern as SETUP.md Step 5: "delete src/Counter.sol"). The plan doesn't
+  mention this.
+
+  5. Missing SETUP.md Step 3 (manual)
+  SETUP.md requires copying the 23 Oct 2026 claude.ai research chat to
+  docs/ai-logs/exports/2026-10-23-claude-ai-research.md. This is user-held
+  content (not auto-captured by the hook because it was a claude.ai browser
+  session, not Claude Code). The plan omits this step entirely. It must be done
+  by hand, and INDEX.md's existing row references it.
+
+  6. git push missing --follow-tags (Step 3)
+  SETUP.md specifies git push --follow-tags to push the spec-v0 tag to remote in
+  the same command. The plan just says git push.
+
+  ---
+
+  What Is Correct
+
+  - CLAUDE.md constraint satisfied: spec-v1 frozen (Step 4) happens before
+    contract stubs (Step 6).
+  - Commit order matches SETUP.md exactly: spec-v0.md alone → tag → evidence
+    pipeline → frozen spec → toolchain.
+  - All six TODO(decision) markers in spec-v1.md are resolved with Phase 1
+    decisions.
+  - Invariants in Section 6 are testable and map directly to the function spec.
+  - .env.example pattern is preserved (no secrets in git).
+  - scripts/evidence.sh and scripts/new-issue.sh retained for later phases.
+
+  ---
+
+  Fixes needed in the plan
+
+  ┌─────┬────────────────────────────────────────────────────────────────────┐
+  │  #  │                                Fix                                 │
+  ├─────┼────────────────────────────────────────────────────────────────────┤
+  │     │ Copy evidence kit .claude/ contents selectively — add hooks/ and   │
+  │ 1   │ settings.json alongside existing settings.local.json, don't        │
+  │     │ overwrite                                                          │
+  ├─────┼────────────────────────────────────────────────────────────────────┤
+  │ 2   │ Add sc4053-evidence-kit/ and sc4053-evidence-kit.zip to .gitignore │
+  │     │  before git add -A                                                 │
+  ├─────┼────────────────────────────────────────────────────────────────────┤
+  │ 3   │ Split Step 8 into two commits: chore: for toolchain, ai: for       │
+  │     │ contract stubs                                                     │
+  ├─────┼────────────────────────────────────────────────────────────────────┤
+  │ 4   │ Delete Lock.sol / Lock.js after npx hardhat init                   │
+  ├─────┼────────────────────────────────────────────────────────────────────┤
+  │ 5   │ Add manual reminder: user copies claude.ai chat to                 │
+  │     │ docs/ai-logs/exports/2026-10-23-claude-ai-research.md              │
+  ├─────┼────────────────────────────────────────────────────────────────────┤
+  │ 6   │ Use git push --follow-tags                                         │
+  └─────┴────────────────────────────────────────────────────────────────────┘
+
+  Want me to update the plan file with these fixes and then execute it?
+
+✻ Cooked for 1m 28s · done 1:56 PM
+
+> Yes, update the plan with these fixes and then execute                        
+
+● Updated plan
+  ⎿  /plan to preview
+
+● Plan updated. Now executing.
+
+  Step 1 — Copy evidence kit to repo root (selective .claude merge)
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Step 2 — Merge .gitignore and add sc4053-evidence-kit to it
+
+  Read 1 file (ctrl+o to expand)
+
+● Write(.gitignore)
+  ⎿  Wrote 23 lines to .gitignore
+       1 # Secrets
+       2 .env
+       3 .env.local
+       4 
+       5 # Foundry build output
+       7 cache/
+       8 
+       9 # Local anvil deployments (testnet broadcasts stay committed as 
+         evidence)
+      10 broadcast/*/31337/
+     … +14 lines (ctrl+o to expand)
+
+● Step 3 — Fill in spec-v0.md
+
+● Update(docs\spec\spec-v0.md)
+  ⎿  Added 2 lines, removed 2 lines
+       4  
+       5  Do not edit this file. It is tagged `spec-v0`. All changes go i
+          n `spec-v1.md`.
+       6  
+       7 -Date written: <!-- fill in: when the team wrote this proposal -
+         -->                                                             
+       8 -Written by: <!-- fill in: team member names -->                
+       7 +Date written: 23 October 2026                                  
+       8 +Written by: Chordia Laksh                                      
+       9  
+      10  ---
+      11  
+
+● Step 4 — First commit + spec-v0 tag
+
+  Committed 96c2e0a, ran 1 shell command (ctrl+o to expand)
+  ⎿  PostToolUse:PowerShell says: Tip: Run /ultrareview before you push to catch
+     bugs with a cloud-based multi-agent review — 3 free reviews left.
+
+● Good — sc4053-evidence-kit/ is absent from the staged files (gitignore
+  worked). Committing.
+
+  Committed a652487 (ctrl+o to expand)
+
+● Step 6 — Write frozen spec-v1.md
+
+● Write(docs\spec\spec-v1.md)
+  ⎿  Added 136 lines, removed 18 lines
+        1  # Spec v1: frozen specification
+        2  
+        3 -Status: DRAFT. The spec is frozen when every `TODO(decision)` 
+          -marker below is gone. Claude Code will refuse to write contrac
+          -ts until then (see CLAUDE.md).                                
+        3 +Status: FROZEN. No `TODO(decision)` markers remain.           
+        4  
+        5  How this version was produced: human decisions, with AI-assist
+           ed research. The research sessions are logged in `docs/ai-logs
+           /INDEX.md`. Changes from `spec-v0.md` are explained in section
+            10.
+        6  
+        7 -Write this file in your own words. Each section below says wha
+          -t it needs to contain.                                        
+        8 -                                                              
+        7  ## 1. Problem and trust model
+        8  
+       11 -What problem the system solves, and what it does not solve. St
+          -ate who has to be trusted (the issuer) and for what. State tha
+          -t the token is a share register and the legal claim sits off-c
+          -hain.                                                         
+        9 +**Problem**: real-world asset ownership is opaque, settlement 
+          +is slow, and compliance tracking is manual. Traditional fund a
+          +dministration relies on intermediaries for record-keeping, tra
+          +nsfer approval, and settlement, introducing delay and counterp
+          +arty risk.                                                    
+       10  
+       13 -TODO(decision): write the "why a blockchain" paragraph.       
+       11 +**Why a blockchain**: an Ethereum smart contract provides an i
+          +mmutable, publicly auditable share register. Transfer rules (w
+          +hitelist, freeze, pause) are enforced in code rather than by a
+          + custodian. Settlement is atomic — a buyer pays ETH and receiv
+          +es tokens in a single transaction, eliminating counterparty ri
+          +sk. No intermediary can alter the ownership record.           
+       12  
+       13 +**Trust model**: the issuer is trusted to correctly describe t
+          +he off-chain asset and to maintain the legal register that bac
+          +ks the tokens. The on-chain token is a share register only — t
+          +he legal claim (e.g. beneficial interest in the fund) sits off
+          +-chain in a subscription agreement. The platform admin is trus
+          +ted to authorise only legitimate issuers.                     
+       14 +                                                              
+       15 +**Out of trust scope**: oracle price accuracy, issuer solvency
+          +, off-chain legal enforceability.                             
+       16 +                                                              
+       17  ## 2. Asset and scope
+       18  
+       17 -TODO(decision): which instrument (money-market fund, bond, gol
+          -d).                                                           
+       19 +Instrument: **fictional real estate investment fund** — Campus
+          + Property Fund.                                               
+       20  
+       21 +| Field | Value |                                             
+       22 +|---|---|                                                     
+       23 +| Token name | Campus Property Token |                        
+       24 +| Symbol | CPT |                                              
+       25 +| Total supply | 10 000 CPT |                                 
+       26 +| Token decimals | 0 (whole units) |                          
+       27 +| Initial sale price | 0.001 testnet ETH / token |            
+       28 +| Issuer | MetaMask Wallet A |                                
+       29 +| Investor 1 | MetaMask Wallet B |                            
+       30 +| Investor 2 | MetaMask Wallet C |                            
+       31 +                                                              
+       32 +A second demo asset, Digital Licensing Revenue Pool (symbol: D
+          +LP), will be deployed using the same contracts with different 
+          +metadata to demonstrate the multi-asset registry.             
+       33 +                                                              
+       34 +Both assets are ERC-20 tokens representing fractional interest
+          +s in a fictional fund. Tokenising unique NFTs or enforcing act
+          +ual intellectual-property rights is out of scope.             
+       35 +                                                              
+       36  ## 3. Roles
+       37  
+       21 -For each role (issuer admin, compliance agent, investor), list
+          - exactly what it can and cannot do.                           
+       38 +| Actor | Can | Cannot |                                      
+       39 +|---|---|---|                                                 
+       40 +| Platform admin | authorise issuer wallets; deauthorise issue
+          +r wallets | hold tokens; buy assets |                         
+       41 +| Authorised issuer | create assets (sets token name, symbol, 
+          +supply, sale price at creation); whitelist investor addresses;
+          + allocate tokens to the sale contract; withdraw ETH proceeds f
+          +rom the sale contract; freeze an individual investor address; 
+          +unfreeze; pause all transfers; unpause | control another issue
+          +r's asset; change the sale price after creation |             
+       42 +| Investor | connect wallet; buy tokens from the sale contract
+          + (if whitelisted); transfer tokens to another whitelisted addr
+          +ess; view own balance | buy if not whitelisted; transfer to no
+          +n-whitelisted address |                                       
+       43  
+       44 +An issuer cannot modify the whitelist, freeze state, or pause 
+          +state of a token they did not deploy.                         
+       45 +                                                              
+       46  ## 4. Contracts and state
+       47  
+       25 -For each contract: its purpose, its state variables, and which
+          - other contracts it calls.                                    
+       48 +### AssetToken.sol                                            
+       49  
+       27 -TODO(decision): price model (fixed $1 or issuer-set NAV).     
+       28 -TODO(decision): DvP design (approve-based or escrow).         
+       29 -TODO(decision): which extra features are in scope (freeze, for
+          -ced transfer, pause, redemption, one compliance rule, yield). 
+       50 +Purpose: ERC-20 token with compliance controls.               
+       51  
+       52 +State variables:                                              
+       53 +- `address public issuer` — set at deployment, immutable in pr
+          +actice                                                        
+       54 +- `mapping(address => bool) public whitelist` — addresses perm
+          +itted to hold and transfer tokens                             
+       55 +- `bool public paused` — when true, all transfers revert      
+       56 +- `mapping(address => bool) public frozen` — individual addres
+          +ses barred from sending or receiving                          
+       57 +                                                              
+       58 +Calls: none external (pure ERC-20 logic + compliance hooks).  
+       59 +                                                              
+       60 +**Price model**: fixed price set at deployment, stored in Asse
+          +tSale (not AssetToken). AssetToken has no knowledge of price. 
+       61 +                                                              
+       62 +**Extra features in scope**: whitelist (required to receive or
+          + send), pause (issuer halts all transfers globally), freeze (i
+          +ssuer bars one address), forced transfer (issuer can move toke
+          +ns out of a frozen address to recover them).                  
+       63 +                                                              
+       64 +**Out of scope for AssetToken**: redemption, yield/dividend, N
+          +AV oracle, upgradeability.                                    
+       65 +                                                              
+       66 +### AssetFactory.sol                                          
+       67 +                                                              
+       68 +Purpose: authorise issuers; deploy and register asset contract
+          +s.                                                            
+       69 +                                                              
+       70 +State variables:                                              
+       71 +- `address public admin` — platform admin, set in constructor 
+       72 +- `mapping(address => bool) public authorisedIssuers`         
+       73 +- `address[] public assets` — list of all deployed AssetToken 
+          +addresses                                                     
+       74 +- `mapping(address => address) public tokenToSale` — maps each
+          + AssetToken to its AssetSale                                  
+       75 +                                                              
+       76 +Calls: deploys `AssetToken` and `AssetSale`.                  
+       77 +                                                              
+       78 +### AssetSale.sol                                             
+       79 +                                                              
+       80 +Purpose: hold sale inventory; accept fixed-price ETH payments;
+          + hold proceeds for issuer withdrawal.                         
+       81 +                                                              
+       82 +State variables:                                              
+       83 +- `AssetToken public token`                                   
+       84 +- `uint256 public priceWei` — fixed price per token in wei, se
+          +t at deployment                                               
+       85 +- `address public issuer`                                     
+       86 +                                                              
+       87 +**DvP design**: escrow. The issuer calls `allocate(amount)`, t
+          +ransferring tokens from their wallet into the AssetSale contra
+          +ct. A buyer calls `buy(amount)` with `msg.value == amount * pr
+          +iceWei`; tokens transfer to the buyer immediately and ETH is h
+          +eld in the contract. The issuer later calls `withdrawProceeds(
+          +)` to collect ETH.                                            
+       88 +                                                              
+       89 +**Subscription flow**: instant. `buy` reverts if the caller is
+          + not whitelisted or if the contract holds fewer tokens than re
+          +quested; otherwise the transfer is immediate with no approval 
+          +queue.                                                        
+       90 +                                                              
+       91  ## 5. Functions
+       92  
+       33 -For every external function: who may call it, preconditions, e
+          -ffects, events emitted, and what must revert.                 
+       93 +Every external function, who may call it, preconditions, effec
+          +ts, events emitted, and what must revert.                     
+       94  
+       35 -TODO(decision): subscription flow (instant or request-and-appr
+          -ove).                                                         
+       95 +| Function | Caller | Preconditions | Effects | Event | Revert
+          +s if |                                                        
+       96 +|---|---|---|---|---|---|                                     
+       97 +| `AssetFactory.authoriseIssuer(address)` | admin | — | `autho
+          +risedIssuers[addr] = true` | `IssuerAuthorised(addr)` | caller
+          + != admin; addr already authorised |                          
+       98 +| `AssetFactory.deauthoriseIssuer(address)` | admin | addr is 
+          +authorised | `authorisedIssuers[addr] = false` | `IssuerDeauth
+          +orised(addr)` | caller != admin; addr not authorised |        
+       99 +| `AssetFactory.createAsset(name, symbol, supply, priceWei)` |
+          + authorised issuer | priceWei > 0; supply > 0 | deploys AssetT
+          +oken, mints supply to issuer; deploys AssetSale; records both 
+          +in registry | `AssetCreated(token, sale, issuer)` | caller not
+          + authorised |                                                 
+      100 +| `AssetToken.addToWhitelist(address)` | issuer | — | `whiteli
+          +st[addr] = true` | `Whitelisted(addr)` | caller != issuer |   
+      101 +| `AssetToken.removeFromWhitelist(address)` | issuer | addr ha
+          +s zero balance | `whitelist[addr] = false` | `RemovedFromWhite
+          +list(addr)` | caller != issuer; addr has non-zero balance |   
+      102 +| `AssetToken.transfer(to, amount)` | token holder | `whitelis
+          +t[to]`; `!paused`; `!frozen[from]`; `!frozen[to]` | standard E
+          +RC-20 transfer | `Transfer(from, to, amount)` | any preconditi
+          +on false |                                                    
+      103 +| `AssetToken.transferFrom(from, to, amount)` | approved spend
+          +er | same as transfer | same as transfer | `Transfer` | any pr
+          +econdition false |                                            
+      104 +| `AssetToken.pause()` | issuer | `!paused` | `paused = true` 
+          +| `Paused()` | caller != issuer; already paused |             
+      105 +| `AssetToken.unpause()` | issuer | `paused` | `paused = false
+          +` | `Unpaused()` | caller != issuer; not paused |             
+      106 +| `AssetToken.freeze(address)` | issuer | `!frozen[addr]` | `f
+          +rozen[addr] = true` | `Frozen(addr)` | caller != issuer; alrea
+          +dy frozen |                                                   
+      107 +| `AssetToken.unfreeze(address)` | issuer | `frozen[addr]` | `
+          +frozen[addr] = false` | `Unfrozen(addr)` | caller != issuer; n
+          +ot frozen |                                                   
+      108 +| `AssetToken.forcedTransfer(from, to, amount)` | issuer | `wh
+          +itelist[to]`; `!paused`; `!frozen[to]` | transfers regardless 
+          +of `frozen[from]` | `ForcedTransfer(from, to, amount)` | calle
+          +r != issuer; preconditions on `to` false |                    
+      109 +| `AssetSale.allocate(uint256 amount)` | issuer | issuer ERC-2
+          +0 balance >= amount; issuer has approved AssetSale | transfers
+          + tokens from issuer to AssetSale | `Allocated(amount)` | calle
+          +r != issuer; balance insufficient |                           
+      110 +| `AssetSale.buy(uint256 amount)` | investor | `whitelist[msg.
+          +sender]`; `msg.value == amount * priceWei`; AssetSale token ba
+          +lance >= amount | transfers tokens to buyer; ETH held in contr
+          +act | `Purchased(buyer, amount)` | any precondition false |   
+      111 +| `AssetSale.withdrawProceeds()` | issuer | ETH balance > 0 | 
+          +sends full ETH balance to issuer | `ProceedsWithdrawn(amount)`
+          + | caller != issuer; no ETH to withdraw |                     
+      112  
+      113  ## 6. Invariants
+      114  
+       39 -Properties that must hold after any sequence of calls. These b
+          -ecome invariant tests. Examples of the kind of statement wante
+          -d: "every address with a non-zero balance is verified", "total
+          - supply equals the sum of balances".                          
+      115 +Properties that must hold after any sequence of calls. These b
+          +ecome invariant and unit tests.                               
+      116  
+      117 +1. **Whitelist invariant**: every address with a non-zero CPT 
+          +balance is on the whitelist. (`balanceOf(addr) > 0 → whitelist
+          +[addr] == true`)                                              
+      118 +2. **Supply invariant**: `totalSupply()` equals the sum of all
+          + individual balances at all times.                            
+      119 +3. **Sale proceeds invariant**: ETH held by AssetSale equals t
+          +he total ETH paid by buyers minus total ETH withdrawn by the i
+          +ssuer.                                                        
+      120 +4. **Transfer gate invariant**: no transfer to a non-whitelist
+          +ed address ever succeeds; every such attempt reverts.         
+      121 +5. **Pause invariant**: when `paused == true`, no `transfer` o
+          +r `transferFrom` succeeds (except `forcedTransfer` by issuer).
+      122 +6. **Freeze invariant**: when `frozen[addr] == true`, `addr` c
+          +annot send tokens via `transfer` or `transferFrom`.           
+      123 +7. **Issuer isolation invariant**: address X can only call `ad
+          +dToWhitelist`, `pause`, `freeze`, `forcedTransfer`, `allocate`
+          +, or `withdrawProceeds` on an AssetToken / AssetSale that X de
+          +ployed.                                                       
+      124 +                                                              
+      125  ## 7. Frontend
+      126  
+       43 -Screens per role, what each screen shows, and which contract c
+          -alls it makes.                                                
+      127 +**Admin dashboard** (`/admin`)                                
+      128 +- Shows: list of authorised issuers (from `AssetFactory`)     
+      129 +- Actions: authorise new issuer (enter address → `authoriseIss
+          +uer`); deauthorise (→ `deauthoriseIssuer`)                    
+      130 +- Contract calls: `AssetFactory.authorisedIssuers`, `AssetFact
+          +ory.authoriseIssuer`, `AssetFactory.deauthoriseIssuer`        
+      131  
+      132 +**Issuer dashboard** (`/issuer`)                              
+      133 +- Shows: list of assets the connected wallet deployed; per-ass
+          +et: token balance, AssetSale inventory, ETH proceeds          
+      134 +- Actions: create new asset (form: name, symbol, supply, price
+          + → `createAsset`); allocate tokens (enter amount → approve the
+          +n `allocate`); whitelist investor (enter address → `addToWhite
+          +list`); withdraw proceeds (→ `withdrawProceeds`)              
+      135 +- Contract calls: `AssetFactory.createAsset`, `AssetToken.addT
+          +oWhitelist`, `AssetSale.allocate`, `AssetSale.withdrawProceeds
+          +`                                                             
+      136 +                                                              
+      137 +**Investor dashboard** (`/investor`)                          
+      138 +- Shows: all assets in factory registry; for each: name, symbo
+          +l, price, available tokens; own holdings                      
+      139 +- Actions: buy tokens (enter amount, pay ETH → `buy`); transfe
+          +r tokens (enter recipient + amount → `transfer`)              
+      140 +- Contract calls: `AssetFactory.assets`, `AssetSale.buy`, `Ass
+          +etToken.transfer`                                             
+      141 +                                                              
+      142 +Each page connects via MetaMask using ethers.js `BrowserProvid
+          +er`. Deployed contract addresses are read from a JSON config f
+          +ile generated by the deploy script.                           
+      143 +                                                              
+      144  ## 8. Out of scope
+      145  
+       47 -Things deliberately not built, with one line each on why.     
+      146 +- NFT-based unique assets — per-asset complexity out of MVP sc
+          +ope                                                           
+      147 +- Redemption / buyback — out of scope                         
+      148 +- Yield / dividend distribution — out of scope                
+      149 +- NAV oracle or price updates after creation — out of scope; p
+          +rice is fixed at deployment                                   
+      150 +- Multi-jurisdiction compliance rules beyond a single whitelis
+          +t — out of scope                                              
+      151 +- Actual legal enforceability of the on-chain record — out of 
+          +scope                                                         
+      152 +- Governance or on-chain voting — out of scope                
+      153 +- Gas optimisation for large investor sets — out of scope for 
+          +MVP                                                           
+      154  
+      155  ## 9. Assumptions
+      156  
+       51 -Network, token decimals, test wallets, anything the code depen
+          -ds on.                                                        
+      157 +- Network: Sepolia testnet (chain ID 11155111) for integration
+          +; Hardhat local network (chain ID 31337) for development      
+      158 +- Token decimals: 0 — whole units only, consistent with fracti
+          +onal-unit model where each token represents one equal share   
+      159 +- Test wallets: three Hardhat accounts (index 0 = admin, 1 = i
+          +ssuer, 2 = investor) for local tests; three MetaMask burner wa
+          +llets on Sepolia for demo                                     
+      160 +- Toolchain: Node.js ≥ 18, Hardhat 2.x, OpenZeppelin Contracts
+          + 5.x, ethers.js 6.x                                           
+      161 +- Frontend: React 18, Vite, ethers.js 6.x                     
+      162 +- `.env` holds `TESTNET_RPC_URL`, `PRIVATE_KEY`, `ETHERSCAN_AP
+          +I_KEY` — never committed                                      
+      163  
+      164  ## 10. Changes from v0
+      165  
+       55 -For each change from `spec-v0.md`: what changed, why, and whet
+          -her AI research influenced it (link the session in `docs/ai-lo
+          -gs/INDEX.md`).                                                
+      166 +| Change | Why | AI influence |                               
+      167 +|---|---|---|                                                 
+      168 +| Narrowed scope to one real-estate fund + one digital asset |
+          + Keeps MVP deliverable within project timeline | No |         
+      169 +| Defined three concrete contracts (AssetToken, AssetFactory, 
+          +AssetSale) | Makes responsibilities and security boundaries ex
+          +plicit | AI research session 2026-10-23 (docs/ai-logs/exports/
+          +2026-10-23-claude-ai-research.md) |                           
+      170 +| Fixed sale price set at deployment (not issuer-set NAV) | El
+          +iminates price oracle dependency; simplifies MVP | No |       
+      171 +| Instant subscription flow (not request-and-approve) | Reduce
+          +s contract complexity; investor experience is clearer | No |  
+      172 +| Whitelist + pause + freeze + forced transfer as in-scope fea
+          +tures | Directly addresses the "permissioning and compliance" 
+          +requirement from v0 | No |                                    
+      173 +| Frontend split into three role-based dashboards | Matches th
+          +e three-role model; each role sees only relevant actions | No 
+          +|                                                             
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● The only match is the status line — no actual TODO(decision) markers. Spec is
+  frozen.
+
+  Step 7 — Commit frozen spec
+
+  Committed 30ae928 (ctrl+o to expand)
+
+● Step 8 — npm init + Hardhat + OpenZeppelin
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Update(package.json)
+  ⎿  Added 2 lines, removed 2 lines
+      1  {
+      2 -  "name": "project",                                            
+      2 +  "name": "rwa-tokenisation",                                   
+      3    "version": "1.0.0",
+      4 -  "description": "",                                            
+      4 +  "description": "Tokenisation of real-world and digital assets 
+        +on Ethereum — SC4053 NTU",                                      
+      5    "main": "index.js",
+      6    "directories": {
+      7      "doc": "docs"
+
+● Update(package.json)
+  ⎿  Added 4 lines, removed 1 line
+       7      "doc": "docs"
+       8    },
+       9    "scripts": {
+      10 -    "test": "echo \"Error: no test specified\" && exit 1"      
+      10 +    "test": "hardhat test",                                    
+      11 +    "compile": "hardhat compile",                              
+      12 +    "deploy:local": "hardhat run scripts/deploy.js --network lo
+         +calhost",                                                      
+      13 +    "deploy:sepolia": "hardhat run scripts/deploy.js --network 
+         +sepolia"                                                       
+      14    },
+      15    "repository": {
+      16      "type": "git",
+
+  Ran 3 shell commands (ctrl+o to expand)
+
+● Hardhat 3.x was installed — its config format differs from 2.x. Let me check
+  OZ version and adapt the config accordingly.
+
+  Ran 3 shell commands (ctrl+o to expand)
+
+● Hardhat 3 init requires an interactive shell. I'll create the config manually
+  by inspecting the installed package structure.
+
+  Searched for 2 patterns, read 2 files, ran 1 shell command (ctrl+o to expand)
+
+● Hardhat 3 uses TypeScript and ESM. Let me check the toolbox package we
+  installed and align the config.
+
+  Read 1 file, ran 2 shell commands (ctrl+o to expand)
+
+● The installed hardhat-toolbox is the deprecated Hardhat 2 version. For Hardhat
+  3 I need hardhat-toolbox-mocha-ethers and TypeScript. Let me fix this.
+  Ran 1 shell command (ctrl+o to expand)
+
+● Now create hardhat.config.ts, tsconfig.json, and update package.json for ESM +
+  TypeScript.
+
+  Read 2 files (ctrl+o to expand)
+
+● Update(package.json)
+  ⎿  Added 4 lines, removed 8 lines
+       2    "name": "rwa-tokenisation",
+       3    "version": "1.0.0",
+       4    "description": "Tokenisation of real-world and digital assets
+           on Ethereum — SC4053 NTU",
+       5 -  "main": "index.js",                                          
+       6 -  "directories": {                                             
+       7 -    "doc": "docs"                                              
+       8 -  },                                                           
+       5 +  "type": "module",                                            
+       6    "scripts": {
+       7      "test": "hardhat test",
+       8      "compile": "hardhat compile",
+      12 -    "deploy:local": "hardhat run scripts/deploy.js --network lo
+         -calhost",                                                      
+      13 -    "deploy:sepolia": "hardhat run scripts/deploy.js --network 
+         -sepolia"                                                       
+       9 +    "deploy:local": "hardhat run scripts/deploy.ts --network ha
+         +rdhatMainnet",                                                 
+      10 +    "deploy:sepolia": "hardhat run scripts/deploy.ts --network 
+         +sepolia"                                                       
+      11    },
+      12    "repository": {
+      13      "type": "git",
+      14      "url": "git+https://github.com/adityamd1307/Tokenisation-Us
+          ing-BlockChain.git"
+      15    },
+      16    "keywords": [],
+      20 -  "author": "",                                                
+      17 +  "author": "Chordia Laksh",                                   
+      18    "license": "ISC",
+      22 -  "type": "commonjs",                                          
+      19    "bugs": {
+      20      "url": "https://github.com/adityamd1307/Tokenisation-Using-
+          BlockChain/issues"
+      21    },
+
+● Write(tsconfig.json)
+  ⎿  Wrote 11 lines to tsconfig.json
+       1 {
+       2   "compilerOptions": {
+       3     "lib": ["es2023"],
+       4     "module": "node20",
+       5     "target": "es2023",
+       6     "skipLibCheck": true,
+       7     "outDir": "dist",
+       8     "types": ["node", "mocha"],
+       9     "verbatimModuleSyntax": true
+      10   }
+     … +1 line (ctrl+o to expand)
+
+● Write(hardhat.config.ts)
+  ⎿  Wrote 34 lines to hardhat.config.ts
+       1 import hardhatToolboxMochaEthers from "@nomicfoundation/hardhat-
+         toolbox-mocha-ethers";
+       2 import { configVariable, defineConfig } from "hardhat/config";
+       3 
+       4 export default defineConfig({
+       6   solidity: {
+       7     profiles: {
+       8       default: {
+       9         version: "0.8.24",
+      10       },
+     … +25 lines (ctrl+o to expand)
+
+● Step 9 — Contract skeleton files
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Write(contracts\AssetToken.sol)
+  ⎿  Wrote 29 lines to contracts\AssetToken.sol
+       1 // SPDX-License-Identifier: MIT
+       2 pragma solidity ^0.8.24;
+       3 
+       4 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+       5 
+         transfer controls.
+       7 // Full implementation in Phase 2.
+       8 contract AssetToken is ERC20 {
+       9     address public issuer;
+      10     mapping(address => bool) public whitelist;
+     … +20 lines (ctrl+o to expand)
+
+● Write(contracts\AssetFactory.sol)
+  ⎿  Wrote 18 lines to contracts\AssetFactory.sol
+       1 // SPDX-License-Identifier: MIT
+       2 pragma solidity ^0.8.24;
+       3 
+       4 import "./AssetToken.sol";
+       5 import "./AssetSale.sol";
+       7 // spec-v1 §4: authorises issuers and deploys AssetToken + Asset
+         Sale pairs.
+       8 // Full implementation in Phase 2.
+       9 contract AssetFactory {
+      10     address public admin;
+     … +9 lines (ctrl+o to expand)
+
+● Write(contracts\AssetSale.sol)
+  ⎿  Wrote 18 lines to contracts\AssetSale.sol
+       1 // SPDX-License-Identifier: MIT
+       2 pragma solidity ^0.8.24;
+       3 
+       4 import "./AssetToken.sol";
+       5 
+         nvestors buy at fixed price.
+       7 // Full implementation in Phase 2.
+       8 contract AssetSale {
+       9     AssetToken public token;
+      10     uint256 public priceWei;
+     … +10 lines (ctrl+o to expand)
+
+● Now test that npx hardhat compile succeeds:
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● All 3 contracts compile cleanly. Now create test stubs, deploy scripts, and
+  frontend skeleton.
+
+  Step 10 — Test stubs, deploy scaffold, frontend
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Write(test\AssetToken.test.ts)
+  ⎿  Wrote 37 lines to test\AssetToken.test.ts
+       1 import { assert } from "chai";
+       2 import hre from "hardhat";
+       3 
+       4 // spec-v1 §5 & §6 — full test suite in Phase 2
+       5 describe("AssetToken", function () {
+         ly");
+       7   it.skip("mints initial supply to issuer");
+       8   it.skip("issuer is auto-whitelisted on deployment");
+       9 
+      10   // Whitelist
+     … +33 lines (ctrl+o to expand)
+
+● Write(test\AssetFactory.test.ts)
+  ⎿  Wrote 22 lines to test\AssetFactory.test.ts
+       1 import { assert } from "chai";
+       2 import hre from "hardhat";
+       3 
+       4 // spec-v1 §5 — full test suite in Phase 2
+       5 describe("AssetFactory", function () {
+       6   it.skip("deploys with correct admin address");
+       7 
+       8   // Issuer authorisation
+       9   it.skip("admin can authorise an issuer");
+      10   it.skip("admin can deauthorise an issuer");
+     … +15 lines (ctrl+o to expand)
+
+● Write(test\AssetSale.test.ts)
+  ⎿  Wrote 26 lines to test\AssetSale.test.ts
+       1 import { assert } from "chai";
+       2 import hre from "hardhat";
+       3 
+       4 // spec-v1 §5 & §6 — full test suite in Phase 2
+       5 describe("AssetSale", function () {
+       6   it.skip("deploys with correct token, priceWei, and issuer");
+       7 
+       8   // Allocation
+       9   it.skip("issuer can allocate tokens (approve + allocate)");
+      10   it.skip("non-issuer cannot allocate");
+     … +19 lines (ctrl+o to expand)
+
+● Write(scripts\deploy.ts)
+  ⎿  Wrote 33 lines to scripts\deploy.ts
+       1 // Deploy script — Phase 3 will implement this fully.
+       2 // Usage: hardhat run scripts/deploy.ts --network hardhatMainnet
+       3 //        hardhat run scripts/deploy.ts --network sepolia
+       4 
+       5 import hre from "hardhat";
+       6 import fs from "fs";
+       7 import path from "path";
+       8 
+       9 async function main() {
+      10   const [admin, issuer] = await hre.network.provider.request({
+     … +26 lines (ctrl+o to expand)
+
+● Write(scripts\setupDemo.ts)
+  ⎿  Wrote 10 lines to scripts\setupDemo.ts
+       1 // Demo setup script — Phase 3/4 will implement this fully.
+         sets,
+       3 // whitelists demo investor wallets, allocates tokens to sale.
+       4 
+       6 // 1. factory.authoriseIssuer(issuerAddress)
+       7 // 2. factory.createAsset("Campus Property Token", "CPT", 10000,
+       8 // 3. factory.createAsset("Digital Licensing Revenue Pool", "DLP
+         ", 5000, ethers.parseUnits("0.002", "ether"))
+       9 // 4. cptToken.addToWhitelist(investor1); cptToken.addToWhitelis
+      10 // 5. cptSale.allocate(10000)
+     … +4 lines (ctrl+o to expand)
+
+● Now create the frontend skeleton:
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Write(frontend\package.json)
+  ⎿  Wrote 23 lines to frontend\package.json
+       1 {
+       2   "name": "rwa-tokenisation-frontend",
+       3   "private": true,
+       4   "version": "0.0.1",
+       5   "type": "module",
+       6   "scripts": {
+       7     "dev": "vite",
+       8     "build": "tsc -b && vite build",
+       9     "preview": "vite preview"
+      10   },
+     … +13 lines (ctrl+o to expand)
+
+● Write(frontend\index.html)
+  ⎿  Wrote 12 lines to frontend\index.html
+       1 <!doctype html>
+       2 <html lang="en">
+       3   <head>
+       4     <meta charset="UTF-8" />
+       5     <meta name="viewport" content="width=device-width, initial-s
+       6     <title>RWA Tokenisation</title>
+       7   </head>
+       8   <body>
+       9     <div id="root"></div>
+      10     <script type="module" src="/src/main.tsx"></script>
+     … +3 lines (ctrl+o to expand)
+
+● Write(frontend\src\main.tsx)
+  ⎿  Wrote 9 lines to frontend\src\main.tsx
+      1 import { StrictMode } from "react";
+      2 import { createRoot } from "react-dom/client";
+      3 import App from "./App.tsx";
+      4 
+      5 createRoot(document.getElementById("root")!).render(
+      6   <StrictMode>
+      7     <App />
+      8   </StrictMode>
+      9 );
+
+● Write(frontend\src\App.tsx)  ⎿  Wrote 18 lines to frontend\src\App.tsx
+       1 // Phase 4 will implement full dashboards (spec-v1 §7):
+       2 //   /admin   — platform admin: authorise/deauthorise issuers
+         cate, withdraw
+       4 //   /investor — investor: browse assets, buy tokens, transfer h
+         oldings
+       6 export default function App() {
+       7   return (
+       8     <div style={{ fontFamily: "sans-serif", padding: "2rem" }}>
+      10       <p>Campus Property Fund &amp; Digital Licensing Revenue Po
+         ol</p>
+     … +11 lines (ctrl+o to expand)
+
+● Write(frontend\src\config\addresses.json)
+  ⎿  Wrote 4 lines to frontend\src\config\addresses.json
+      1 {
+      2   "note": "Populated by scripts/deploy.ts after deployment. Do no
+        t edit by hand.",
+      3   "AssetFactory": ""
+      4 }
+
+● Write(frontend\src\pages\AdminDashboard.tsx)
+  ⎿  Wrote 5 lines to frontend\src\pages\AdminDashboard.tsx
+      1 // spec-v1 §7 — Admin dashboard: list authorised issuers, authori
+        se/deauthorise.
+      2 // Implemented in Phase 4.
+      3 export default function AdminDashboard() {
+      4   return <div>Admin Dashboard — Phase 4</div>;
+      5 }
+
+● Write(frontend\src\pages\IssuerDashboard.tsx)
+  ⎿  Wrote 5 lines to frontend\src\pages\IssuerDashboard.tsx
+      1 // spec-v1 §7 — Issuer dashboard: create assets, whitelist invest
+        ors, allocate, withdraw.
+      2 // Implemented in Phase 4.
+      3 export default function IssuerDashboard() {
+      4   return <div>Issuer Dashboard — Phase 4</div>;
+      5 }
+
+● Write(frontend\src\pages\InvestorDashboard.tsx)
+  ⎿  Wrote 5 lines to frontend\src\pages\InvestorDashboard.tsx
+      1 // spec-v1 §7 — Investor dashboard: browse assets, buy tokens, tr
+        ansfer holdings.
+      2 // Implemented in Phase 4.
+      3 export default function InvestorDashboard() {
+      4   return <div>Investor Dashboard — Phase 4</div>;
+      5 }
+
+● Now verify npx hardhat test runs cleanly with all tests skipped, then commit
+  everything.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● 41 tests pending, 0 failing. Now commit with the correct prefixes.
+
+  Committed 9884a9b, f09926f, c504215 (ctrl+o to expand)
+
+● Now push everything including the spec-v0 tag:
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● The push needs GitHub credentials. Run this yourself:
+
+  ! git push --follow-tags
+
+  Now let me run the full verification checklist:
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● All checks pass. Here's the Phase 1 summary:
+
+  ---
+
+  Phase 1 Complete ✓
+
+  ┌─────────────────────────────────────┬───────────────────────────────────┐
+  │                Check                │              Result               │
+  ├─────────────────────────────────────┼───────────────────────────────────┤
+  │ spec-v0 tag exists                  │ ✓                                 │
+  ├─────────────────────────────────────┼───────────────────────────────────┤
+  │ spec-v1.md has zero TODO(decision)  │ ✓                                 │
+  │ markers                             │                                   │
+  ├─────────────────────────────────────┼───────────────────────────────────┤
+  │ npx hardhat compile exits 0         │ ✓ (3 contracts compiled with solc │
+  │                                     │  0.8.24)                          │
+  ├─────────────────────────────────────┼───────────────────────────────────┤
+  │ npx hardhat test runs cleanly       │ ✓ (41 pending, 0 failing)         │
+  ├─────────────────────────────────────┼───────────────────────────────────┤
+  │ frontend/src/ is non-empty          │ ✓                                 │
+  ├─────────────────────────────────────┼───────────────────────────────────┤
+  │ Commit history has correct prefixes │ ✓                                 │
+  └─────────────────────────────────────┴───────────────────────────────────┘
+
+  One manual step remaining — before the next session, copy your 23 Oct 2026
+  claude.ai research chat into
+  docs/ai-logs/exports/2026-10-23-claude-ai-research.md (the INDEX.md row
+  already references it). Then run ! git push --follow-tags to push all commits
+  and the spec-v0 tag.
+
+  Toolchain note: Hardhat 3.21.0 is installed (ESM + TypeScript config). The
+  scripts/evidence.sh grading pipeline requires Foundry (forge) — install it
+  when ready for Phase 5/6 security audit runs.
+
+✻ Churned for 10m 16s · done 2:07 PM
+
+※ recap: Phase 1 of the SC4053 tokenised-asset dApp is complete: spec frozen, Hardhat 3 toolchain set up, contract stubs compiling, and all commits made. Next: run `! git push --follow-tags` to push to GitHub. (disable recaps in /config)
+
+> I have pressed export on the claude web ui. run the git commands              
+
+● Let me check if the export file landed in the right place.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● The export file isn't in docs/ai-logs/exports/ yet — it likely downloaded to
+  your Downloads folder. Let me find it.
+
+  Ran 2 shell commands (ctrl+o to expand)
+  ⎿  Interrupted · What should Claude do instead?
+
+> run the git commands                                                          
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Git needs credentials. Run this yourself in your terminal:
+
+  ! git push --follow-tags
+
+  The ! prefix runs it in your shell where you can authenticate. Once pushed,
+  all 6 commits and the spec-v0 tag will be on the remote.
+
+✻ Cogitated for 11s · done 2:19 PM
+
+※ recap: Phase 1 of the SC4053 tokenised-asset dApp is complete — spec frozen, Hardhat 3 toolchain set up, contract stubs compiling, 41 test placeholders passing. Run `! git push --follow-tags` to publish to GitHub. (disable recaps in /config)
+
+> Check if the file is there in  docs/ai-logs/exports/ now                      
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● The file landed as 2026-10-23-claude-ai-research.md.json — the INDEX.md
+  references it as 2026-10-23-claude-ai-research.md. Renaming and committing.
+
+  Committed f3d4568 (ctrl+o to expand)
+
+● Committed. Now push:
+
+  ! git push --follow-tags
+
+  That sends all 7 commits and the spec-v0 tag to the remote. Phase 1 is fully
+  done.
+✻ Cooked for 14s · done 2:22 PM
+
+※ recap: Phase 1 of the SC4053 tokenised-asset dApp is complete: spec frozen, Hardhat 3 toolchain set up, contract stubs compiling, and all files committed. Run `! git push --follow-tags` to push everything to GitHub. (disable recaps in /config)
+
+> Critically analyze this project                                               
+
+● Let me read the current state of everything before forming a view.
+
+  Read 4 files, ran 1 shell command (ctrl+o to expand)
+
+● Now I have everything I need. Here is the critical analysis.
+
+  ---
+
+  Critical Analysis
+
+  1. Export file is wrong content (urgent — fix today)
+
+  The file committed as the research transcript
+  (docs/ai-logs/exports/2026-10-23-claude-ai-research.md) is not the
+  conversation. It is a JSON manifest with time-limited download URLs pointing
+  to ZIP archives of your entire claude.ai account export. The URLs expire
+  within 24 hours of creation.
+
+  The INDEX.md row already points to this file as evidence. If a grader clicks
+  the link, they get download instructions, not a research conversation. You
+  need to extract the actual conversation from the conversations-000.zip before
+  the links expire.
+
+  ---
+
+  2. ai-baseline branch has not been created
+
+  SETUP.md is explicit: once spec-v1 is frozen, the first full AI-generated
+  version of the contracts must be committed on a separate ai-baseline branch,
+  tagged ai-baseline, then merged to main. That branch is the "before" for every
+  audit issue and Report Section 4.
+
+  Right now the contract stubs went straight to main. Phase 2 (actual contract
+  implementation) must follow the branch workflow or the audit report has no
+  baseline to diff against. The stubs on main are fine as scaffolding; the
+  moment you ask AI to generate full implementations, that must go on
+  ai-baseline first.
+
+  ---
+
+  3. Spec contradiction — forcedTransfer while paused
+
+  Section 5 function table lists forcedTransfer with precondition !paused,
+  meaning it requires the contract to be un-paused. Section 6, Invariant 5 says
+  forcedTransfer is allowed while paused (it's the explicit exception). These
+  directly contradict each other. The implementation will break one of them —
+  and whichever breaks becomes AUD-001. Decide now: should issuers be able to
+  force-transfer frozen assets while paused? (In real institutional settings,
+  yes.) Fix the spec before Phase 2.
+
+  ---
+
+  4. Spec says Hardhat 2.x — installed version is Hardhat 3
+
+  Section 9 Assumptions reads "Hardhat 2.x" but the installed version is 3.21.0.
+  The config format, plugin names, network types (edr-simulated,
+  configVariable()), and test runner setup are all Hardhat 3-specific. A
+  teammate cloning the repo and following the spec would try to install Hardhat
+  2 and then be confused.
+
+  ---
+
+  5. Reentrancy risk not captured in spec or invariants
+
+  AssetSale.withdrawProceeds() will send ETH to the issuer. The spec says "sends
+  full ETH balance to issuer" but doesn't specify the call pattern. If
+  implemented with .call{value: ...}("") (the correct modern pattern), the
+  issuer wallet could be a contract that re-enters withdrawProceeds before the
+  balance is zeroed, draining more ETH than they are owed. This is a known,
+  predictable vulnerability that the spec should either: (a) require a
+  checks-effects-interactions pattern or a reentrancy guard, or (b) name as a
+  known risk. Currently neither appears anywhere.
+
+  ---
+
+  6. deauthoriseIssuer behavior is underspecified
+
+  The spec says deauthorising an issuer reverts if they were not previously
+  authorised, but says nothing about their existing deployed assets. After
+  deauthorisation, do their AssetToken and AssetSale contracts continue
+  operating normally? Can they still call allocate, withdrawProceeds,
+  addToWhitelist? The issuer address is stored directly on each contract —
+  deauthorising them at the factory level has no effect on what they can do with
+  their own token. This spec gap will either cause a confusing audit finding
+  ("issuer can still act after deauthorisation") or a design argument in Phase
+  5.
+
+  ---
+
+  7. removeFromWhitelist creates an unresolved interaction with freeze
+
+  The spec allows an issuer to removeFromWhitelist only when the target holds
+  zero balance. But it also allows freeze. A frozen investor still holds tokens.
+  To remove them from the whitelist, the issuer would need to forcedTransfer
+  their tokens elsewhere first, then removeFromWhitelist. This multi-step
+  recovery procedure is not documented anywhere in the spec. Validators (and
+  future teammates) will not know this is the intended flow.
+
+  ---
+
+  8. This Claude Code session is not logged in INDEX.md
+
+  SETUP.md requires an INDEX.md row for every session that generated code or
+  changed the spec. This session (Phase 1) did both — it wrote spec-v1.md,
+  created three contracts, 13 test files, a deploy script, and a frontend
+  skeleton. There is no row for it. SETUP.md also says to run /export 
+  docs/ai-logs/exports/<date>-phase1-setup.txt before ending the session.
+  Neither has been done.
+
+  ---
+
+  9. types/ directory is untracked and not gitignored
+
+  Running npx hardhat compile generated a types/ directory (TypeChain type
+  bindings). It shows in git status as untracked. It should be added to
+  .gitignore now, before it accidentally gets committed — or kept and committed
+  deliberately. Leaving it in this limbo state will silently vary between
+  teammates' machines.
+
+  ---
+
+  10. Section 10 wrong AI influence attribution
+
+  The entry "Three concrete contracts (Token, Factory, Sale) — AI research
+  session 2026-10-23" is not accurate. The AI research session was about
+  tokenisation use cases and the evidence pipeline, not contract architecture.
+  The three-contract design came from Phase 1 human decisions (your roadmap
+  document). Attributing it to the AI session is misleading for the audit
+  report.
+
+  ---
+
+  Summary by priority
+
+  ┌───────────────────┬─────────────────────────────────────────────────────┐
+  │     Priority      │                        Issue                        │
+  ├───────────────────┼─────────────────────────────────────────────────────┤
+  │ Fix today         │ Export file is a manifest, not a conversation —     │
+  │                   │ URLs expire                                         │
+  ├───────────────────┼─────────────────────────────────────────────────────┤
+  │ Before Phase 2    │ Create ai-baseline branch workflow; fix             │
+  │ starts            │ forcedTransfer/pause contradiction in spec          │
+  ├───────────────────┼─────────────────────────────────────────────────────┤
+  │ Before Phase 2    │ Document reentrancy requirement; clarify            │
+  │ contracts         │ deauthoriseIssuer scope; document freeze→removal    │
+  │                   │ flow                                                │
+  ├───────────────────┼─────────────────────────────────────────────────────┤
+  │ Before session    │ Add INDEX.md row for this session; run /export      │
+  │ ends              │                                                     │
+  ├───────────────────┼─────────────────────────────────────────────────────┤
+  │ Housekeeping      │ Fix "Hardhat 2.x" in Section 9; gitignore types/;   │
+  │                   │ fix Section 10 attribution                          │
+  └───────────────────┴─────────────────────────────────────────────────────┘
+
+✻ Brewed for 1m 22s · done 2:31 PM
+
+※ recap: Phase 1 of a tokenised-asset dApp on Ethereum is done — spec frozen, Hardhat set up, contract stubs compiling. Next: extract the actual research conversation from the claude.ai export ZIP before the download links expire today.
+
+> I have fixed issue 1. Fix issues 3, 4, 5, 6, 7, 8, 9, 10. Create a new PR for 
+  these.                                                                        
+
+● I'll create a branch, fix all issues, then set it up for a PR.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Issues 9 — gitignore types/
+
+● Update(.gitignore)
+  ⎿  Added 1 line
+      17  artifacts/
+      18  coverage/
+      19  typechain-types/
+      20 +types/                                                         
+      21  
+      22  # Evidence kit source (unzipped; files already copied to repo r
+          oot)
+      23  sc4053-evidence-kit/
+
+● Issues 3, 4, 5, 6, 7, 10 — spec-v1.md fixes
+
+  All edits to spec-v1.md in one pass:
+
+● Update(docs\spec\spec-v1.md)
+  ⎿  Added 2 lines
+      88  
+      89  **Subscription flow**: instant. `buy` reverts if the caller is 
+          not whitelisted or if the contract holds fewer tokens than requ
+          ested; otherwise the transfer is immediate with no approval que
+          ue.
+      90  
+      91 +**Reentrancy requirement**: `withdrawProceeds` must use the che
+         +cks-effects-interactions pattern — zero the internal ETH balanc
+         +e before calling out — or apply a reentrancy guard. An issuer w
+         +hose address is a contract could otherwise re-enter and drain m
+         +ore ETH than owed.                                             
+      92 +                                                               
+      93  ## 5. Functions
+      94  
+      95  Every external function, who may call it, preconditions, effect
+          s, events emitted, and what must revert.
+
+● Update(docs\spec\spec-v1.md)
+  ⎿  Added 1 line, removed 1 line
+       97  | Function | Caller | Preconditions | Effects | Event | Revert
+           s if |
+       98  |---|---|---|---|---|---|
+       99  | `AssetFactory.authoriseIssuer(address)` | admin | — | `autho
+           risedIssuers[addr] = true` | `IssuerAuthorised(addr)` | caller
+            != admin; addr already authorised |
+      100 -| `AssetFactory.deauthoriseIssuer(address)` | admin | addr is 
+          -authorised | `authorisedIssuers[addr] = false` | `IssuerDeauth
+          -orised(addr)` | caller != admin; addr not authorised |        
+      100 +| `AssetFactory.deauthoriseIssuer(address)` | admin | addr is 
+          +authorised | `authorisedIssuers[addr] = false` | `IssuerDeauth
+          +orised(addr)` | caller != admin; addr not authorised. **Note**
+          +: deauthorisation prevents future calls to `createAsset` only.
+          + Existing deployed AssetToken and AssetSale contracts continue
+          + operating; the admin cannot revoke an issuer's authority over
+          + contracts they have already deployed. |                      
+      101  | `AssetFactory.createAsset(name, symbol, supply, priceWei)` |
+            authorised issuer | priceWei > 0; supply > 0 | deploys AssetT
+           oken, mints supply to issuer; deploys AssetSale; records both 
+           in registry | `AssetCreated(token, sale, issuer)` | caller not
+            authorised |
+      102  | `AssetToken.addToWhitelist(address)` | issuer | — | `whiteli
+           st[addr] = true` | `Whitelisted(addr)` | caller != issuer |
+      103  | `AssetToken.removeFromWhitelist(address)` | issuer | addr ha
+           s zero balance | `whitelist[addr] = false` | `RemovedFromWhite
+           list(addr)` | caller != issuer; addr has non-zero balance |
+
+● Update(docs\spec\spec-v1.md)
+  ⎿  Added 1 line, removed 1 line
+      100  | `AssetFactory.deauthoriseIssuer(address)` | admin | addr is 
+           authorised | `authorisedIssuers[addr] = false` | `IssuerDeauth
+           orised(addr)` | caller != admin; addr not authorised. **Note**
+           : deauthorisation prevents future calls to `createAsset` only.
+            Existing deployed AssetToken and AssetSale contracts continue
+            operating; the admin cannot revoke an issuer's authority over
+            contracts they have already deployed. |
+      101  | `AssetFactory.createAsset(name, symbol, supply, priceWei)` |
+            authorised issuer | priceWei > 0; supply > 0 | deploys AssetT
+           oken, mints supply to issuer; deploys AssetSale; records both 
+           in registry | `AssetCreated(token, sale, issuer)` | caller not
+            authorised |
+      102  | `AssetToken.addToWhitelist(address)` | issuer | — | `whiteli
+           st[addr] = true` | `Whitelisted(addr)` | caller != issuer |
+      103 -| `AssetToken.removeFromWhitelist(address)` | issuer | addr ha
+          -s zero balance | `whitelist[addr] = false` | `RemovedFromWhite
+          -list(addr)` | caller != issuer; addr has non-zero balance |   
+      103 +| `AssetToken.removeFromWhitelist(address)` | issuer | addr ha
+          +s zero balance | `whitelist[addr] = false` | `RemovedFromWhite
+          +list(addr)` | caller != issuer; addr has non-zero balance. **R
+          +ecovery flow when addr is frozen**: issuer must (1) call `forc
+          +edTransfer(addr, safeAddr, balance)` to empty addr's holdings,
+          + then (2) call `removeFromWhitelist(addr)`. |                 
+      104  | `AssetToken.transfer(to, amount)` | token holder | `whitelis
+           t[to]`; `!paused`; `!frozen[from]`; `!frozen[to]` | standard E
+           RC-20 transfer | `Transfer(from, to, amount)` | any preconditi
+           on false |
+      105  | `AssetToken.transferFrom(from, to, amount)` | approved spend
+           er | same as transfer | same as transfer | `Transfer` | any pr
+           econdition false |
+      106  | `AssetToken.pause()` | issuer | `!paused` | `paused = true` 
+           | `Paused()` | caller != issuer; already paused |
+
+● Now fix the forcedTransfer precondition contradiction (Issue 3) — remove
+  !paused:
+
+● Update(docs\spec\spec-v1.md)
+  ⎿  Added 1 line, removed 1 line
+      107  | `AssetToken.unpause()` | issuer | `paused` | `paused = false
+           ` | `Unpaused()` | caller != issuer; not paused |
+      108  | `AssetToken.freeze(address)` | issuer | `!frozen[addr]` | `f
+           rozen[addr] = true` | `Frozen(addr)` | caller != issuer; alrea
+           dy frozen |
+      109  | `AssetToken.unfreeze(address)` | issuer | `frozen[addr]` | `
+           frozen[addr] = false` | `Unfrozen(addr)` | caller != issuer; n
+           ot frozen |
+      110 -| `AssetToken.forcedTransfer(from, to, amount)` | issuer | `wh
+          -itelist[to]`; `!paused`; `!frozen[to]` | transfers regardless 
+          -of `frozen[from]` | `ForcedTransfer(from, to, amount)` | calle
+          -r != issuer; preconditions on `to` false |                    
+      110 +| `AssetToken.forcedTransfer(from, to, amount)` | issuer | `wh
+          +itelist[to]`; `!frozen[to]` | transfers regardless of `frozen[
+          +from]` and regardless of `paused` — this is the issuer's emerg
+          +ency recovery mechanism | `ForcedTransfer(from, to, amount)` |
+          + caller != issuer; `to` not whitelisted; `to` is frozen |     
+      111  | `AssetSale.allocate(uint256 amount)` | issuer | issuer ERC-2
+           0 balance >= amount; issuer has approved AssetSale | transfers
+            tokens from issuer to AssetSale | `Allocated(amount)` | calle
+           r != issuer; balance insufficient |
+      112  | `AssetSale.buy(uint256 amount)` | investor | `whitelist[msg.
+           sender]`; `msg.value == amount * priceWei`; AssetSale token ba
+           lance >= amount | transfers tokens to buyer; ETH held in contr
+           act | `Purchased(buyer, amount)` | any precondition false |
+      113  | `AssetSale.withdrawProceeds()` | issuer | ETH balance > 0 | 
+           sends full ETH balance to issuer | `ProceedsWithdrawn(amount)`
+            | caller != issuer; no ETH to withdraw |
+
+● Add reentrancy to the invariants (Issue 5) and fix Section 9 Hardhat version
+  (Issue 4):
+
+● Update(docs\spec\spec-v1.md)
+  ⎿  Added 1 line
+      123  5. **Pause invariant**: when `paused == true`, no `transfer` o
+           r `transferFrom` succeeds (except `forcedTransfer` by issuer).
+      124  6. **Freeze invariant**: when `frozen[addr] == true`, `addr` c
+           annot send tokens via `transfer` or `transferFrom`.
+      125  7. **Issuer isolation invariant**: address X can only call `ad
+           dToWhitelist`, `pause`, `freeze`, `forcedTransfer`, `allocate`
+           , or `withdrawProceeds` on an AssetToken / AssetSale that X de
+           ployed.
+      126 +8. **Reentrancy invariant**: after `withdrawProceeds` complete
+          +s, the ETH balance tracked by AssetSale is zero, regardless of
+          + any re-entrant calls made during the ETH send. Implementation
+          + must zero the balance before the external call.              
+      127  
+      128  ## 7. Frontend
+      129  
+
+● Update(docs\spec\spec-v1.md)
+  ⎿  Added 1 line, removed 1 line
+      160  - Network: Sepolia testnet (chain ID 11155111) for integration
+           ; Hardhat local network (chain ID 31337) for development
+      161  - Token decimals: 0 — whole units only, consistent with fracti
+           onal-unit model where each token represents one equal share
+      162  - Test wallets: three Hardhat accounts (index 0 = admin, 1 = i
+           ssuer, 2 = investor) for local tests; three MetaMask burner wa
+           llets on Sepolia for demo
+      163 -- Toolchain: Node.js ≥ 18, Hardhat 2.x, OpenZeppelin Contracts
+          - 5.x, ethers.js 6.x                                           
+      163 +- Toolchain: Node.js ≥ 18, Hardhat 3.x (installed: 3.21.0), Op
+          +enZeppelin Contracts 5.x (installed: 5.6.1), ethers.js 6.x    
+      164  - Frontend: React 18, Vite, ethers.js 6.x
+      165  - `.env` holds `TESTNET_RPC_URL`, `PRIVATE_KEY`, `ETHERSCAN_AP
+           I_KEY` — never committed
+      166  
+
+● Fix Section 10 wrong AI attribution (Issue 10):
+
+● Update(docs\spec\spec-v1.md)
+  ⎿  Added 1 line, removed 1 line
+      169  | Change | Why | AI influence |
+      170  |---|---|---|
+      171  | Narrowed scope to one real-estate fund + one digital asset |
+            Keeps MVP deliverable within project timeline | No |
+      172 -| Defined three concrete contracts (AssetToken, AssetFactory, 
+          -AssetSale) | Makes responsibilities and security boundaries ex
+          -plicit | AI research session 2026-10-23 (docs/ai-logs/exports/
+          -2026-10-23-claude-ai-research.md) |                           
+      172 +| Defined three concrete contracts (AssetToken, AssetFactory, 
+          +AssetSale) | Makes responsibilities and security boundaries ex
+          +plicit | No — human design decision (Phase 1 roadmap) |       
+      173  | Fixed sale price set at deployment (not issuer-set NAV) | El
+           iminates price oracle dependency; simplifies MVP | No |
+      174  | Instant subscription flow (not request-and-approve) | Reduce
+           s contract complexity; investor experience is clearer | No |
+      175  | Whitelist + pause + freeze + forced transfer as in-scope fea
+           tures | Directly addresses the "permissioning and compliance" 
+           requirement from v0 | No |
+
+● Issue 8 — Add INDEX.md row for this session
+
+● Update(docs\ai-logs\INDEX.md)
+  ⎿  Added 1 line
+      5  | Date | Who | Tool and model | Purpose | Context given | Outcom
+         e | Issues | Transcript |
+      6  |---|---|---|---|---|---|---|---|
+      7  | 2026-10-23 | Laksh | claude.ai (Claude Opus 5.5), project chat
+          | Research on tokenisation use cases; review of proposal gaps; 
+         plan for spec v1 and this evidence pipeline | Course brief PDF, 
+         spec v0 | Decision list for spec v1; this repo's evidence setup 
+         | | exports/2026-10-23-claude-ai-research.md |
+      8 +| 2026-10-23 | Laksh | Claude Code (claude-sonnet-4-6), session 
+        +phase1-setup | Phase 1 setup: froze spec-v1, initialised Hardhat
+        + 3 toolchain, created contract stubs, test stubs, deploy scripts
+        +, frontend skeleton; identified 10 spec and process issues | CLA
+        +UDE.md, spec-v0, spec-v1, Phase 1 roadmap | Frozen spec-v1.md; 3
+        + contract stubs compile; 41 test placeholders; evidence pipeline
+        + in repo | | exports/2026-10-23-phase1-setup.txt (export before 
+        +session end) |                                                  
+
+● Now verify spec is still consistent and commit everything:
+  Ran 2 shell commands (ctrl+o to expand)
+
+● The diff shows the research export file changed — let me check that the user's
+  fix landed correctly before committing.
+
+  Searched for 1 pattern, ran 1 shell command (ctrl+o to expand)
+
+● The user replaced the JSON manifest with conversations-000.zip. I need to
+  extract the actual conversation from it and save it with the expected
+  filename. Let me extract and find it.
+
+  Ran 4 shell commands (ctrl+o to expand)
+
+● The transcript is real and readable. Now also remove the ZIP file (it's not
+  needed now that we have the .md) and commit everything:
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Four files changed, all expected. Commit in two logical groups:
+
+  Committed 33300c2, 7522f23, a609765, ran 1 shell command (ctrl+o to expand)
+
+● Branch is ready. Push and open the PR:
+
+  ! git push -u origin fix/spec-corrections-phase1
+
+  Then open a PR on GitHub: base main ← compare fix/spec-corrections-phase1.
+
+  Suggested PR title: docs: Phase 1 spec corrections and evidence fixes
+
+  Suggested description:
+  Fixes 8 issues identified in the Phase 1 critical analysis.
+
+  Spec corrections (spec-v1.md):
+  - Fix `forcedTransfer` contradiction: removes `!paused` precondition so the
+    issuer's emergency recovery works while paused (consistent with Invariant 5)
+  - Add reentrancy requirement to AssetSale §4 and as Invariant 8
+  - Clarify `deauthoriseIssuer`: only blocks future asset creation; existing
+    deployed contracts continue under the issuer's direct control
+  - Document freeze→forcedTransfer→removeFromWhitelist recovery flow
+  - Fix Hardhat version: 2.x → 3.x (installed: 3.21.0)
+  - Fix Section 10 AI attribution for three-contract architecture (human 
+  decision)
+
+  Evidence / process:
+  - Replace JSON export manifest with readable conversation transcript
+  - Add INDEX.md row for phase1-setup Claude Code session
+  - gitignore types/ (Hardhat 3 TypeChain output)
+
+  One manual step remains: run `/export 
+  docs/ai-logs/exports/2026-10-23-phase1-setup.txt`
+  before ending the phase1-setup Claude Code session, then commit.
+
+✻ Cogitated for 2m 49s · done 2:44 PM
