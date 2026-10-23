@@ -6,6 +6,8 @@ Phase 2 update (23 October 2026): the user's later [Phase 2 requirements](phase2
 
 Phase 3 update (23 October 2026): the user's later [Phase 3 requirements](phase3-requirements.md) govern AssetFactory and AssetSale where they differ from this historical specification. In particular, the function names change (`authorizeIssuer`, `revokeIssuer`, `buyTokens`, `pricePerToken`), the registry gains `getAsset` / `getAssetCount` with description and asset-type metadata, and a sale can be closed so unsold inventory can be recovered. The decisions are recorded in that file. The reentrancy requirement and invariant 8 below still apply.
 
+Open decision D5 (recorded 23 October 2026, [phase3-requirements.md](phase3-requirements.md)): whether pause, freeze and forced transfer are implemented or formally dropped is undecided. The team must decide before Phase 4 starts. Until then, everything below about these features describes intended behaviour, not implemented behaviour: the §1 "Why a blockchain" sentence, the §3 issuer row, the §4 feature list, the §5 `pause` / `unpause` / `freeze` / `unfreeze` / `forcedTransfer` rows, and invariants 5 and 6.
+
 How this version was produced: human decisions, with AI-assisted research. The research sessions are logged in `docs/ai-logs/INDEX.md`. Changes from `spec-v0.md` are explained in section 10.
 
 ## 1. Problem and trust model
@@ -170,11 +172,19 @@ Each page connects via MetaMask using ethers.js `BrowserProvider`. Deployed cont
 
 ## 10. Changes from v0
 
+AI influence is classified from the research transcript (`docs/ai-logs/exports/2026-10-23-claude-ai-research.md`, cited as R<line>):
+- **AI proposed, human adopted**: the AI recommended this and we took it.
+- **AI offered, human chose otherwise**: the AI laid out options and we picked a different one.
+- **No AI proposal found**: the transcript does not contain it.
+
+Audit-1 finding F-07 showed the earlier "No" values were wrong. That "correction" (commit a609765) had itself been proposed by the Phase 1 AI session, `phase1-setup.txt` lines 1860–1867. The superseded values remain in git history.
+
 | Change | Why | AI influence |
 |---|---|---|
-| Narrowed scope to one real-estate fund + one digital asset | Keeps MVP deliverable within project timeline | No |
-| Defined three concrete contracts (AssetToken, AssetFactory, AssetSale) | Makes responsibilities and security boundaries explicit | No — human design decision (Phase 1 roadmap) |
-| Fixed sale price set at deployment (not issuer-set NAV) | Eliminates price oracle dependency; simplifies MVP | No |
-| Instant subscription flow (not request-and-approve) | Reduces contract complexity; investor experience is clearer | No |
-| Whitelist + pause + freeze + forced transfer as in-scope features | Directly addresses the "permissioning and compliance" requirement from v0 | No |
-| Frontend split into three role-based dashboards | Matches the three-role model; each role sees only relevant actions | No |
+| Narrowed scope to one real-estate fund + one digital asset | Keeps MVP deliverable within project timeline | AI offered, human chose otherwise. The AI recommended a tokenised money-market fund, with a bond and gold as alternatives (R240–244). |
+| Defined three concrete contracts (AssetToken, AssetFactory, AssetSale) | Makes responsibilities and security boundaries explicit | AI offered, human chose otherwise. The AI proposed an ERC-3643-style split: IdentityRegistry, ComplianceRules, AssetToken, Issuance, DvPSettlement (R62–66, R304–310). We chose three contracts. The name `AssetToken` matches the AI's proposal (R64). |
+| Fixed sale price set at deployment (not issuer-set NAV) | Eliminates price oracle dependency; simplifies MVP | AI offered, human chose otherwise. The AI recommended issuer-set NAV and listed a fixed price as the simpler option (R265–267). |
+| Instant subscription flow (not request-and-approve) | Reduces contract complexity; investor experience is clearer | AI proposed, human adopted (R270). |
+| Escrow DvP in AssetSale (spec-v1 §4) | Sale contract holds inventory and proceeds | AI offered, human chose otherwise. The AI recommended approve-based DvP without escrow (R258–259). |
+| Whitelist + pause + freeze + forced transfer as in-scope features | Directly addresses the "permissioning and compliance" requirement from v0 | AI proposed, human adopted. Freeze, forced transfer and pause were all rated "Must" (R296–297). The implementation is still pending decision D5. |
+| Frontend split into three role-based dashboards | Matches the three-role model; each role sees only relevant actions | No AI proposal found. The AI suggested a different role split: Issuer, Compliance Agent, Investor (R310). |
