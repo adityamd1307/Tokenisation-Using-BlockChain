@@ -136,4 +136,15 @@ describe("Phase 3 audit-1 regressions", function () {
       await expect(sweep(issuer, saleAddress)).to.be.revertedWithCustomError(sale, "NoExcessETH");
     });
   });
+
+  // AUD-008 (audit-1 F-10), decision D8: spec-v1 §3 says the admin cannot hold tokens.
+  describe("AUD-008 admin cannot be an issuer", function () {
+    it("authorizeIssuer(admin) reverts and the admin stays unauthorised", async function () {
+      const { factory, admin } = await networkHelpers.loadFixture(fundedSale);
+      const authorize = factory.authorizeIssuer(admin.address);
+      await expect(authorize).to.revert(ethers);
+      await expect(authorize).to.be.revertedWithCustomError(factory, "AdminCannotBeIssuer");
+      expect(await factory.authorisedIssuers(admin.address)).to.equal(false);
+    });
+  });
 });
