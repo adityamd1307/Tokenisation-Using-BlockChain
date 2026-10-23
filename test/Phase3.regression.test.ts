@@ -93,4 +93,47 @@ describe("Phase 3 audit-1 regressions", function () {
       expect(await token.balanceOf(issuer.address)).to.equal(10_000n);
     });
   });
+
+  // AUD-007 (audit-1 F-08), decision D7: ETH forced in via selfdestruct must be recoverable.
+  describe("AUD-007 forced ETH", function () {
+    const sweepAbi = new ethers.Interface(["function sweepExcessETH()"]);
+    const sweep = (signer: Awaited<ReturnType<typeof fundedSale>>["issuer"], to: string) =>
+      signer.sendTransaction({ to, data: sweepAbi.encodeFunctionData("sweepExcessETH") });
+
+    async function forced() {
+      const state = await fundedSale();
+      await state.sale.connect(state.investor).buyTokens(100n, { value: 100n * PRICE });
+      const saleAddress = await state.sale.getAddress();
+      await ethers.deployContract("ForceSendHarness", [saleAddress], { value: 1_000n });
+      return { ...state, saleAddress };
+    }
+
+    it("selfdestruct really forces ETH past the missing receive function", async function () {
+      const { sale, saleAddress } = await networkHelpers.loadFixture(forced);
+      expect(await ethers.provider.getBalance(saleAddress)).to.equal(100n * PRICE + 1_000n);
+      expect(await sale.unclaimedProceeds()).to.equal(100n * PRICE);
+    });
+
+    it("the issuer can recover forced ETH after withdrawing proceeds, leaving the sale empty", async function () {
+      const { sale, issuer, saleAddress } = await networkHelpers.loadFixture(forced);
+      await sale.withdrawProceeds();
+      await expect(sweep(issuer, saleAddress)).to.changeEtherBalances(ethers, [issuer, saleAddress], [1_000n, -1_000n]);
+      expect(await ethers.provider.getBalance(saleAddress)).to.equal(0n);
+    });
+
+    it("sweeping before withdrawal takes only the excess and leaves owed proceeds claimable", async function () {
+      const { sale, issuer, saleAddress } = await networkHelpers.loadFixture(forced);
+      await expect(sweep(issuer, saleAddress)).to.changeEtherBalance(ethers, issuer, 1_000n);
+      expect(await sale.unclaimedProceeds()).to.equal(100n * PRICE);
+      await expect(sale.withdrawProceeds()).to.changeEtherBalance(ethers, issuer, 100n * PRICE);
+      expect(await ethers.provider.getBalance(saleAddress)).to.equal(0n);
+    });
+
+    it("only the issuer can sweep, and only when there is excess", async function () {
+      const { sale, issuer, outsider, saleAddress } = await networkHelpers.loadFixture(forced);
+      await expect(sweep(outsider, saleAddress)).to.be.revertedWithCustomError(sale, "NotIssuer");
+      await sweep(issuer, saleAddress);
+      await expect(sweep(issuer, saleAddress)).to.be.revertedWithCustomError(sale, "NoExcessETH");
+    });
+  });
 });
