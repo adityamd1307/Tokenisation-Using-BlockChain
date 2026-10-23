@@ -38,6 +38,19 @@ Requirements: [phase3-requirements.md](spec/phase3-requirements.md), including u
 - **No `receive`/`fallback`:** plain ETH sends revert. *Corrected after audit-1 F-08:* the original note claimed that ETH could therefore only arrive through `buyTokens` and invariant 3 held. That is false. `selfdestruct` and coinbase rewards can force ETH into the contract, where it was stuck. Fixed in AUD-007.
 - `SafeERC20` is used for token movements, which is standard practice. AssetToken reverts on failure anyway.
 
+## Post-audit changes (audit-1, 23 October 2026)
+
+Audit-1 reviewed commit 7fd3e26 (`docs/evidence/audit-1/`). Four findings went through the CLAUDE.md issue workflow, with a failing test, a fix, and before/after `evidence.sh` runs:
+
+| Issue | Change | Decision |
+|---|---|---|
+| AUD-005 | spec-v1 invariant 1 restated as eligibility of movement; regression covers revocation | — |
+| AUD-006 | `AssetToken._revokeRole`: the issuer's `DEFAULT_ADMIN_ROLE` cannot be revoked or renounced (`IssuerAdminRoleLocked`) | D6 |
+| AUD-007 | `AssetSale.sweepExcessETH()` (issuer-only) recovers forced ETH; invariant 3 restated | D7 |
+| AUD-008 | `authorizeIssuer(admin)` reverts with `AdminCannotBeIssuer` (policy check only) | D8 |
+
+After these changes, `npx hardhat test` gives **108 passing, 0 failing**: 9 tests in `test/Phase3.regression.test.ts`, plus the original 99. The tables and counts below describe the original Phase 3 state at 7fd3e26.
+
 ## Tests
 
 `npx hardhat test` → **99 passing, 0 pending, 0 failing.** Output: [test-full.log](evidence/phase3/test-full.log).

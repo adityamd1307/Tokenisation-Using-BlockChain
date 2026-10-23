@@ -5,7 +5,7 @@
 | Audited commit | `7fd3e26` (main after Phase 3) |
 | Date | 2026-10-23 |
 | Performed by | Claude Code, session `7b0eabb6-ecbd-4dbb-b515-64d2958841d4` (transcript in `docs/ai-logs/raw/`) |
-| Independence | Limited. The auditor is from the same model family that wrote the Phase 1 and Phase 3 code. No human has reviewed these findings yet. |
+| Independence | Limited. The auditor ran on `claude-opus-5-5`, the same model as the Phase 3 session that wrote AssetFactory and AssetSale (verified from the per-message `model` field in both raw transcripts). No human has reviewed these findings yet. |
 | Critique of the audit | Phase 3 session `c567bbec-8104-4601-9e63-6ad5e37d5896` spot-checked F-01, F-02, F-13, F-15 and F-16 and confirmed them. It challenged the wording or severity of F-04, F-05, F-06, F-10 and F-11. |
 
 The artefacts were copied unchanged from the audit session's temporary scratchpad. The only change is the probe file extension.
