@@ -1,0 +1,9 @@
+build      exit 0    npx hardhat compile
+test       exit 1    npx hardhat test --no-compile
+gas        exit 1    npx hardhat test --gas-stats
+coverage   exit 1    npx hardhat test --coverage
+slither    skipped    (slither not installed)
+
+Notes: gas and coverage re-run the suite, so they exit non-zero whenever any
+test fails; on a "before fix" run that is expected. Slither exits non-zero when
+it reports findings; it only failed to run if slither.json says "success": false.

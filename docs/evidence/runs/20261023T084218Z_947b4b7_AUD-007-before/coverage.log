@@ -1,0 +1,222 @@
+$ npx hardhat test --coverage
+
+
+Warning: "selfdestruct" has been deprecated. Note that, starting from the Cancun hard fork, the underlying opcode no longer deletes the code and data associated with an account and only transfers its Ether to the beneficiary, unless executed in the same transaction in which the contract was created (see EIP-6780). Any use in newly deployed contracts is strongly discouraged even if the new behavior is taken into account. Future changes to the EVM might further reduce the functionality of the opcode.
+ --> .\contracts\test\ForceSendHarness.sol:9:112:
+  |
+9 | __NomicFoundationCoverage.sendHit(0xefecc6c61b9d77b637bbdf0c1f3da5fd5f4895ba22f7eb59e613911c6733276b);         selfdestruct(target);
+  |                                                                                                                ^^^^^^^^^^^^
+
+Compiled 6 Solidity files with solc 0.8.24 (evm target: shanghai)
+
+Running Solidity tests
+
+
+Running Mocha tests
+
+
+  AssetFactory — Phase 3
+    deployment
+      √ deploys with correct admin address and an empty registry (731ms)
+      √ rejects a zero admin (127ms)
+    issuer authorisation
+      √ admin can authorise an issuer (97ms)
+      √ authorising an already-authorised issuer or the zero address reverts (134ms)
+      √ admin can revoke an issuer
+      √ revoking an address that is not authorised reverts
+      √ non-admin cannot authorise or revoke an issuer (43ms)
+    asset creation
+      √ authorised issuer can create an asset (deploys AssetToken + AssetSale) (162ms)
+      √ created asset is recorded in the registry with full metadata and tokenToSale (151ms)
+      √ issuer creates two different assets that are registered independently (176ms)
+      √ unauthorised address, including the admin, cannot create an asset (50ms)
+      √ createAsset with unitPriceWei == 0 reverts
+      √ createAsset with totalSupply == 0 reverts
+      √ getAsset reverts for an ID that was never assigned (176ms)
+      √ rejects an out-of-range assetType
+    revocation scope
+      √ revoked issuer cannot create new assets but existing contracts keep operating (440ms)
+    issuer isolation
+      √ issuer A cannot whitelist investors on issuer B's token (40ms)
+      √ issuer A cannot allocate, withdraw, close or recover on issuer B's sale (51ms)
+
+  AssetSale — Phase 3
+    deployment
+      √ deploys with correct assetToken, pricePerToken, and issuer (240ms)
+      √ rejects a zero token, zero issuer, or zero price (86ms)
+      √ exposes no function to change the price after creation
+    allocation
+      √ issuer can allocate tokens (whitelist sale, approve, allocate) (101ms)
+      √ allocate reverts until the issuer whitelists the sale contract
+      √ allocate without an approval reverts
+      √ non-issuer cannot allocate (137ms)
+      √ allocate with insufficient issuer balance reverts
+      √ allocate of zero reverts
+    buying (instant subscription flow)
+      √ whitelisted investor buys 100 tokens with exact ETH payment (51ms)
+      √ investor underpays: reverts
+      √ investor overpays: reverts
+      √ unapproved investor attempts purchase: reverts
+      √ revoked investor cannot buy
+      √ investor buys more than inventory: reverts
+      √ buying the entire inventory succeeds and leaves nothing for sale
+      √ buy of zero quantity reverts
+      √ rejects plain ETH sent outside buyTokens
+    proceeds
+      √ issuer can withdraw ETH proceeds after a purchase (239ms)
+      √ non-issuer withdraws proceeds: reverts
+      √ withdrawProceeds with zero balance reverts
+      √ invariant 8: a re-entrant contract issuer is paid exactly once and the balance is zero (277ms)
+      √ a failed payout reverts and leaves the proceeds claimable (59ms)
+    closing and inventory recovery
+      √ issuer can close the sale, after which buying and allocating revert (511ms)
+      √ recoverUnsoldTokens reverts while the sale is open
+      √ issuer recovers all unsold inventory after closing and can still withdraw proceeds (85ms)
+      √ non-issuer cannot close the sale or recover inventory
+    invariants
+      √ invariant 3: sale ETH balance equals tokens sold times pricePerToken minus withdrawals (160ms)
+      √ invariant 2: supply equals the sum of balances, and holders are eligible absent revocation (205ms)
+    Phase 3 lifecycle demonstration
+      √ create 10,000 CPT, whitelist sale, deposit 5,000, investor pays 0.1 ETH for 100 CPT
+
+  AssetToken AUD-004 regression
+    √ rejects a transfer to an unapproved investor without changing balances (65ms)
+
+  AssetToken — Phase 2
+    A — deployment and fixed supply
+      √ sets the name, symbol, and whole-unit decimals (51ms)
+      √ mints exactly 10,000 whole units to the designated issuer
+      √ emits the standard mint Transfer from the zero address
+      √ whitelists the issuer and leaves other addresses, including zero, ineligible
+      √ grants the issuer the administrator and compliance roles
+      √ rejects a zero issuer
+      √ rejects a zero supply
+      √ exposes no mint or burn entry point, even to the administrator
+      √ assigns supply and roles to the issuer instead of a different deploying account (54ms)
+      √ supports construction by a contract without granting that contract authority (83ms)
+    B — whitelist and role administration
+      √ approves investors B and C with publicly readable status (41ms)
+      √ emits investor, status, and operator on approval and revocation (43ms)
+      √ rejects unauthorised whitelist update approved=true
+      √ rejects a zero investor when approved=true
+      √ rejects unauthorised whitelist update approved=false (82ms)
+      √ rejects a zero investor when approved=false
+      √ treats repeated status updates as no-ops without duplicate events (75ms)
+      √ revokes a funded investor without confiscation, burning, or Transfer events (175ms)
+      √ delegates compliance and records the actual delegate as operator (141ms)
+      √ prevents unauthorised accounts from granting themselves compliance authority (46ms)
+      √ prevents compliance-only delegates from granting roles (128ms)
+      √ removes compliance authority immediately when the role is revoked (74ms)
+      √ requires compliance authority even for an administrator whose compliance role was revoked (112ms)
+    C — direct transfers and revocation
+      √ transfers 100 units to B and emits the standard Transfer event (100ms)
+      √ rejects an unapproved recipient and preserves balances and supply (199ms)
+      √ allows B to transfer 20 units to approved C
+      √ rejects a revoked sender even when the recipient is approved (57ms)
+      √ rejects transfers into a revoked holder with a positive balance
+      √ rejects transfers when both holder and recipient are ineligible
+      √ restores sending and receiving after reapproval (84ms)
+      √ applies the same eligibility requirements to the issuer (173ms)
+    D — approvals and delegated transfers
+      √ creates and replaces allowances with standard Approval events (66ms)
+      √ allows an unwhitelisted spender to transfer between approved holders (52ms)
+      √ rolls back balances and allowance for an ineligible delegated recipient (47ms)
+      √ checks the actual holder and rolls back allowance when that holder is revoked (132ms)
+      √ preserves the standard insufficient-allowance error and unchanged state (42ms)
+      √ preserves approvals and approval revocation for ineligible wallets (84ms)
+      √ preserves unlimited allowances across successful transfers
+      √ rolls back allowance spending when the delegated holder has insufficient balance
+    E — edge cases, contract holders, and instance isolation
+      √ rejects a direct transfer exceeding the balance
+      √ permits a zero-value transfer between eligible accounts and emits Transfer (39ms)
+      √ enforces both eligibility checks even for zero-value transfers
+      √ allows zero-value delegated transfers but still checks holder eligibility (87ms)
+      √ preserves standard zero-recipient errors for direct and delegated transfers (49ms)
+      √ preserves standard errors for a zero spender or a zero delegated owner (39ms)
+      √ supports self-transfers without altering balance or supply (56ms)
+      √ allows an approved smart-contract holder to receive and forward inventory (185ms)
+      √ isolates roles, whitelist, allowances, balances, and supply across assets (372ms)
+      √ conserves supply across deterministic transfers, revocation, and failures (248ms)
+    Local demonstration
+      √ demonstrates CPT issuance, unapproved D rejection, and final balances 9,900 / 80 / 20 (100ms)
+
+  Phase 3 audit-1 regressions
+    AUD-005 invariant 1 through a revocation
+      √ a revoked holder keeps its balance but cannot send, receive or buy until re-approved (216ms)
+    AUD-006 issuer admin role cannot be removed
+      √ the issuer cannot renounce DEFAULT_ADMIN_ROLE
+      √ a delegated administrator cannot revoke the issuer's DEFAULT_ADMIN_ROLE but can drop its own
+      √ compliance stays revocable, and the issuer can always restore it and recover locked inventory (122ms)
+    AUD-007 forced ETH
+      √ selfdestruct really forces ETH past the missing receive function (160ms)
+      1) the issuer can recover forced ETH after withdrawing proceeds, leaving the sale empty
+      2) sweeping before withdrawal takes only the excess and leaves owed proceeds claimable
+      3) only the issuer can sweep, and only when there is excess
+
+
+  104 passing (9s)
+  3 failing
+
+  1) Phase 3 audit-1 regressions
+       AUD-007 forced ETH
+         the issuer can recover forced ETH after withdrawing proceeds, leaving the sale empty:
+     SolidityError: Transaction reverted: function selector was not recognized and there's no fallback function
+      at AssetSale.<unrecognized-selector> (contracts/AssetSale.sol:10)
+      at EdrProvider.#handleEdrResponse (node_modules\hardhat\dist\src\internal\builtin-plugins\network-manager\edr\edr-provider.js:214:25)
+      at EdrProvider.#handleRequest (node_modules\hardhat\dist\src\internal\builtin-plugins\network-manager\edr\edr-provider.js:295:45)
+      at async <anonymous> (node_modules\hardhat\src\internal\builtin-plugins\network-manager\network-manager.ts:278:49)
+      at async next (node_modules\hardhat\src\internal\core\hook-manager.ts:208:13)
+      at async Array.onRequest (node_modules\hardhat\src\internal\builtin-plugins\network-manager\hook-handlers\network.ts:81:14)
+      at async next (node_modules\hardhat\src\internal\core\hook-manager.ts:207:13)
+      at async HookManagerImplementation.runHandlerChain (node_modules\hardhat\src\internal\core\hook-manager.ts:213:12)
+      at async EdrProvider.request (node_modules\hardhat\dist\src\internal\builtin-plugins\network-manager\edr\edr-provider.js:140:31)
+      at async AutomaticGasHandler.getMultipliedGasEstimation (node_modules\hardhat\src\internal\builtin-plugins\network-manager\request-handlers\handlers\gas\multiplied-gas-estimation.ts:50:30)
+
+  2) Phase 3 audit-1 regressions
+       AUD-007 forced ETH
+         sweeping before withdrawal takes only the excess and leaves owed proceeds claimable:
+     SolidityError: Transaction reverted: function selector was not recognized and there's no fallback function
+      at AssetSale.<unrecognized-selector> (contracts/AssetSale.sol:10)
+      at EdrProvider.#handleEdrResponse (node_modules\hardhat\dist\src\internal\builtin-plugins\network-manager\edr\edr-provider.js:214:25)
+      at EdrProvider.#handleRequest (node_modules\hardhat\dist\src\internal\builtin-plugins\network-manager\edr\edr-provider.js:295:45)
+      at async <anonymous> (node_modules\hardhat\src\internal\builtin-plugins\network-manager\network-manager.ts:278:49)
+      at async next (node_modules\hardhat\src\internal\core\hook-manager.ts:208:13)
+      at async Array.onRequest (node_modules\hardhat\src\internal\builtin-plugins\network-manager\hook-handlers\network.ts:81:14)
+      at async next (node_modules\hardhat\src\internal\core\hook-manager.ts:207:13)
+      at async HookManagerImplementation.runHandlerChain (node_modules\hardhat\src\internal\core\hook-manager.ts:213:12)
+      at async EdrProvider.request (node_modules\hardhat\dist\src\internal\builtin-plugins\network-manager\edr\edr-provider.js:140:31)
+      at async AutomaticGasHandler.getMultipliedGasEstimation (node_modules\hardhat\src\internal\builtin-plugins\network-manager\request-handlers\handlers\gas\multiplied-gas-estimation.ts:50:30)
+
+  3) Phase 3 audit-1 regressions
+       AUD-007 forced ETH
+         only the issuer can sweep, and only when there is excess:
+     AssertionError: Expected transaction to be reverted with custom error 'NotIssuer', but it reverted without a reason
+      at async Context.<anonymous> (test\Phase3.regression.test.ts:134:7)
+
+
+
+
+104 passing (104 mocha)
+3 failing (3 mocha)
+
+Saved html report to C:\Users\laksh\OneDrive - Nanyang Technological University\NTU\Y4S1\SC4053\Project\coverage\html
+╔════════════════════════════════════════════════════════════════════════════════════╗
+║                                  Coverage Report                                   ║
+╚════════════════════════════════════════════════════════════════════════════════════╝
+╔════════════════════════════════════════════════════════════════════════════════════╗
+║ File Coverage                                                                      ║
+╟───────────────────────────────────────────┬────────┬─────────────┬─────────────────╢
+║ File Path                                 │ Line % │ Statement % │ Uncovered Lines ║
+╟───────────────────────────────────────────┼────────┼─────────────┼─────────────────╢
+║ contracts\test\ForceSendHarness.sol       │ 100.00 │ 100.00      │ -               ║
+║ contracts\AssetToken.sol                  │ 100.00 │ 100.00      │ -               ║
+║ contracts\AssetFactory.sol                │ 100.00 │ 100.00      │ -               ║
+║ contracts\AssetSale.sol                   │ 100.00 │ 100.00      │ -               ║
+║ contracts\test\AssetTokenHarness.sol      │ 100.00 │ 100.00      │ -               ║
+║ contracts\test\AssetSaleIssuerHarness.sol │ 92.31  │ 92.86       │ 38              ║
+╟───────────────────────────────────────────┼────────┼─────────────┼─────────────────╢
+║ Total                                     │ 99.28  │ 99.20       │                 ║
+╚═══════════════════════════════════════════╧════════╧═════════════╧═════════════════╝
+
+
+Test run failed

@@ -1,0 +1,194 @@
+$ npx hardhat test --no-compile
+
+
+Running Solidity tests
+
+
+Running Mocha tests
+
+
+  AssetFactory — Phase 3
+    deployment
+      √ deploys with correct admin address and an empty registry (990ms)
+      √ rejects a zero admin (78ms)
+    issuer authorisation
+      √ admin can authorise an issuer (50ms)
+      √ authorising an already-authorised issuer or the zero address reverts (160ms)
+      √ admin can revoke an issuer
+      √ revoking an address that is not authorised reverts
+      √ non-admin cannot authorise or revoke an issuer
+    asset creation
+      √ authorised issuer can create an asset (deploys AssetToken + AssetSale) (135ms)
+      √ created asset is recorded in the registry with full metadata and tokenToSale (103ms)
+      √ issuer creates two different assets that are registered independently (111ms)
+      √ unauthorised address, including the admin, cannot create an asset
+      √ createAsset with unitPriceWei == 0 reverts
+      √ createAsset with totalSupply == 0 reverts
+      √ getAsset reverts for an ID that was never assigned (131ms)
+      √ rejects an out-of-range assetType
+    revocation scope
+      √ revoked issuer cannot create new assets but existing contracts keep operating (205ms)
+    issuer isolation
+      √ issuer A cannot whitelist investors on issuer B's token
+      √ issuer A cannot allocate, withdraw, close or recover on issuer B's sale
+
+  AssetSale — Phase 3
+    deployment
+      √ deploys with correct assetToken, pricePerToken, and issuer (114ms)
+      √ rejects a zero token, zero issuer, or zero price (48ms)
+      √ exposes no function to change the price after creation (40ms)
+    allocation
+      √ issuer can allocate tokens (whitelist sale, approve, allocate) (59ms)
+      √ allocate reverts until the issuer whitelists the sale contract (41ms)
+      √ allocate without an approval reverts
+      √ non-issuer cannot allocate (110ms)
+      √ allocate with insufficient issuer balance reverts
+      √ allocate of zero reverts
+    buying (instant subscription flow)
+      √ whitelisted investor buys 100 tokens with exact ETH payment (54ms)
+      √ investor underpays: reverts
+      √ investor overpays: reverts
+      √ unapproved investor attempts purchase: reverts
+      √ revoked investor cannot buy
+      √ investor buys more than inventory: reverts
+      √ buying the entire inventory succeeds and leaves nothing for sale
+      √ buy of zero quantity reverts
+      √ rejects plain ETH sent outside buyTokens
+    proceeds
+      √ issuer can withdraw ETH proceeds after a purchase (221ms)
+      √ non-issuer withdraws proceeds: reverts
+      √ withdrawProceeds with zero balance reverts
+      √ invariant 8: a re-entrant contract issuer is paid exactly once and the balance is zero (210ms)
+      √ a failed payout reverts and leaves the proceeds claimable (49ms)
+    closing and inventory recovery
+      √ issuer can close the sale, after which buying and allocating revert (162ms)
+      √ recoverUnsoldTokens reverts while the sale is open
+      √ issuer recovers all unsold inventory after closing and can still withdraw proceeds (68ms)
+      √ non-issuer cannot close the sale or recover inventory
+    invariants
+      √ invariant 3: sale ETH balance equals tokens sold times pricePerToken minus withdrawals (96ms)
+      √ invariant 2: supply equals the sum of balances, and holders are eligible absent revocation (166ms)
+    Phase 3 lifecycle demonstration
+      √ create 10,000 CPT, whitelist sale, deposit 5,000, investor pays 0.1 ETH for 100 CPT
+
+  AssetToken AUD-004 regression
+    √ rejects a transfer to an unapproved investor without changing balances (60ms)
+
+  AssetToken — Phase 2
+    A — deployment and fixed supply
+      √ sets the name, symbol, and whole-unit decimals (46ms)
+      √ mints exactly 10,000 whole units to the designated issuer
+      √ emits the standard mint Transfer from the zero address
+      √ whitelists the issuer and leaves other addresses, including zero, ineligible
+      √ grants the issuer the administrator and compliance roles
+      √ rejects a zero issuer
+      √ rejects a zero supply
+      √ exposes no mint or burn entry point, even to the administrator
+      √ assigns supply and roles to the issuer instead of a different deploying account (67ms)
+      √ supports construction by a contract without granting that contract authority (91ms)
+    B — whitelist and role administration
+      √ approves investors B and C with publicly readable status
+      √ emits investor, status, and operator on approval and revocation (44ms)
+      √ rejects unauthorised whitelist update approved=true
+      √ rejects a zero investor when approved=true
+      √ rejects unauthorised whitelist update approved=false (78ms)
+      √ rejects a zero investor when approved=false
+      √ treats repeated status updates as no-ops without duplicate events (62ms)
+      √ revokes a funded investor without confiscation, burning, or Transfer events (73ms)
+      √ delegates compliance and records the actual delegate as operator
+      √ prevents unauthorised accounts from granting themselves compliance authority
+      √ prevents compliance-only delegates from granting roles (44ms)
+      √ removes compliance authority immediately when the role is revoked
+      √ requires compliance authority even for an administrator whose compliance role was revoked (45ms)
+    C — direct transfers and revocation
+      √ transfers 100 units to B and emits the standard Transfer event
+      √ rejects an unapproved recipient and preserves balances and supply (67ms)
+      √ allows B to transfer 20 units to approved C
+      √ rejects a revoked sender even when the recipient is approved
+      √ rejects transfers into a revoked holder with a positive balance
+      √ rejects transfers when both holder and recipient are ineligible
+      √ restores sending and receiving after reapproval
+      √ applies the same eligibility requirements to the issuer
+    D — approvals and delegated transfers
+      √ creates and replaces allowances with standard Approval events
+      √ allows an unwhitelisted spender to transfer between approved holders
+      √ rolls back balances and allowance for an ineligible delegated recipient
+      √ checks the actual holder and rolls back allowance when that holder is revoked (41ms)
+      √ preserves the standard insufficient-allowance error and unchanged state
+      √ preserves approvals and approval revocation for ineligible wallets
+      √ preserves unlimited allowances across successful transfers
+      √ rolls back allowance spending when the delegated holder has insufficient balance
+    E — edge cases, contract holders, and instance isolation
+      √ rejects a direct transfer exceeding the balance
+      √ permits a zero-value transfer between eligible accounts and emits Transfer
+      √ enforces both eligibility checks even for zero-value transfers
+      √ allows zero-value delegated transfers but still checks holder eligibility
+      √ preserves standard zero-recipient errors for direct and delegated transfers
+      √ preserves standard errors for a zero spender or a zero delegated owner
+      √ supports self-transfers without altering balance or supply
+      √ allows an approved smart-contract holder to receive and forward inventory (66ms)
+      √ isolates roles, whitelist, allowances, balances, and supply across assets (177ms)
+      √ conserves supply across deterministic transfers, revocation, and failures (113ms)
+    Local demonstration
+      √ demonstrates CPT issuance, unapproved D rejection, and final balances 9,900 / 80 / 20 (87ms)
+
+  Phase 3 audit-1 regressions
+    AUD-005 invariant 1 through a revocation
+      √ a revoked holder keeps its balance but cannot send, receive or buy until re-approved (197ms)
+    AUD-006 issuer admin role cannot be removed
+      √ the issuer cannot renounce DEFAULT_ADMIN_ROLE
+      √ a delegated administrator cannot revoke the issuer's DEFAULT_ADMIN_ROLE but can drop its own
+      √ compliance stays revocable, and the issuer can always restore it and recover locked inventory (71ms)
+    AUD-007 forced ETH
+      √ selfdestruct really forces ETH past the missing receive function (121ms)
+      1) the issuer can recover forced ETH after withdrawing proceeds, leaving the sale empty
+      2) sweeping before withdrawal takes only the excess and leaves owed proceeds claimable
+      3) only the issuer can sweep, and only when there is excess
+
+
+  104 passing (6s)
+  3 failing
+
+  1) Phase 3 audit-1 regressions
+       AUD-007 forced ETH
+         the issuer can recover forced ETH after withdrawing proceeds, leaving the sale empty:
+     SolidityError: Transaction reverted: function selector was not recognized and there's no fallback function
+      at AssetSale.<unrecognized-selector> (contracts/AssetSale.sol:10)
+      at EdrProvider.#handleEdrResponse (node_modules\hardhat\dist\src\internal\builtin-plugins\network-manager\edr\edr-provider.js:214:25)
+      at EdrProvider.#handleRequest (node_modules\hardhat\dist\src\internal\builtin-plugins\network-manager\edr\edr-provider.js:295:45)
+      at async <anonymous> (node_modules\hardhat\src\internal\builtin-plugins\network-manager\network-manager.ts:278:49)
+      at async next (node_modules\hardhat\src\internal\core\hook-manager.ts:208:13)
+      at async Array.onRequest (node_modules\hardhat\src\internal\builtin-plugins\network-manager\hook-handlers\network.ts:81:14)
+      at async next (node_modules\hardhat\src\internal\core\hook-manager.ts:207:13)
+      at async HookManagerImplementation.runHandlerChain (node_modules\hardhat\src\internal\core\hook-manager.ts:213:12)
+      at async EdrProvider.request (node_modules\hardhat\dist\src\internal\builtin-plugins\network-manager\edr\edr-provider.js:140:31)
+      at async AutomaticGasHandler.getMultipliedGasEstimation (node_modules\hardhat\src\internal\builtin-plugins\network-manager\request-handlers\handlers\gas\multiplied-gas-estimation.ts:50:30)
+
+  2) Phase 3 audit-1 regressions
+       AUD-007 forced ETH
+         sweeping before withdrawal takes only the excess and leaves owed proceeds claimable:
+     SolidityError: Transaction reverted: function selector was not recognized and there's no fallback function
+      at AssetSale.<unrecognized-selector> (contracts/AssetSale.sol:10)
+      at EdrProvider.#handleEdrResponse (node_modules\hardhat\dist\src\internal\builtin-plugins\network-manager\edr\edr-provider.js:214:25)
+      at EdrProvider.#handleRequest (node_modules\hardhat\dist\src\internal\builtin-plugins\network-manager\edr\edr-provider.js:295:45)
+      at async <anonymous> (node_modules\hardhat\src\internal\builtin-plugins\network-manager\network-manager.ts:278:49)
+      at async next (node_modules\hardhat\src\internal\core\hook-manager.ts:208:13)
+      at async Array.onRequest (node_modules\hardhat\src\internal\builtin-plugins\network-manager\hook-handlers\network.ts:81:14)
+      at async next (node_modules\hardhat\src\internal\core\hook-manager.ts:207:13)
+      at async HookManagerImplementation.runHandlerChain (node_modules\hardhat\src\internal\core\hook-manager.ts:213:12)
+      at async EdrProvider.request (node_modules\hardhat\dist\src\internal\builtin-plugins\network-manager\edr\edr-provider.js:140:31)
+      at async AutomaticGasHandler.getMultipliedGasEstimation (node_modules\hardhat\src\internal\builtin-plugins\network-manager\request-handlers\handlers\gas\multiplied-gas-estimation.ts:50:30)
+
+  3) Phase 3 audit-1 regressions
+       AUD-007 forced ETH
+         only the issuer can sweep, and only when there is excess:
+     AssertionError: Expected transaction to be reverted with custom error 'NotIssuer', but it reverted without a reason
+      at async Context.<anonymous> (test\Phase3.regression.test.ts:134:7)
+
+
+
+
+104 passing (104 mocha)
+3 failing (3 mocha)
+
+Test run failed
