@@ -1,0 +1,4 @@
+$ npx hardhat compile
+
+
+Compiled 3 Solidity files with solc 0.8.24 (evm target: shanghai)
