@@ -1,0 +1,18 @@
+Running Mocha tests
+
+
+  AssetToken AUD-004 regression
+    1) rejects a transfer to an unapproved investor without changing balances
+
+
+  0 passing (371ms)
+  1 failing
+
+  1) AssetToken AUD-004 regression
+       rejects a transfer to an unapproved investor without changing balances:
+     AssertionError: Expected transaction to be reverted
+      at async Context.<anonymous> (test/AssetToken.regression.test.ts:16:7)
+
+
+
+

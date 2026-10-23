@@ -1,0 +1,26 @@
+Running Mocha tests
+
+
+  AssetToken AUD-004 regression
+    1) rejects a transfer to an unapproved investor without changing balances
+
+
+  0 passing (399ms)
+  1 failing
+
+  1) AssetToken AUD-004 regression
+       rejects a transfer to an unapproved investor without changing balances:
+     AssertionError: The .reverted matcher has been deprecated. Use .revert(ethers) instead.
+      at _Assertion.<anonymous> (node_modules/@nomicfoundation/hardhat-ethers-chai-matchers/src/internal/matchers/reverted/legacyReverted.ts:15:16)
+      at _Assertion.propertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1607:27)
+      at doAsserterAsyncAndAddThen (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:340:16)
+      at _Assertion.<anonymous> (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:329:15)
+      at _Assertion.overwritingPropertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1766:35)
+      at Reflect.get (<anonymous>)
+      at Object.proxyGetter [as get] (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1696:22)
+      at Context.<anonymous> (test/AssetToken.regression.test.ts:16:66)
+
+
+
+
+WARNING: hre.network.connect() is deprecated and will be removed in a future version. Use hre.network.create() or hre.network.getOrCreate() instead.

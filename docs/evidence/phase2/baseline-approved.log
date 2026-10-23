@@ -1,0 +1,66 @@
+
+> rwa-tokenisation@1.0.0 test
+> hardhat test
+
+No contracts to compile
+
+Running Solidity tests
+
+
+Running Mocha tests
+
+
+  AssetFactory
+    - deploys with correct admin address
+    - admin can authorise an issuer
+    - admin can deauthorise an issuer
+    - non-admin cannot authorise an issuer
+    - authorised issuer can create an asset (deploys AssetToken + AssetSale)
+    - created asset is recorded in assets array and tokenToSale mapping
+    - unauthorised address cannot create an asset
+    - createAsset with priceWei == 0 reverts
+    - createAsset with supply == 0 reverts
+    - issuer A cannot whitelist investors on issuer B's token
+
+  AssetSale
+    - deploys with correct token, priceWei, and issuer
+    - issuer can allocate tokens (approve + allocate)
+    - non-issuer cannot allocate
+    - allocate with insufficient issuer balance reverts
+    - whitelisted investor can buy tokens with exact ETH payment
+    - buy with wrong ETH amount reverts
+    - buy when not whitelisted reverts
+    - buy more than available inventory reverts
+    - issuer can withdraw ETH proceeds after a purchase
+    - non-issuer cannot withdraw proceeds
+    - withdrawProceeds with zero balance reverts
+    - invariant: sale ETH balance equals tokens sold times priceWei minus withdrawals
+
+  AssetToken
+    - deploys with correct name, symbol, decimals, and supply
+    - mints initial supply to issuer
+    - issuer is auto-whitelisted on deployment
+    - issuer can add an address to the whitelist
+    - non-issuer cannot add to whitelist
+    - issuer can remove a zero-balance address from whitelist
+    - issuer cannot remove an address that still holds tokens
+    - transfer to non-whitelisted address reverts
+    - transfer from whitelisted to whitelisted succeeds
+    - issuer can pause; all transfers revert while paused
+    - issuer can unpause; transfers succeed again
+    - non-issuer cannot pause
+    - issuer can freeze an address; that address cannot send tokens
+    - frozen address cannot receive tokens via transfer
+    - issuer can unfreeze
+    - issuer can forcedTransfer from a frozen address to a whitelisted address
+    - non-issuer cannot call forcedTransfer
+    - invariant: every holder is whitelisted (supply invariant)
+    - invariant: totalSupply equals sum of all balances
+
+
+  0 passing (2ms)
+  41 pending
+
+
+41 passing (41 mocha)
+
