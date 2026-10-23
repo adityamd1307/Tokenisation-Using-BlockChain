@@ -1,0 +1,9 @@
+build      exit 127
+test       exit 127
+gas        exit 127
+coverage   exit 127
+slither    exit 127
+
+Notes: gas and coverage exit non-zero whenever any test fails, so on a
+"before fix" run that is expected. Slither exits non-zero when it reports
+findings; it only failed to run if slither.json says "success": false.
