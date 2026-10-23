@@ -1,0 +1,23 @@
+# Secrets
+.env
+.env.local
+
+# Foundry build output
+out/
+cache/
+
+# Local anvil deployments (testnet broadcasts stay committed as evidence)
+broadcast/*/31337/
+
+# Frontend
+node_modules/
+dist/
+
+# Hardhat build output
+artifacts/
+coverage/
+typechain-types/
+
+# Evidence kit source (unzipped; files already copied to repo root)
+sc4053-evidence-kit/
+sc4053-evidence-kit.zip
