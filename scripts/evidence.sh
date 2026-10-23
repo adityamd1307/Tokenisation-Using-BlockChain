@@ -48,8 +48,10 @@ step() {
 
 step build    npx hardhat compile
 step test     npx hardhat test --no-compile
-step gas      npx hardhat test --no-compile --gas-stats
-step coverage npx hardhat test --no-compile --coverage
+# Gas stats and coverage each need their own instrumented build. With
+# --no-compile they print an empty table or 0% and still exit 0.
+step gas      npx hardhat test --gas-stats
+step coverage npx hardhat test --coverage
 
 if command -v slither >/dev/null 2>&1; then
   # Slither prints the build commands it runs on stdout too; those lines start
