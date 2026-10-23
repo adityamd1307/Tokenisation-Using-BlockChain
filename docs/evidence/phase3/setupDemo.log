@@ -1,0 +1,20 @@
+﻿
+Network: hardhatMainnet
+Admin 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 | Issuer 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 | Investor 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC
+
+1. AssetFactory deployed: 0x5FbDB2315678afecb367f032d93F642f64180aa3
+2. Issuer authorised: true
+3. Assets registered: 2
+   #0 CPT: token 0xa16E02E87b7454126E5E10d957A927A7F5B5d2be, sale 0xB7A5bd0345EF1Cc5E66bf61BdeC17D2461fBd968, 10000 units @ 0.001 ETH
+   #1 DLP: token 0xeEBe00Ac0756308ac4AaBfD76c05c4F3088B8883, sale 0x10C6E9530F1C1AF873a391030a1D9E8ed0630D26, 5000 units @ 0.002 ETH
+4. CPT sale contract and investor whitelisted
+5. Sale funded: 5000 CPT available
+6. Investor bought 100 CPT for 0.1 ETH
+
+Balances:
+   Issuer CPT:          5000
+   Sale inventory CPT:  4900
+   Investor CPT:        100
+   Total supply CPT:    10000
+   Sale ETH balance:    0.1 ETH
+   Unclaimed proceeds:  0.1 ETH

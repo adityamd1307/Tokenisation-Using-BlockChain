@@ -1,0 +1,3 @@
+﻿AssetFactory: 22557 bytes deployed (default profile, optimizer off; EIP-170 limit 24576)
+AssetSale: 4385 bytes deployed (default profile, optimizer off; EIP-170 limit 24576)
+AssetToken: 6789 bytes deployed (default profile, optimizer off; EIP-170 limit 24576)
