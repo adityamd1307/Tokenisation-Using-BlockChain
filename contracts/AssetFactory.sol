@@ -34,6 +34,7 @@ contract AssetFactory {
     error InvalidAdmin();
     error NotAdmin();
     error InvalidIssuer();
+    error AdminCannotBeIssuer();
     error IssuerAlreadyAuthorised(address issuer);
     error IssuerNotAuthorised(address issuer);
     error InvalidSupply();
@@ -55,9 +56,12 @@ contract AssetFactory {
         admin = admin_;
     }
 
-    /// @dev Phase 3 §3.1; spec-v1 §5 reverts if already authorised.
+    /// @dev Phase 3 §3.1; spec-v1 §5 reverts if already authorised. Decision D8
+    /// (AUD-008): spec-v1 §3 bars the admin from holding tokens. Policy check only;
+    /// it cannot stop the admin using a second wallet.
     function authorizeIssuer(address issuer) external onlyAdmin {
         if (issuer == address(0)) revert InvalidIssuer();
+        if (issuer == admin) revert AdminCannotBeIssuer();
         if (authorisedIssuers[issuer]) revert IssuerAlreadyAuthorised(issuer);
         authorisedIssuers[issuer] = true;
         emit IssuerAuthorised(issuer);
