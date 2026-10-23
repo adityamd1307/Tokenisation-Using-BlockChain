@@ -31,12 +31,14 @@ contract AssetSale {
     error NoProceeds();
     error WithdrawalFailed();
     error NoUnsoldTokens();
+    error NoExcessETH();
 
     event Allocated(uint256 amount);
     event Purchased(address indexed buyer, uint256 quantity, uint256 paid);
     event ProceedsWithdrawn(uint256 amount);
     event SaleClosed();
     event UnsoldTokensRecovered(uint256 amount);
+    event ExcessETHSwept(uint256 amount);
 
     modifier onlyIssuer() {
         if (msg.sender != issuer) revert NotIssuer();
@@ -96,6 +98,18 @@ contract AssetSale {
         (bool ok, ) = issuer.call{value: amount}("");
         if (!ok) revert WithdrawalFailed();
         emit ProceedsWithdrawn(amount);
+    }
+
+    /// @notice Sends ETH forced in by selfdestruct or coinbase, i.e. anything above
+    /// what buyers paid and the issuer has not withdrawn.
+    /// @dev Decision D7 (AUD-007). Owed proceeds are excluded, so a sweep never pays
+    /// them out; they stay claimable through withdrawProceeds.
+    function sweepExcessETH() external onlyIssuer {
+        uint256 excess = address(this).balance - unclaimedProceeds;
+        if (excess == 0) revert NoExcessETH();
+        (bool ok, ) = issuer.call{value: excess}("");
+        if (!ok) revert WithdrawalFailed();
+        emit ExcessETHSwept(excess);
     }
 
     /// @dev Phase 3 §3.4, decision D3: closing is irreversible.

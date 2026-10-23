@@ -124,7 +124,7 @@ Properties that must hold after any sequence of calls. These become invariant an
 
 1. **Eligibility invariant** (restated by AUD-005): every token movement — `transfer`, `transferFrom`, a sale purchase — has a whitelisted sender and a whitelisted recipient. A holder whose eligibility is revoked keeps their balance but can neither send nor receive, nor buy, until re-approved. *Superseded wording, kept for audit comparison: "every address with a non-zero CPT balance is on the whitelist (`balanceOf(addr) > 0 → whitelist[addr] == true`)". That cannot hold since Phase 2 §2.3, which requires revocation to preserve balances.*
 2. **Supply invariant**: `totalSupply()` equals the sum of all individual balances at all times.
-3. **Sale proceeds invariant**: ETH held by AssetSale equals the total ETH paid by buyers minus total ETH withdrawn by the issuer.
+3. **Sale proceeds invariant** (restated by AUD-007, decision D7): `unclaimedProceeds` equals the total ETH paid by buyers minus the total withdrawn by the issuer, and is ≤ the ETH balance of AssetSale. Any excess is ETH forced in by `selfdestruct` or a coinbase reward, and the issuer can recover it with `sweepExcessETH()`. *Superseded wording: "ETH held by AssetSale equals the total ETH paid by buyers minus total ETH withdrawn by the issuer". That cannot be guaranteed, because ETH can be forced into any contract.*
 4. **Transfer gate invariant**: no transfer to a non-whitelisted address ever succeeds; every such attempt reverts.
 5. **Pause invariant**: when `paused == true`, no `transfer` or `transferFrom` succeeds (except `forcedTransfer` by issuer).
 6. **Freeze invariant**: when `frozen[addr] == true`, `addr` cannot send tokens via `transfer` or `transferFrom`.
