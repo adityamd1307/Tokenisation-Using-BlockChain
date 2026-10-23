@@ -18,6 +18,7 @@ contract AssetToken is ERC20, AccessControl {
     error InvalidInvestor();
     error SenderNotWhitelisted(address sender);
     error RecipientNotWhitelisted(address recipient);
+    error IssuerAdminRoleLocked();
 
     event WhitelistUpdated(address indexed investor, bool approved, address indexed operator);
 
@@ -56,6 +57,14 @@ contract AssetToken is ERC20, AccessControl {
         if (isWhitelisted[investor] == approved) return;
         isWhitelisted[investor] = approved;
         emit WhitelistUpdated(investor, approved, _msgSender());
+    }
+
+    /// @dev Phase 3 decision D6 (AUD-006): the issuer always keeps DEFAULT_ADMIN_ROLE,
+    /// so `issuer` names the ultimate authority and can always restore COMPLIANCE_ROLE.
+    /// Both revokeRole and renounceRole route through here.
+    function _revokeRole(bytes32 role, address account) internal override returns (bool) {
+        if (role == DEFAULT_ADMIN_ROLE && account == issuer) revert IssuerAdminRoleLocked();
+        return super._revokeRole(role, account);
     }
 
     /// @dev Phase 2 §2.4: covers transfer and transferFrom, checking the holder
