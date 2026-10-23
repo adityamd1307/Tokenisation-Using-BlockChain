@@ -82,7 +82,8 @@ describe("AssetSale — Phase 3", function () {
 
     it("exposes no function to change the price after creation", async function () {
       const { sale } = await networkHelpers.loadFixture(deploySale);
-      const names = sale.interface.fragments.filter((f) => f.type === "function").map((f) => (f as { name: string }).name);
+      const names: string[] = [];
+      sale.interface.forEachFunction((f) => names.push(f.name));
       expect(names.filter((n) => /price/i.test(n))).to.deep.equal(["pricePerToken"]);
     });
   });
