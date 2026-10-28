@@ -1,0 +1,5 @@
+
+> rwa-tokenisation-frontend@0.0.1 build
+> tsc -b && vite build
+
+error TS5083: Cannot read file '/Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/frontend/tsconfig.json'.

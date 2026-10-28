@@ -1,5 +1,7 @@
 # Verification — 23 October 2026
 
+Phase 4 follow-up (28 October 2026): this file is historical. Current frontend implementation, passing automated/local-service validation and remaining genuine MetaMask/browser checks are documented in [phase4-implementation.md](phase4-implementation.md) and [Phase 4 evidence](evidence/phase4/README.md). Do not interpret the old scaffold results below as the current repository state.
+
 Baseline: c504215 (main). Result at the time of this initial review: incomplete application; not verified as working.
 
 Phase 2 follow-up: token implementation and validation are recorded in [phase2-implementation.md](phase2-implementation.md). The observations below describe the original scaffold; they are not the latest token test results. Later application phases remain incomplete.

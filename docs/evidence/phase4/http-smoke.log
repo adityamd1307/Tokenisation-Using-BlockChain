@@ -1,0 +1,6 @@
+GET /: 200; app shell served
+GET /assets/0: 200; app shell served
+GET /admin: 200; app shell served
+GET /issuer: 200; app shell served
+GET /portfolio: 200; app shell served
+This verifies HTTP routing only; it is not a browser or MetaMask test.

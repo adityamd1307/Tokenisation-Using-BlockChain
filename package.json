@@ -6,7 +6,12 @@
   "scripts": {
     "test": "hardhat test",
     "compile": "hardhat compile",
-    "deploy:local": "hardhat run scripts/deploy.ts --network hardhatMainnet",
+    "node": "hardhat node --hostname 127.0.0.1",
+    "deploy:local": "hardhat run scripts/deploy.ts --network localhost",
+    "deploy:ephemeral": "hardhat run scripts/deploy.ts --network hardhatMainnet",
+    "frontend:sync": "hardhat compile && node scripts/syncFrontend.mjs",
+    "demo:local": "hardhat run scripts/seedLocal.ts --network localhost",
+    "test:integration": "npm --prefix frontend run test:integration",
     "deploy:sepolia": "hardhat run scripts/deploy.ts --network sepolia"
   },
   "repository": {

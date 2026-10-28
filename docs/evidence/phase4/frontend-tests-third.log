@@ -1,0 +1,235 @@
+
+> rwa-tokenisation-frontend@0.0.1 pretest
+> node ../scripts/syncFrontend.mjs
+
+Synced all three frontend ABIs from compiled artifacts.
+
+> rwa-tokenisation-frontend@0.0.1 test
+> vitest run
+
+
+ RUN  v4.1.12 /Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/frontend
+
+ ❯ src/test/issuer.test.tsx (12 tests | 1 failed) 1896ms
+     × performs separate approval and deposit transactions and refreshes allowance 1080ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/issuer.test.tsx > Issuer controls > performs separate approval and deposit transactions and refreshes allowance
+Error: expect(element).toBeEnabled()
+
+Received element is not enabled:
+  <button
+  class="button"
+  disabled=""
+/>
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"app-shell"[39m
+      [36m>[39m
+        [36m<aside[39m
+          [33mclass[39m=[32m"sidebar"[39m
+        [36m>[39m
+          [36m<a[39m
+            [33mclass[39m=[32m"brand"[39m
+            [33mdata-discover[39m=[32m"true"[39m
+            [33mhref[39m=[32m"/"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"brand-mark"[39m
+            [36m>[39m
+              [0ma[0m
+              [36m<span>[39m
+                [0mt[0m
+              [36m</span>[39m
+            [36m</span>[39m
+            [36m<div>[39m
+              [0mAssetToken[0m
+              [36m<small>[39m
+                [0mASSET MANAGEMENT[0m
+              [36m</small>[39m
+            [36m</div>[39m
+          [36m</a>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"nav-label"[39m
+          [36m>[39m
+            [0mWORKSPACE[0m
+          [36m</div>[39m
+          [36m<nav[39m
+            [33maria-label[39m=[32m"Main navigation"[39m
+          [36m>[39m
+            [36m<a[39m
+              [33mclass[39m=[32m""[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33maria-hidden[39m=[32m"true"[39m
+              [36m>[39m
+                [0m▦[0m
+              [36m</span>[39m
+              [0mMarketplace[0m
+            [36m</a>[39m
+            [36m<a[39m
+              [33maria-current[39m=[32m"page"[39m
+              [33mclass[39m=[32m"active"[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/issuer"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33maria-hidden[39m=[32m"true"[39m
+              [36m>[39m
+                [0m▤[0m
+              [36m</span>[39m
+              [0mIssuer dashboard[0m
+            [36m</a>[39m
+            [36m<a[39m
+              [33mclass[39m=[32m""[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/portfolio"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33maria-hidden[39m=[32m"true"[39m
+              [36m>[39m
+                [0m◈[0m
+              [36m</span>[39m
+              [0mMy portfolio[0m
+            [36m</a>[39m
+            [36m<a[39m
+              [33mclass[39m=[32m""[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/admin"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33maria-hidden[39m=[32m"true"[39m
+              [36m>[39m
+                [0m⚙[0m
+              [36m</span>[39m
+              [0mAdministration[0m
+            [36m</a>[39m
+          [36m</nav>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"sidebar-bottom"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"wallet-summary"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"eyebrow"[39m
+              [36m>[39m
+                [0mWallet overview[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"address-wrap"[39m
+              [36m>[39m
+                [36m<code[39m
+                  [33mtitle[39m=[32m"0x2000000000000000000000000000000000000002"[39m
+                [36m>[39m
+                  [0m0x2000…0002[0m
+                [36m</code>[39m
+                [36m<button[39m
+                  [33maria-label[39m=[32m"Copy 0x2000000000000000000000000000000000000002"[39m
+                  [33mclass[39m=[32m"copy-button"[39m
+                  [33mtype[39m=[32m"button"[39m
+                [36m>[39m
+                  [0mCopy[0m
+                [36m</button>[39m
+              [36m</span>[39m
+              [36m<span>[39m
+                [0mLocal Ethereum[0m
+              [36m</span>[39m
+              [36m<strong>[39m
+                [0m1.0 ETH[0m
+              [36m</strong>[39m
+              [36m<span>[39m
+                [0mAuthorised issuer[0m
+              [36m</span>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"environment"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"dot"[39m
+              [36m/>[39m
+              [0mLOCAL DEVELOPMENT[0m
+              [36m<span>[39m
+                [0mPHASE 04[0m
+              [36m</span>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</aside>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"main-shell"[39m
+        [36m>[39m
+          [36m<header[39m
+            [33mclass[39m=[32m"topbar"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"breadcrumb"[39m
+            [36m>[39m
+              [0mWorkspace [0m
+              [36m<span>[39m
+                [0m/[0m
+              [36m</span>[39m
+              [0m [0m
+              [36m<strong>[39m
+                [0mTokenisation platform[0m
+              [36m</strong>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"topbar-actions"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"network-label"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33mclass[39m=[32m"dot"[39m
+                [36m/>[39m
+                [0mLocal Ethereum[0m
+              [36m</span>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"wallet-controls"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"wallet-account"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"wallet-dot"[39m
+                  [36m/>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"address-wrap"[39m
+                  [36m>[39m
+                    [36m<code[39m
+                      [33mtitle[39m=[32m"0x2000000000000000000000000000000000000002"[39m
+                    [36m>[39m
+                      [0m0x2000…0002[0m
+                    [36m</code>[39m
+                    [36m<button[39m
+                      [33maria-label[39m=[32m"Copy 0x2000000000000000000000000000000000000002"[39m
+                      [33mclass[39m=[32m"copy-button"[39m
+                      [33mtype[39m=[32m"button"[39m
+                    [36m>[39m
+                      [0mCopy[0m
+                    [36m</button>[39m
+                  [36m</span>[39m
+                [36m</div>[39m
+                [36m<button[39...
+ ❯ src/test/issuer.test.tsx:33:142
+
+ ❯ runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:47:12
+ ❯ checkCallback node_modules/@testing-library/dom/dist/wait-for.js:124:77
+ ❯ Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:118:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 5 passed (6)
+      Tests  1 failed | 102 passed (103)
+   Start at  10:35:31
+   Duration  3.35s (transform 906ms, setup 1.53s, import 1.72s, tests 3.10s, environment 3.98s)
+

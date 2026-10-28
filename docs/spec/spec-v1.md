@@ -8,6 +8,8 @@ Phase 3 update (23 October 2026): the user's later [Phase 3 requirements](phase3
 
 Open decision D5 (recorded 23 October 2026, [phase3-requirements.md](phase3-requirements.md)): whether pause, freeze and forced transfer are implemented or formally dropped is undecided. The team must decide before Phase 4 starts. Until then, everything below about these features describes intended behaviour, not implemented behaviour: the §1 "Why a blockchain" sentence, the §3 issuer row, the §4 feature list, the §5 `pause` / `unpause` / `freeze` / `unfreeze` / `forcedTransfer` rows, and invariants 5 and 6.
 
+Phase 4 update (28 October 2026): the later [Phase 4 requirements](phase4-requirements.md) authorise building the frontend against the already implemented contracts and prohibit unnecessary Solidity redesign. They supersede the historical instruction to block Phase 4 on D5. Pause/freeze/forced transfer remain unsupported and are not fabricated in the UI. See [Phase 4 implementation and verification limits](../phase4-implementation.md).
+
 How this version was produced: human decisions, with AI-assisted research. The research sessions are logged in `docs/ai-logs/INDEX.md`. Changes from `spec-v0.md` are explained in section 10.
 
 ## 1. Problem and trust model

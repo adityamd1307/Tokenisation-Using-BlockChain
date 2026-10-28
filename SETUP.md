@@ -1,3 +1,5 @@
+> Phase 4 update (28 October 2026): the current reproducible setup is in [README.md](README.md) and [the Phase 4 workflow](docs/phase4-implementation.md#reproducible-local-workflow). This file retains historical Phase 1 setup notes; use the current instructions for persistent localhost deployment, ABI sync, and frontend tests.
+
 # Setting up the evidence pipeline
 
 Do the steps in order. Step 2 has to happen before any AI tool touches the repo.

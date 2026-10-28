@@ -1,0 +1,17 @@
+
+> rwa-tokenisation@1.0.0 test:integration
+> npm --prefix frontend run test:integration
+
+
+> rwa-tokenisation-frontend@0.0.1 test:integration
+> vitest run --config vite.integration.config.ts
+
+
+ RUN  v4.1.12 /Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/frontend
+
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  10:34:15
+   Duration  5.06s (transform 80ms, setup 0ms, import 206ms, tests 4.74s, environment 0ms)
+

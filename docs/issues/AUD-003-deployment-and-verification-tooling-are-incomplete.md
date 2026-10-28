@@ -46,3 +46,9 @@ Token tests are now executable; only the 22 factory/sale placeholders remain ski
 - ~~`scripts/evidence.sh` still requires `forge`.~~ It has been ported to Hardhat 3: compile, test, gas-stats, coverage, with Slither optional. Each step logs its command and the run records the commit SHA.
 - ~~Root typecheck has not been addressed.~~ `npx tsc --noEmit` now exits 0. The frontend is excluded until Vite provides its own tsconfig in Phase 4.
 - Still open: Sepolia deployment, and multiple Sepolia signers for `setupDemo.ts`.
+
+## Phase 4 follow-up — 28 October 2026
+
+Persistent `npm run deploy:local` now targets explicit localhost chain 31337 and writes deployment address, block/hash, runtime bytecode hash and all three compiled ABI arrays. The frontend has its own TypeScript/Vite/test configuration and lockfile. Both TypeScript checks, the production frontend build, 112 frontend behavior tests, 108 existing contract tests, actual local frontend-service lifecycle and HTTP route smoke checks pass. See [Phase 4 evidence](../evidence/phase4/README.md). `deploy:ephemeral` retains the throwaway workflow; `demo:local` explicitly seeds the two demo assets only on an empty local registry.
+
+Still open: genuine browser/MetaMask validation, Sepolia deployment and a multi-wallet public-testnet demonstration. No public deployment or interactive pass is claimed; Phase 5 remains outside this task.
