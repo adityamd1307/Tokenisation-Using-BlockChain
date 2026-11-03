@@ -40,3 +40,7 @@ The token portion is now implemented under the later Phase 2 requirements, with 
 ## Phase 3 follow-up — 23 October 2026
 
 AssetFactory and AssetSale are now implemented under `docs/spec/phase3-requirements.md` (commit e407edf), covering authorisation, creation, registry, allocation, buying, withdrawal and close/recover. `npx hardhat test` reports 99 passing, 0 pending (`docs/evidence/phase3/test-full.log`). This issue remains open only for pause, freeze and forced transfer (spec-v1 §4–6, invariants 5–6), which await a team decision. See `docs/phase3-implementation.md`.
+
+## D5 follow-up — 3 November 2026
+
+D5 is decided: pause and forced transfer will be implemented, and freeze is dropped as already covered by whitelist revocation (`docs/spec/phase3-requirements.md`, "D5 decision"; spec-v1 §5 "D5 functions"). This issue remains open until `pause`, `unpause` and `forcedTransfer` are implemented and tested.
