@@ -8,6 +8,8 @@ Phase 3 update (23 October 2026): the user's later [Phase 3 requirements](phase3
 
 Decision D5 (opened 23 October 2026 in [phase3-requirements.md](phase3-requirements.md); decided 3 November 2026): **pause and forced transfer are implemented; freeze is dropped.** Freeze adds nothing because whitelist revocation already does the same job. Since Phase 2 §2.3, a revoked holder keeps their balance but can neither send, receive nor buy (invariant 1). So "freeze" in this spec now means revoking eligibility with `setWhitelisted(addr, false)`. The governing function rows are in §5 under "D5 functions", and invariants 1, 5, 6 and 7 are restated. Everywhere else, a mention of freeze (§1 "Why a blockchain", the §3 issuer row, the §4 `frozen` mapping and feature list, the §5 `freeze` / `unfreeze` rows) is superseded and kept only for audit comparison. Until the code lands, the D5 functions describe intended behaviour, not implemented behaviour.
 
+Phase 4 update (28 October 2026): the later [Phase 4 requirements](phase4-requirements.md) authorise building the frontend against the already implemented contracts and prohibit unnecessary Solidity redesign. They supersede the historical instruction to block Phase 4 on D5. Pause/freeze/forced transfer remain unsupported and are not fabricated in the UI. See [Phase 4 implementation and verification limits](../phase4-implementation.md).
+
 How this version was produced: human decisions, with AI-assisted research. The research sessions are logged in `docs/ai-logs/INDEX.md`. Changes from `spec-v0.md` are explained in section 10.
 
 ## 1. Problem and trust model
