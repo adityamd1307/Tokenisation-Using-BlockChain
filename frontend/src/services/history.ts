@@ -1,4 +1,5 @@
-// Phase 4 §8.4: bounded, real event queries. A purchase's ERC-20 transfer is deduplicated.
+// Phase 4 §8.4: bounded, real event queries. The ERC-20 transfer inside a purchase or a
+// forced transfer (D5, AUD-013) is deduplicated so each operation appears once, typed.
 import { Contract, type EventLog, type Log } from "ethers";
 import type { Activity, Asset } from "../types";
 import { Blockchain } from "./blockchain";
@@ -38,13 +39,13 @@ export async function assetHistory(
     sale = api.sale(asset);
   for (let from = api.config.deployBlock; from <= tip; from += 2000) {
     const to = Math.min(tip, from + 1999);
+    // One token query returns Transfer, ForcedTransfer and WhitelistUpdated together.
     const sets = await Promise.all([
-      logs(token, token.filters.Transfer(), from, to),
+      logs(token, "*", from, to),
       logs(sale, "*", from, to),
       ...(account
         ? []
         : [
-            logs(token, token.filters.WhitelistUpdated(), from, to),
             logs(
               factory,
               factory.filters.AssetCreated(BigInt(asset.id)),
@@ -70,6 +71,15 @@ export async function assetHistory(
             ...base,
             type: "Transfer",
             quantity: a.value,
+            from: a.from,
+            to: a.to,
+          });
+          break;
+        case "ForcedTransfer":
+          rows.push({
+            ...base,
+            type: "Forced transfer",
+            quantity: a.amount,
             from: a.from,
             to: a.to,
           });
@@ -147,6 +157,14 @@ export async function assetHistory(
       .filter((r) => r.type === "Purchase")
       .map((r) => `${r.hash}:${r.to?.toLowerCase()}:${r.quantity}`),
   );
+  const forced = new Set(
+    rows
+      .filter((r) => r.type === "Forced transfer")
+      .map(
+        (r) =>
+          `${r.hash}:${r.from?.toLowerCase()}:${r.to?.toLowerCase()}:${r.quantity}`,
+      ),
+  );
   const filtered = rows
     .filter((r) => {
       if (
@@ -155,9 +173,16 @@ export async function assetHistory(
         purchases.has(`${r.hash}:${r.to?.toLowerCase()}:${r.quantity}`)
       )
         return false;
+      if (
+        r.type === "Transfer" &&
+        forced.has(
+          `${r.hash}:${r.from?.toLowerCase()}:${r.to?.toLowerCase()}:${r.quantity}`,
+        )
+      )
+        return false;
       if (account)
         return (
-          (r.type === "Transfer" || r.type === "Purchase") &&
+          ["Transfer", "Purchase", "Forced transfer"].includes(r.type) &&
           [r.from?.toLowerCase(), r.to?.toLowerCase()].includes(
             account.toLowerCase(),
           )
