@@ -1,0 +1,5 @@
+﻿# Runtime bytecode sizes from artifacts (deployedBytecode), EIP-170 limit 24576 bytes; creation fails only above the limit.
+main bff2f81, default profile (optimizer off): AssetFactory 23418, AssetToken 6955
+D5 branch, default profile (optimizer off):     AssetFactory 24576 (100.0%, 0 bytes headroom), AssetToken 8002, AssetSale 4925
+D5 branch, production profile (optimizer on, runs 200): AssetFactory 13545, AssetToken 4124
+Note: scripts/deploy.ts runs via 'hardhat run' with the default profile, so deploy:sepolia would deploy the unoptimised 24576-byte factory.

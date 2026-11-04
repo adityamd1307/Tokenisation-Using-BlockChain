@@ -1,0 +1,5 @@
+# D5 mutation check, 2026-11-04T13:41:37, base commit bff2f81 plus uncommitted D5 work
+M1 no pause check in _update : KILLED (passing=17 failing=2)
+M2 no zero-address source check : KILLED (passing=17 failing=2)
+M3 no whitelisted-source check : KILLED (passing=17 failing=2)
+M4 forcedTransfer goes through _update : KILLED (passing=14 failing=5)
