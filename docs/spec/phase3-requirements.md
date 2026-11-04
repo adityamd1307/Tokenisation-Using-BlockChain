@@ -147,3 +147,9 @@ Chordia Laksh decided this in a Claude Code (claude-opus-5-5) session, as joint 
 | Who may call them? | `DEFAULT_ADMIN_ROLE` | The issuer can never lose this role (D6). Authority comes from the role, not the stored `issuer` field (AUD-006 lesson). Keeps the strongest powers away from the delegable `COMPLIANCE_ROLE`. |
 | Which holders can `forcedTransfer` take from? | Only non-whitelisted (revoked) addresses, never `address(0)` | Recovery becomes "revoke, then force-transfer", which mirrors spec-v1's "freeze, then forcedTransfer" flow. Live investors and the sale contract cannot be drained without an earlier on-chain revocation event. The zero-address check stops `forcedTransfer` from minting. |
 | Does `forcedTransfer` work while paused? | Yes | As in spec-v1 §5 and invariant 5. Recovery stays possible during an emergency halt. |
+
+## D10 decision (4 November 2026)
+
+| Question | Decision |
+|---|---|
+| Before a push, the pre-push secret scan found Hardhat's published development key for account 0 and its default test seed phrase in session 069871d2's raw transcript. Claude Code had typed them as literal search patterns in its own scan commands, and the hook archives commands verbatim. They are public test values, but CLAUDE.md says never to print private keys, and the repository is public. | Chordia Laksh chose "redact, then push". The archive hook's mechanical redaction (D9) is extended to Hardhat's 20 default development keys, which it matches by SHA-256 so that the hook never contains them, and to the default seed phrase, which it matches as a pattern. The unpushed commit holding the unredacted copy (f4958f8) was dropped locally before any push, and the transcript was re-archived. A hash scan of all 285 tracked files and of the committed transcript at b769e4c found no remaining occurrence. |

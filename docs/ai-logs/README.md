@@ -14,6 +14,8 @@ History of the hook:
 
 **Redaction.** The copies in `raw/` are verbatim except for one mechanical rule, applied by the hook: every email address is replaced with `[email-redacted]`. GitHub `@users.noreply.github.com` addresses are left alone, because they are already public in the commit history. This keeps team members' personal and work addresses out of a public repository. It is the only exception to "do not edit transcripts" below. The same rule, with the hook's regular expression, is applied by hand to the readable copies in `exports/` before they are committed. On 4 November 2026 it replaced one address in `exports/2026-10-23-phase3-and-audit-remediation.txt` (line 2635).
 
+**Development keys (decision D10).** The hook also replaces Hardhat's 20 published development private keys with `[hardhat-dev-key-redacted]`, and its default test seed phrase with `[hardhat-dev-mnemonic-redacted]`. These values are public and hold nothing of value, but a public repository should not contain anything that looks like a private key. The hook recognises the keys by their SHA-256 hash, so the hook itself never contains them. Session 069871d2 is the first transcript this applied to: its scan commands had quoted one key and the phrase. Real keys stay in `.env`, which no session reads, so they should never reach a transcript in the first place.
+
 Claude Code only keeps its own transcripts for a limited time, so the copies in `raw/` are the record we rely on. Commit them.
 
 The raw files are JSONL in Claude Code's internal format, which can change between versions. They are the record, not something to read. For the report, use the readable exports below.
