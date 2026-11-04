@@ -5,8 +5,15 @@ export default defineConfig({
   plugins: [hardhatToolboxMochaEthers],
   solidity: {
     profiles: {
+      // AUD-014: AssetFactory embeds AssetToken and AssetSale; unoptimised it is at the EIP-170 limit.
       default: {
         version: "0.8.24",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+          },
+        },
       },
       production: {
         version: "0.8.24",
