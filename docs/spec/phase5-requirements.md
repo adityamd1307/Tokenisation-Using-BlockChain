@@ -73,6 +73,17 @@ Record testnet transaction hashes, test outputs and screenshots. These will beco
 
 ---
 
-## Decisions
+## Decisions made by the user (4 November 2026)
 
-Open. See the readiness review in session 069871d2; decisions will be recorded here as D11 onward, in the same form as D1–D10 in [phase3-requirements.md](phase3-requirements.md).
+Claude Code raised these conflicts between this request and the current code before any Phase 5 code was written. Claude Code proposed each option, and the user chose the recommended one each time. Numbering continues from D1–D10 in [phase3-requirements.md](phase3-requirements.md).
+
+| # | Question | Decision |
+|---|---|---|
+| D11 | Task 5.2 says the deploy script "runs the demo setup using testnet wallets", but Task 5.1's live MetaMask demo starts from "Wallet A authorises Wallet B". Running the setup on the factory the frontend uses would leave the live demo nothing to do. | **Clean factory plus scripted replay.** The deployment script deploys the main factory, with Wallet A as platform administrator, saves the factory address, chain ID and ABIs, and configures the frontend. It leaves the factory empty for the live Task 5.1 demo. A separate replay script runs all 12 Task 5.1 steps on its own factory with the four testnet wallets, producing reproducible transaction hashes for the report. |
+| D12 | The Sepolia network config has one key (`PRIVATE_KEY`), and `setupDemo.ts` needs at least three signers. Task 5.1 uses four wallets. | **Four named variables:** `SEPOLIA_KEY_A` to `SEPOLIA_KEY_D`, read with `configVariable` from environment variables or Hardhat's keystore, never from a committed file. Wallet A deploys and is the platform administrator. The same four accounts are imported into MetaMask. This replaces `PRIVATE_KEY` for Sepolia, and README and AUD-003 must be updated when it is implemented. |
+| D13 | Scenario 7 ("Wallet C tries transferring 20 CPT to Wallet D; transaction fails"): the frontend checks the recipient's eligibility before asking MetaMask to sign (`frontend/src/services/blockchain.ts:310`), so no transaction or hash exists. | **UI block plus on-chain revert.** The live demo records the UI's rejection (screenshot). The replay script also sends the same transfer directly, with a fixed gas limit so that gas estimation does not stop it, so a reverted transaction (`RecipientNotWhitelisted`) is recorded on Sepolia. The frontend's preflight is unchanged. |
+| D14 | Phase 4's 13 manual MetaMask and browser scenarios (`docs/phase4-implementation.md`) are all Pending, and the roadmap says not to start a phase before the previous phase's acceptance criteria are met. | **Local rehearsal first.** Before any Sepolia transaction, run Phase 4's manual checklist with MetaMask on the local chain and record the results and screenshots as Phase 4 acceptance (AUD-002). Then run Task 5.1 on Sepolia. |
+
+Still open (not blocking the start of Phase 5):
+- "Working deployed application": whether the frontend must be hosted publicly or only run locally against the Sepolia contracts.
+- The frontend's read RPC (`VITE_RPC_URL`) is compiled into the browser bundle. It must be a keyless public endpoint, or a key the team accepts as public.
