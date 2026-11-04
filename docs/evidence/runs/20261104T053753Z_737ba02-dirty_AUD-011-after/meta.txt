@@ -1,0 +1,8 @@
+utc: 20261104T053753Z
+commit: 737ba029931340babe6181aa53f4e7c73334e536
+uncommitted changes: yes-dirty
+label: AUD-011-after
+run by: Chordia Laksh
+node: v24.15.0
+hardhat: 3.21.0
+slither: not installed
