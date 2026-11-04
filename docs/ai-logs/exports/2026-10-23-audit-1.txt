@@ -1,0 +1,889 @@
+ ▐▛███▛█   Claude Code v2.1.309
+▝▜██████▀  Opus 5.5 · Claude Pro
+ ▝▝   ▝▝   ~\OneDrive - Nanyang Technological University\NTU\Y4S1\SC4053\Pr…
+
+
+> You are auditing the state of an NTU SC4053 project: "Tokenisation of         
+  Real-World and Digital Assets on Ethereum" (Hardhat 3.21, Solidity 0.8.24,    
+  OpenZeppelin 5.6.1, ethers 6, Mocha/Chai, TypeScript). The project is graded  
+  on two things: the dApp, and how well we audit the code that AI tools wrote   
+  for it. Phases 1–3 are done. Phase 4 (frontend) has not started.              
+                                                                                
+  Your job is a critical, evidence-based review of where the project stands.    
+  This is a READ-ONLY review:                                                   
+  - Do not edit contracts, tests, specs or docs.                                
+  - Do not commit, push, rebase or touch branches or tags.                      
+  - Do not read .env or print any key.                                          
+  You may run read-only commands: compile, test, scripts on the in-process      
+  network, git log/show/diff, grep. You may also write throwaway mutation       
+  experiments, but restore every file afterwards and prove it with `git         
+  status`.                                                                      
+                                                                                
+  Be sceptical. Most of this code, its tests and its documentation were written 
+  by AI sessions, and the docs describe that work in the AI's own words. Treat  
+  every claim in docs/phase2-implementation.md, docs/phase3-implementation.md,  
+  docs/issues/*.md, docs/ai-logs/INDEX.md and commit messages as unverified     
+  until you have checked it against code, tests or command output. Your role is 
+  not to confirm the previous session's conclusions.                            
+                                                                                
+  ## Read first                                                                 
+  1. CLAUDE.md: process rules, commit prefixes, the issue workflow, and "Rules  
+  learned from audit findings".                                                 
+  2. docs/spec/spec-v0.md, spec-v1.md, phase2-requirements.md,                  
+  phase3-requirements.md (including decisions D1–D4).                           
+  3. contracts/AssetToken.sol, AssetFactory.sol, AssetSale.sol,                 
+  contracts/test/*.sol.                                                         
+  4. test/*.test.ts, scripts/*.ts, scripts/evidence.sh, scripts/new-issue.sh,   
+  hardhat.config.ts, package.json.                                              
+  5. docs/issues/, docs/evidence/, docs/ai-logs/, docs/VERIFICATION.md.         
+  6. `git log --graph --oneline --all` and `git tag`.                           
+                                                                                
+  ## Analyse each area                                                          
+                                                                                
+  A. Spec consistency and traceability                                          
+  - Where do spec-v1, phase2-requirements and phase3-requirements still         
+  contradict each other? Is the "later requirements govern" layering coherent,  
+  and would a grader see it as principled or as moving the goalposts?           
+  - Does every external function trace to a spec section? List any requirement  
+  with no implementation and any implementation with no requirement.            
+  - Spec-v1 invariants 5 and 6 (pause, freeze, forced transfer) are not         
+  implemented. Is that deferral documented consistently everywhere, and what    
+  does it cost against the course brief?                                        
+                                                                                
+  B. Smart-contract security and correctness (AssetToken, AssetFactory,         
+  AssetSale)                                                                    
+  - Access control: role admin and transferability. Can `issuer` (immutable)    
+  drift from whoever actually holds DEFAULT_ADMIN_ROLE / COMPLIANCE_ROLE? Check 
+  renounce/grant paths and whether the "issuer isolation" invariant really      
+  holds.                                                                        
+  - Sale: payment exactness, overflow, the inventory accounting source of       
+  truth, CEI and reentrancy, ETH that can arrive outside buyTokens              
+  (selfdestruct, coinbase), close/recover semantics, and every whitelist        
+  interaction (the sale de-whitelisted, the issuer de-whitelisted, the buyer    
+  revoked mid-flow).                                                            
+  - Factory: authorisation edge cases, registry integrity, rogue AssetSale      
+  contracts deployed outside the factory, bytecode size headroom (EIP-170),     
+  gas, and whether revoking an issuer behaves as the spec says.                 
+  - Anything else: front-running, griefing, stuck funds or tokens, event        
+  completeness for a frontend indexer, error clarity.                           
+  For each finding, give a concrete exploit or failure scenario, or label it    
+  "Hypothesis:".                                                                
+                                                                                
+  C. Test quality                                                               
+  - Run `npx hardhat test` and report the real counts.                          
+  - Do the tests prove behaviour, or do they only exercise it? Look for tests   
+  that could not fail, missing negative cases, assertions on the wrong party,   
+  and fixtures that hide state problems.                                        
+  - Run targeted mutation experiments on the critical lines (whitelist checks   
+  in _update, the payment check, the inventory check, onlyIssuer, CEI ordering, 
+  the saleClosed gates) and report which mutants survive. Restore the files.    
+  - Is each item in the Phase 2 and Phase 3 test tables actually covered?       
+                                                                                
+  D. Process and audit-evidence compliance with CLAUDE.md                       
+  - Commit prefixes against the actual content of each commit (ai:, human:,     
+  test(AUD-NNN):, fix(AUD-NNN):, docs:, evidence:, chore:).                     
+  - For each AUD issue: does the history show a failing test committed alone    
+  before the fix? Do evidence runs exist for before and after? Are all four     
+  sections filled? Does the status in docs/issues/INDEX.md match the issue file 
+  and the git history? (For example, check whether AUD-004 still says "fixed    
+  (uncommitted)".)                                                              
+  - The ai-baseline branch was never created, contrary to the setup             
+  instructions. How much does that weaken the "AI code vs audited code" story,  
+  and what is the most honest mitigation?                                       
+  - scripts/evidence.sh requires forge, which this project does not use. Does   
+  the evidence pipeline actually work? Can every evidence log be traced to the  
+  commit and command that produced it?                                          
+  - AI logs: are transcripts present for every session the INDEX lists (one is  
+  marked "pending")? Is the "AI influence" attribution in spec-v1 §10 accurate? 
+  - Is "Why the AI made the mistake" in each issue limited to what the          
+  transcript or code shows, with guesses marked "Hypothesis:"?                  
+                                                                                
+  E. Readiness for Phase 4 (frontend) and Phase 5 (Sepolia)                     
+  - Do the contract views and events give the three dashboards in spec-v1 §7    
+  what they need without heavy client-side work?                                
+  - Deployment gaps: frontend/src/config/addresses.json format, no `localhost`  
+  network configured, a single Sepolia signer while setupDemo needs three, and  
+  an incomplete root TypeScript/typecheck setup.                                
+                                                                                
+  ## Output                                                                     
+  1. A short executive verdict: what is solid, what is risky, and what would    
+  lose marks.                                                                   
+  2. A findings table sorted by severity: ID (F-01…), severity                  
+  (critical/high/medium/low/info), area (A–E), file:line, claim, evidence (the  
+  command output or code you checked), confirmed or Hypothesis, and recommended 
+  action.                                                                       
+  3. For each finding that is a genuine bug, vulnerability or spec gap, a       
+  proposed AUD issue title and the regression test that would fail on the       
+  current code. Describe it only; do not create it.                             
+  4. A list of the doc claims you checked, each marked verified or refuted.     
+  5. Proposed new entries for CLAUDE.md "Rules learned from audit findings",    
+  each citing the finding it comes from.                                        
+  6. The exact commands you ran, and confirmation that `git status` is clean at 
+  the end.                                                                      
+                                                                                
+  Do not pad the report. If an area has no real problems, say so in one line.   
+  Do not report style nits as findings.                                         
+
+● I'll start by mapping the repo and reading the process rules, specs and
+  contracts.
+
+  Read 13 files, ran 1 shell command (ctrl+o to expand)
+
+● Now the process docs, issues and scripts.
+
+  Read 2 files, ran 5 shell commands (ctrl+o to expand)
+
+● I've confirmed one gap: the transcript-archive hook never runs here since
+  python3 is just the Windows Store stub and docs/ai-logs/raw/ doesn't exist.
+  Next I'll run the test suite and mutation experiments.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Tests confirm 99 passing. Now the mutation experiments. I'm writing a
+  throwaway runner in the scratchpad that applies one mutant at a time, runs the
+  suite and restores the file with git checkout.
+
+  Made 2 scratchpad edits +61 -1, ran 1 shell command (ctrl+o to expand)
+
+● Runner works and the tree is clean. Running the remaining 29 mutants in the
+  background while I check the evidence logs.
+
+  Searched for 1 pattern, read 1 file, ran 5 shell commands (ctrl+o to expand)
+
+● I've confirmed the Phase 2 before-snapshot matches baseline, that phase2.log
+  is a byte-identical copy of a failing first run, and that the claude.ai
+  research transcript recommended features spec-v1 §10 flags as "AI influence:
+  No." Now checking §10's history and the Phase 1 transcript.
+
+  Searched for 3 patterns, read 1 file, ran 3 shell commands (ctrl+o to expand)
+
+● While waiting on the mutation run, I noticed the root typecheck fails on
+  frontend files and an AI-written test (test/AssetSale.test.ts:85, TS2352),
+  plus Hardhat 3 injects a default localhost network that contradicts a doc
+  claim.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Results are written only when the run ends. I'll prepare the exploit probe
+  tests in the scratchpad now and run them once the mutation run finishes.
+
+  Made 2 scratchpad edits +132 -4, searched for 1 pattern (ctrl+o to expand)
+
+● The mutation run is still going (30 mutants, one full compile and test cycle
+  each). I'll run the probe tests and finish the report as soon as it completes.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● The mutation run is still in progress: a mutant is applied to
+  contracts/AssetSale.sol right now and is restored after each run. I'll
+  continue when it finishes.
+
+✻ Cooked for 6m 35s · done 3:53 PM
+
+● Background command "Run remaining mutants in background" completed (exit code
+0)
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● The mutation run finished: 28 of 30 mutants killed, the tree is clean. Now the
+  exploit probes. I'll copy the probe file into test/ temporarily, run only
+  that file, then delete it.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Audit of the SC4053 tokenisation project (state at 7fd3e26, read-only)
+
+  1. Executive verdict
+
+  What is solid. The contracts are small and correct for the cases they were
+  written to handle. I re-ran the suite and got 99 passing. The critical lines
+  are well guarded: I applied 30 mutants and the tests killed 28. The two
+  survivors are covered in F-11. The CEI ordering in withdrawProceeds is really
+  protected. Changing it to zero the balance after the send makes the invariant
+  8 test fail, which matches what the Phase 3 notes claim.
+
+  What is risky. None of the problems I found lets an attacker drain funds. The
+  real risks are in the design, and the docs gloss over them:
+  - Invariant 1 is gone, but a test still claims it. Since Phase 2, a revoked
+    investor keeps their tokens. So "every holder is whitelisted" is false by
+    design, yet a Phase 3 test is still named after invariant 1 and passes.
+  - "Issuer isolation" depends on role management nobody tests. The issuer
+    stored in the token and the sale never changes, while the actual roles can
+    be handed over or renounced. One of those paths permanently locks the sale's
+    tokens.
+  - Smaller gaps. ETH forced into the sale is stuck forever, and the admin can
+    authorise itself as an issuer, which spec-v1 §3 forbids.
+
+  What would lose marks (the audit evidence, not the dApp):
+  1. Missing transcripts. Neither session that wrote contract code has a
+     verbatim transcript. The transcript-archive hook has never run on this
+     machine.
+  2. The issue workflow was never followed. There is no test(AUD-…) or
+     fix(AUD-…) commit anywhere in the history, and no usable evidence.sh run.
+  3. No ai-baseline branch or tag exists, and no human: commit exists either. So
+     the "AI code vs audited code" diff is currently empty: the code on main is
+     the AI's output.
+  4. spec-v1 §10 understates AI influence. The removal of the one AI attribution
+     was itself proposed by an AI.
+
+  2. Findings
+
+  ID: F-01
+  Sev: high
+  Area: D
+  Location: docs/ai-logs/INDEX.md rows 2 and 4; .claude/settings.json
+  Claim: Neither session that wrote contract code has a verbatim transcript, and
+
+  the archive hook has never worked.
+  Evidence: Phase 2 (Codex) is "Session summary (not verbatim)"; Phase 3 is
+  "Transcript export pending". The hook calls python3, which here is the
+  Windows Store stub (Python was not found…, exit 9009). docs/ai-logs/raw/ does
+   not exist and there is no sessions.tsv.
+  Status: Confirmed
+  Action: Export the Phase 3 session now if it is still available, and recover
+  the Codex log. Point the hook at python or py. In the report, say plainly
+  which claims cannot be checked against a transcript.
+  ────────────────────────────────────────
+  ID: F-02
+  Sev: high
+  Area: D
+  Location: git log; AUD-004
+  Claim: The CLAUDE.md issue workflow was never executed.
+  Evidence: All of AUD-004 (code, regression test, evidence, issue file,
+  CLAUDE.md rule) arrived in one commit, 4faf156 "initial commit", merged via
+  PR #2 (e3d0cc4). git log --grep '^fix(AUD' finds nothing. INDEX says "fixed
+  (uncommitted)" and the issue says "Regression test commit: None", although
+  both are on main.
+  Status: Confirmed
+  Action: Update AUD-004 to cite 4faf156/e3d0cc4 and explain the deviation
+  honestly. Run the real workflow for the next issue.
+  ────────────────────────────────────────
+  ID: F-03
+  Sev: high
+  Area: D
+  Location: REPORT-MAP.md §4 and §7; SETUP.md:66-73
+  Claim: There is no ai-baseline branch or tag, and no human: commit.
+  Evidence: git tag lists only spec-v0. The Phase 1 transcript (lines 1764–1775)
+
+  flagged this before Phase 2 started.
+  Status: Confirmed
+  Action: See §3 below.
+  ────────────────────────────────────────
+  ID: F-04
+  Sev: med
+  Area: A, C
+  Location: test/AssetSale.test.ts:319; spec-v1 §6.1
+  Claim: Invariant 1 is false by design, yet a test titled "invariant 1" passes.
+  Evidence: That test never revokes anyone, so it cannot fail. Probe P2: buy 10,
+
+  revoke, then balanceOf = 10 while isWhitelisted = false. spec-v1 §6 still
+  lists invariant 1 unchanged; only phase2-implementation.md:13 supersedes it.
+  Status: Confirmed
+  Action: Restate invariant 1 in the spec, e.g. "every successful transfer has
+  eligible endpoints". Rename the test and add a revocation step.
+  ────────────────────────────────────────
+  ID: F-05
+  Sev: med
+  Area: B
+  Location: AssetToken.sol:13,35-36; AssetSale.sol:14,42
+  Claim: The issuer recorded in the token and sale can stop matching who
+  actually
+  holds the roles, and one path locks the inventory permanently.
+  Evidence: P3: the issuer grants both roles to Y, then renounces its own.
+  token.issuer() and sale.issuer() still name the original issuer, who can no
+  longer whitelist anyone. Y (who deployed nothing) de-whitelists the sale and
+  the issuer, and recoverUnsoldTokens reverts. P4: the issuer de-whitelists the
+   sale, renounces both roles and closes the sale; 5,000 tokens are then stuck
+  with no way out. This refutes the phase3-implementation.md:82 claim "Both can
+   be undone by the issuer, who holds COMPLIANCE_ROLE".
+  Status: Confirmed
+  Action: Use AccessControlDefaultAdminRules, or block renouncing the last
+  admin.
+  Restate invariant 7 in terms of roles.
+  ────────────────────────────────────────
+  ID: F-06
+  Sev: med
+  Area: A
+  Location: spec-v1 §1, §3, §5–7
+  Claim: The deferral of pause, freeze and forced transfer is stated in each
+  place, but there is no decision behind it.
+  Evidence: It is described consistently as deferred in the spec-v1 header, the
+  Phase 3 constraints, AUD-001 and both phase docs. But there is no owner, date
+   or decision. §1 still says "Transfer rules (whitelist, freeze, pause) are
+  enforced in code", and the §3 roles table still lists them. The research
+  session rated freeze, forced transfer and pause as "Must"
+  (claude-ai-research.md:296-297).
+  Status: Confirmed
+  Action: Make the call now (D5): implement them or formally drop them. If
+  implemented, watch the size limit (F-09).
+  ────────────────────────────────────────
+  ID: F-07
+  Sev: med
+  Area: D
+  Location: spec-v1 §10; INDEX.md row 3
+  Claim: AI influence is understated, and one model is misattributed.
+  Evidence: §10 says "No" for instant subscription and for pause/freeze/forced
+  transfer. The research transcript recommended exactly these (:270, :296-297)
+  and also proposed the AssetToken name (:64). The "correction" in a609765 that
+   removed the only AI attribution was proposed by the Phase 1 AI
+  (phase1-setup.txt:1860-1867). INDEX says claude-sonnet-4-6, but the
+  transcript shows Set model to Opus 4.7 (1M  context) (:14).
+  Status: Confirmed
+  Action: Rewrite §10 with three values: AI proposed / human chose / human
+  originated. Fix the model column.
+  ────────────────────────────────────────
+  ID: F-08
+  Sev: low
+  Area: B
+  Location: AssetSale.sol:18,92-99
+  Claim: ETH forced into the sale (selfdestruct or coinbase) breaks invariant 3
+  and is lost for good.
+  Evidence: P1 (simulated with setBalance): after withdrawing, the sale still
+  holds 1 wei and withdrawProceeds reverts with NoProceeds. This refutes the
+  doc claim that "ETH can only arrive through buyTokens and invariant 3 holds".
+  Status: Confirmed (simulated)
+  Action: Either restate invariant 3 as unclaimedProceeds ≤ balance, or add a
+  sweep of balance − unclaimedProceeds callable only by the issuer.
+  ────────────────────────────────────────
+  ID: F-09
+  Sev: low
+  Area: B, E
+  Location: bytecode-sizes.txt; package.json deploy:sepolia
+  Claim: The factory deploys at 22,557 B without optimisation, leaving 2,019 B
+  under EIP-170.
+  Evidence: The factory embeds both contracts' creation code. The deploy scripts
+
+  pass no --build-profile production. Measured gas: createAsset 2,779,238;
+  factory deployment 4,902,786.
+  Status: Size confirmed. That adding pause/freeze/forcedTransfer to AssetToken
+  would push the factory over the limit is a hypothesis.
+  Action: Deploy with the production profile, and re-measure after any change to
+
+  AssetToken.
+  ────────────────────────────────────────
+  ID: F-10
+  Sev: low
+  Area: B
+  Location: AssetFactory.sol:59
+  Claim: The admin can authorise itself as an issuer and hold tokens, which
+  spec-v1 §3 forbids.
+  Evidence: P7 succeeds. VERIFICATION.md already flagged this, and no doc defers
+
+  it.
+  Status: Confirmed
+  Action: Add if (issuer == admin) revert, or record a decision to allow it.
+  ────────────────────────────────────────
+  ID: F-11
+  Sev: low
+  Area: C
+  Location: tests
+  Claim: There are gaps in the negative tests, and two mutants survive.
+  Evidence: Survivors: M23 (pay out address(this).balance), which survives
+  because forced ETH is never tested; and M25 (factory price check removed),
+  which is equivalent because InvalidPrice() has the same selector in
+  AssetSale. Error-type-only kills: M07 and M09 are killed only by the
+  error-type assertion; removing those checks is still safe because the token
+  reverts anyway. Untested: a de-whitelisted sale (P5 gives the buyer the
+  opaque SenderNotWhitelisted(sale)), a de-whitelisted issuer during recovery,
+  renouncing roles, forced ETH, and overflow (P8 panics with 0x11 instead of
+  IncorrectPayment). The AUD-004 regression uses the generic
+  .to.revert(ethers).
+  Status: Confirmed
+  Action: Add these cases. Assert the specific custom error in the AUD-004
+  regression.
+  ────────────────────────────────────────
+  ID: F-12
+  Sev: low
+  Area: D
+  Location: 4faf156, c504215
+  Claim: Some commit prefixes do not match their content.
+  Evidence: 4faf156 "initial commit" contains the AI-written AssetToken and has
+  no prefix, so git log --grep '^ai:' (REPORT-MAP) misses the whole token.
+  c504215 chore: contains test stubs, deploy.ts and the frontend that Claude
+  Code wrote (phase1-setup.txt:1544-1623).
+  Status: Confirmed
+  Action: Do not rewrite history. Add a prefix-correction table to the report.
+  ────────────────────────────────────────
+  ID: F-13
+  Sev: low
+  Area: D
+  Location: docs/evidence/
+  Claim: Evidence cannot be traced back to a commit and command.
+  Evidence: phase2.log is byte-identical to phase2-first-run.log, which shows 50
+   
+  passing / 1 failing. No log shows a green Phase 2 run before Phase 3.
+  phase2-implementation.md still has three TBD sections (lines 162, 166, 189).
+  The Phase 3 logs record no commit or command. baseline.log is a mutex timeout
+   from another machine. evidence.sh needs forge, which is absent; its only run
+   shows exit 127 on every step.
+  Status: Confirmed
+  Action: Port evidence.sh to npx hardhat test (and Slither) and have it write
+  the commit SHA into every log. Fill in or delete the TBD sections.
+  ────────────────────────────────────────
+  ID: F-14
+  Sev: low
+  Area: D
+  Location: docs/issues/
+  Claim: The issue inventory is weak.
+  Evidence: AUD-001, 002 and 003 track phases that had not been built yet, not
+  AI
+  defects. INDEX leaves their severity and category blank while the files say
+  "high". AUD-001 duplicates AUD-004. AUD-004 says "AI session: Not
+  established", but phase1-setup.txt:~1425 shows Claude Code writing the stub,
+  marked "Full implementation in Phase 2". That makes AUD-004 an unfinished
+  stub rather than an AI mistake. Its "Why" section is suitably hedged.
+  Status: Confirmed
+  Action: Recategorise AUD-001–003 as tracking issues, sync INDEX, and attribute
+
+  AUD-004 to the Phase 1 session.
+  ────────────────────────────────────────
+  ID: F-15
+  Sev: low
+  Area: E
+  Location: tsconfig.json; test/AssetSale.test.ts:85
+  Claim: The root typecheck fails, including on an AI-written test.
+  Evidence: npx tsc --noEmit fails on the frontend JSX and with TS2352 at
+  AssetSale.test.ts:85.
+  Status: Confirmed
+  Action: Split the tsconfig into root and frontend configs, and fix the cast.
+  ────────────────────────────────────────
+  ID: F-16
+  Sev: info
+  Area: E
+  Location: hardhat.config.ts; addresses.json
+  Claim: Deployment readiness for Phase 4/5.
+  Evidence: Sepolia: one signer, while setupDemo needs three. addresses.json:
+  the
+  committed file has only note and AssetFactory; deploy.ts writes network,
+  chainId, admin and deployBlock. localhost: "no localhost network" is wrong.
+  Hardhat 3 adds localhost → http://localhost:8545 itself
+  (network-manager/hook-handlers/config.js).
+  Status: Confirmed
+  Action: Correct AUD-003 and the Phase 3 notes. The frontend should read
+  chainId
+  and deployBlock.
+  ────────────────────────────────────────
+  ID: F-17
+  Sev: info
+  Area: B, E
+  Location: factory and sale
+  Claim: Rogue sales, missing inventory events, and what the dashboards need.
+  Evidence: Rogue sales: anyone can deploy an AssetSale for a registered token
+  (P9; already documented). Inventory events: tokens sent directly to the sale
+  become inventory without an Allocated event (P6). Dashboards: the admin's
+  issuer list can only be rebuilt from IssuerAuthorised/IssuerRevoked events
+  since deployBlock. The issuer view can filter AssetCreated by the indexed
+  issuer. Investor holdings take one balanceOf per asset. All of this is
+  workable without heavy client-side code.
+  Status: Confirmed
+  Action: The frontend must use only registry addresses and compute inventory
+  from availableTokens(), not from events.
+
+  On the ai-baseline branch (F-03). The honest mitigation is not to back-date
+  anything. Add new annotated tags on the existing commits, with a message
+  stating they were created later: ai-baseline-phase2 → 4faf156 and
+  ai-baseline-phase3 → 5578ec5. Then state in the report that no human-modified
+  code exists yet. Real human: and fix(AUD-…) commits from now on are the only
+  thing that will give Report §7 any content. Creating tags is your call; I did
+  not create them.
+
+  On spec layering (Area A). "Later requirements govern" is defensible, because
+  D1–D4 are recorded with the user's decisions. But spec-v1 still says FROZEN
+  while three commits have edited it since, and its §3–§6 tables describe a
+  system that no longer exists. A grader could read that as moving the
+  goalposts. A single delta table (spec-v1 item → superseded by / deferred /
+  implemented) would fix this.
+
+  Spec traceability.
+  - Requirements with no implementation: pause, unpause, freeze, unfreeze and
+    forcedTransfer (deferred); the admin restriction (F-10); invariants 1, 5 and
+    6; and an on-chain list of issuers for §7.
+  - Implementations with no requirement: only inherited grantRole, revokeRole
+    and renounceRole, whose renounce semantics no spec governs (F-05). Every
+    other external function traces to a spec section.
+
+  3. Proposed AUD issues (described only, not created)
+
+  Finding: F-04
+  Title: Invariant 1 contradicts revocation-with-balance; test cannot fail
+  Regression test that fails on current code: Buy 10 → revoke the investor →
+  assert that every holder with a balance is whitelisted. It fails now. The fix
+   is a spec change and a rewritten test, which is legitimate as a spec gap.
+  ────────────────────────────────────────
+  Finding: F-05
+  Title: Issuer can renounce the last admin role, permanently locking sale
+  inventory
+  Regression test that fails on current code: Issuer de-whitelists the sale →
+  renounceRole(DEFAULT_ADMIN_ROLE,  issuer) is expected to revert. It succeeds
+  now.
+  ────────────────────────────────────────
+  Finding: F-08
+  Title: Forced ETH is unrecoverable and breaks invariant 3
+  Regression test that fails on current code: setBalance(sale, owed + 1) →
+  withdraw → expect the sale's balance to be 0, or a sweep to succeed.
+  Currently 1 wei stays and withdrawal reverts with NoProceeds.
+  ────────────────────────────────────────
+  Finding: F-10
+  Title: Platform admin can self-authorise as issuer (spec-v1 §3)
+  Regression test that fails on current code: authorizeIssuer(admin) is expected
+
+  to revert. It succeeds now.
+  ────────────────────────────────────────
+  Finding: F-11
+  Title: Buyer sees a token error when the sale is not whitelisted
+  Regression test that fails on current code: De-whitelist the sale → buyTokens
+  is expected to revert with a sale-level error such as SaleNotWhitelisted. It
+  currently reverts with SenderNotWhitelisted(sale) from the token. Low
+  priority.
+
+  4. Doc claims checked
+
+  ┌───────────────────────────────────────────┬─────────────────────────────┐
+  │                   Claim                   │           Result            │
+  ├───────────────────────────────────────────┼─────────────────────────────┤
+  │ "99 passing, 0 pending"                   │                             │
+  │ (phase3-implementation.md, commit         │ Verified (re-run)           │
+  │ a0cbd56)                                  │                             │
+  ├───────────────────────────────────────────┼─────────────────────────────┤
+  │ CEI mutant: "only the invariant 8 test    │ Verified (M19)              │
+  │ failed"                                   │                             │
+  ├───────────────────────────────────────────┼─────────────────────────────┤
+  │ "No receive/fallback … ETH can only       │                             │
+  │ arrive through buyTokens and invariant 3  │ Refuted (P1)                │
+  │ holds"                                    │                             │
+  ├───────────────────────────────────────────┼─────────────────────────────┤
+  │ "Both can be undone by the issuer, who    │ Refuted (P3, P4)            │
+  │ holds COMPLIANCE_ROLE"                    │                             │
+  ├───────────────────────────────────────────┼─────────────────────────────┤
+  │ "invariants 1–3" tested (commit 4b09196)  │ Refuted for invariant 1     │
+  │                                           │ (F-04)                      │
+  ├───────────────────────────────────────────┼─────────────────────────────┤
+  │ "No localhost network" (Phase 3 notes,    │ Refuted (F-16)              │
+  │ AUD-003)                                  │                             │
+  ├───────────────────────────────────────────┼─────────────────────────────┤
+  │                                           │ Verified (evidence file;    │
+  │ Factory 22,557 B, optimiser off           │ the profile is set in       │
+  │                                           │ config)                     │
+  ├───────────────────────────────────────────┼─────────────────────────────┤
+  │ AssetToken.before.sol equals the c504215  │ Verified (identical apart   │
+  │ baseline                                  │ from a BOM)                 │
+  ├───────────────────────────────────────────┼─────────────────────────────┤
+  │ AUD-004 before (0 passing / 1 failing)    │ Verified (logs exist). The  │
+  │ and after (1 / 0) logs                    │ commit they ran against is  │
+  │                                           │ not recorded.               │
+  ├───────────────────────────────────────────┼─────────────────────────────┤
+  │ AUD-004 "full-suite outcomes" in          │ Refuted (TBD sections;      │
+  │ phase2-implementation.md                  │ phase2.log shows 1 failing) │
+  ├───────────────────────────────────────────┼─────────────────────────────┤
+  │ INDEX: AUD-004 "fixed (uncommitted)"      │ Refuted (merged in e3d0cc4) │
+  ├───────────────────────────────────────────┼─────────────────────────────┤
+  │ INDEX: Phase 1 session ran on             │ Refuted (transcript :14,    │
+  │ claude-sonnet-4-6                         │ Opus 4.7)                   │
+  ├───────────────────────────────────────────┼─────────────────────────────┤
+  │ spec-v1 §10 "AI influence: No" (instant   │ Refuted (F-07)              │
+  │ flow, compliance features)                │                             │
+  ├───────────────────────────────────────────┼─────────────────────────────┤
+  │ AI logs README: hook copies sessions into │ Refuted (F-01)              │
+  │  raw/                                     │                             │
+  ├───────────────────────────────────────────┼─────────────────────────────┤
+  │ Phase 3 "two AI mistakes caught           │ Unverifiable: the           │
+  │ pre-commit"                               │ transcript is pending       │
+  ├───────────────────────────────────────────┼─────────────────────────────┤
+  │ Revocation keeps balances; _update checks │ Verified (code, tests,      │
+  │  holder and recipient, not the spender    │ M01/M02)                    │
+  ├───────────────────────────────────────────┼─────────────────────────────┤
+  │ revokeIssuer only blocks future           │ Verified (test and code)    │
+  │ createAsset calls                         │                             │
+  ├───────────────────────────────────────────┼─────────────────────────────┤
+  │ All nine Phase 3 §3.5 cases and the Phase │ Verified                    │
+  │  2 A–E groups have tests                  │                             │
+  └───────────────────────────────────────────┴─────────────────────────────┘
+
+  5. Proposed CLAUDE.md rules
+
+  - F-04: When a later requirement drops a spec-v1 invariant, edit that
+    invariant in the spec in the same commit. Never title a test after an
+    invariant unless the test can actually fail when the invariant is broken.
+  - F-05: Any "only X may…" invariant must be tested along every role path:
+    grant, revoke, renounce and transfer. A stored issuer field is not proof of
+    authority.
+  - F-08 / F-11: For every contract that holds ETH, test forced ETH. For every
+    guard, include at least one mutant that changes behaviour, not just the
+    error name.
+  - F-02 / F-13: Every evidence log must record the commit SHA and the exact
+    command. A copied log, or a "TBD", does not count as evidence.
+  - F-07: Attribute AI influence by reading the transcript, not from an AI's
+    summary of what it did.
+
+  6. Commands run, and final state
+
+  Read-only commands:
+  - git ls-files, git log --graph --oneline --all, git tag, git branch -a
+  - git show --stat <every commit>, git show a609765/4faf156 -- <file>, git 
+    rev-parse spec-v0, git diff --stat spec-v0 HEAD -- docs/spec/spec-v0.md
+  - git diff --no-index comparing the baseline token against
+    AssetToken.before.sol, and Get-FileHash on the two Phase 2 logs
+  - python3 --version
+  - npx hardhat test → 99 passing
+  - npx tsc --noEmit → fails (F-15)
+  - Read and Grep over all the files listed in your brief, plus the Hardhat
+    network-manager source
+
+  Throwaway experiments:
+  - Mutation runner (C:\Users\laksh\AppData\Local\Temp\claude\C--Users-laksh-One
+    Drive---Nanyang-Technological-University-NTU-Y4S1-SC4053-Project\7b0eabb6-ec
+    bd-4dbb-b515-64d2958841d4\scratchpad\mutate.ps1): 30 mutants, each run with
+    npx hardhat test and restored with git checkout -- <file>. Results are in
+    C:\Users\laksh\AppData\Local\Temp\claude\C--Users-laksh-OneDrive---Nanyang-T
+    echnological-University-NTU-Y4S1-SC4053-Project\7b0eabb6-ecbd-4dbb-b515-64d2
+    958841d4\scratchpad\mutants.txt.
+  - Probe suite: copied into test/zz-audit-probe.test.ts, run with npx hardhat 
+    test mocha test/zz-audit-probe.test.ts, then deleted. All 10 probes passed,
+    which confirms each finding. The output is in C:\Users\laksh\AppData\Local\T
+    emp\claude\C--Users-laksh-OneDrive---Nanyang-Technological-University-NTU-Y4
+    S1-SC4053-Project\7b0eabb6-ecbd-4dbb-b515-64d2958841d4\scratchpad\probe.log.
+
+  Final state: git status --short --untracked-files=all printed nothing, so the
+  working tree is clean. No commits, branches or tags were touched, and .env was
+  not read.
+
+  I can also publish this as a private page you can share with your team for the
+  audit report.
+
+✻ Cogitated for 2m 10s · done 3:58 PM
+
+※ recap: The read-only audit of your SC4053 project is finished: tests pass and the contracts hold up, but the audit evidence is weak (missing transcripts, an unused issue workflow, no baseline tag). Next, pick which proposed AUD issues to file first. (disable recaps in /config)
+
+> A different claude code session is running right now to fix these. Check the  
+  satus of the changes and the progress. do NOT make any edits                  
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● The other session has made 22 commits since my audit, and its current fix is
+  still uncommitted. Looking at the in-progress diff and the key commits:
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Checking that the test commits contain only tests, that the evidence runs show
+  fail-then-pass, and the model attribution the other session disputed:
+
+  Ran 2 shell commands (ctrl+o to expand)
+● The other session's progress on the audit fixes (checked read-only)
+
+  The other session has made 22 commits since my audit (7fd3e26), between 16:06
+  and 16:44. It is now partway through AUD-007, with the fix still uncommitted.
+  I made no edits; I only ran git log, git show, git diff, git status and read
+  files.
+
+  Where each finding stands
+
+  Finding: F-01 transcripts / hook
+  Status: Done. The hook was ported to node and three raw transcripts are
+  archived (Phase 1, Phase 3, and this audit session). The Phase 2 Codex
+  session still has no verbatim transcript.
+  Evidence: 88c2f9b, c22fc7a, docs/ai-logs/raw/
+  ────────────────────────────────────────
+  Finding: F-02 issue workflow
+  Status: Now followed for AUD-005 to 007: a test commit, a failing "before"
+  run,
+  the fix, then a passing "after" run. AUD-004 is honestly marked "test+fix in
+  one commit".
+  Evidence: see the table below
+  ────────────────────────────────────────
+  Finding: F-03 ai-baseline
+  Status: Not addressed. There are no new tags or branches, and this needs your
+  decision.
+  Evidence: git tag still shows only spec-v0
+  ────────────────────────────────────────
+  Finding: F-04 → AUD-005 (invariant 1)
+  Status: Fixed with evidence: before run 99 passing / 1 failing, after run 100
+  passing.
+  Evidence: b85271f → 0f9ce3f
+  ────────────────────────────────────────
+  Finding: F-05 → AUD-006 (issuer admin role)
+  Status: Fixed with evidence: before run 3 failing, after run 103 passing.
+  Evidence: a075ff0 → 12f8cd2
+  ────────────────────────────────────────
+  Finding: F-06 pause/freeze/forced transfer
+  Status: Recorded as decision D5 with owners and a deadline. Still open by 
+  design.
+  Evidence: 888e0a5
+  ────────────────────────────────────────
+  Finding: F-07 §10 attribution
+  Status: §10 was rewritten from the transcript.
+  Evidence: 888e0a5
+  ────────────────────────────────────────
+  Finding: F-08 → AUD-007 (forced ETH)
+  Status: In progress. The test now uses a real selfdestruct contract and the
+  before run shows 3 failing. sweepExcessETH() and the restated invariant 3 are
+   uncommitted, and there is no after run yet.
+  Evidence: 947b4b7, 81d6382, plus the working tree
+  ────────────────────────────────────────
+  Finding: F-10 → AUD-008 (admin self-authorises)
+  Status: Issue opened and decision D8 recorded. Not started.
+  Evidence: 62994eb, 7207281
+  ────────────────────────────────────────
+  Finding: F-13 evidence pipeline
+  Status: Done. evidence.sh now runs Hardhat, records the command used for each
+  step, and names each run folder after its commit. The Phase 2 TBD sections
+  are filled in.
+  Evidence: d87cd66, fbed974, c225fa2
+  ────────────────────────────────────────
+  Finding: F-14 issue index
+  Status: AUD-001 to 003 are recategorised as tracking issues.
+  Evidence: c225fa2
+  ────────────────────────────────────────
+  Finding: F-15 typecheck
+  Status: Done. The frontend is excluded from the root tsconfig, and the bad
+  cast
+  is replaced.
+  Evidence: aee9ea6, 913569c
+  ────────────────────────────────────────
+  Finding: F-16 wrong doc claims
+  Status: Corrected.
+  Evidence: c225fa2
+  ────────────────────────────────────────
+  Finding: F-09 bytecode headroom, F-11 extra negative tests, F-12 prefix table
+  Status: Nothing in the commit messages addresses these yet.
+  Evidence: —
+
+  Things to watch
+
+  1. I got one claim wrong, and the other session was right to keep 
+     claude-sonnet-4-6. In the raw Phase 1 transcript, all 412 assistant
+     messages are claude-sonnet-4-6. The /model line I cited in the exported
+     text did not take effect. Please drop that part of F-07; the §10
+     attribution part still stands.
+  2. The issue index is stale. AUD-005 and AUD-006 still show "open" with blank
+     severity, although both have fix commits and after runs. Expect it to be
+     updated, but check before relying on it.
+  3. The AUD-005 fix commit also rewrote its own regression test
+     (test/Phase3.regression.test.ts, 23 lines changed). For a spec gap that is
+     defensible, because the spec changed. But a grader may read a fix that
+     edits its own failing test as moving the test to pass. The issue file
+     should explain why.
+  4. The AUD-006 fix looks sound. In OpenZeppelin 5, renounceRole goes through
+     _revokeRole, so both paths are blocked for the issuer. The trade-off is
+     that an issuer can never fully hand over admin. A co-admin can still remove
+     the issuer's compliance role, but the issuer can grant it back.
+  5. The uncommitted AUD-007 sweep looks sound. The subtraction cannot
+     underflow, owed proceeds are excluded, and a re-entrant sweep would see an
+     excess of 0 and revert. It still needs its fix commit and an after run.
+  6. Bytecode headroom (F-09) is shrinking. The token gained an override and the
+     sale is gaining a function, and the factory embeds both. Nobody has
+     re-measured the 2,019 bytes of headroom. I didn't compile, to avoid
+     interfering with the running session.
+  7. The archived transcripts have emails redacted. This is decision D9, but
+     docs/ai-logs/README.md says "Do not edit transcripts after the fact". The
+     README should mention the redaction exception.
+
+  The working tree has exactly two uncommitted files, both belonging to the
+  other session's AUD-007 fix: contracts/AssetSale.sol and docs/spec/spec-v1.md.
+  There are no untracked files.
+
+✻ Worked for 1m 20s · done 4:46 PM
+
+※ recap: Goal: get the audit findings fixed with proper evidence; I just checked the other session's progress without editing anything. Next, once the AUD-007 fix is committed with its after run, confirm the stale issue index gets updated. (disable recaps in /config)
+
+> Check again now. Do not make any edits                                        
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Since the last check the remaining fixes landed and two tags appeared.
+  Verifying the tags, the one "-dirty" evidence run, the final run and the new
+  CLAUDE.md rules:
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Second status check: all four new issues are fixed
+
+  All four new issues (AUD-005 to AUD-008) now have a test commit, a failing
+  "before" run, a fix commit and a passing "after" run. The final evidence run
+  shows 108 passing. As before, I made no edits; I only ran git commands and
+  read files.
+
+  New since the last check (16:45 to 16:58)
+
+  Item: AUD-007 (forced ETH)
+  State: Fixed in 3659cce; after run 107 passing (b250ccd).
+  ────────────────────────────────────────
+  Item: AUD-008 (admin self-authorises)
+  State: Test 4ce7928 changes only the test file. Before run: 1 failing. Fix
+  118d13b; after run: 108 passing.
+  ────────────────────────────────────────
+  Item: Issue files and index
+  State: AUD-005 to 008 have all four sections filled. The index now shows
+  severity, category and the fix commit for each, so it is no longer stale.
+  ────────────────────────────────────────
+  Item: CLAUDE.md
+  State: Five new rules, each citing an issue (e58db95).
+  ────────────────────────────────────────
+  Item: F-03 baseline
+  State: Two annotated tags were added: ai-baseline-phase2 → 4faf156 and
+  ai-baseline-phase3 → 5578ec5. Both messages say they were created
+  retroactively and why, which is the honest version I suggested. No
+  ai-baseline branch exists.
+  ────────────────────────────────────────
+  Item: Final run
+  State: b93c9e1: run at 9a0d369, compile, test, gas and coverage all exit 0,
+  108
+  passing. The commit message reports 98.68% line coverage and a clean
+  typecheck.
+
+  Still worth flagging
+
+  1. Bytecode headroom (F-09) is now tighter, and the recorded figure is stale.
+     The final run's gas report shows AssetFactory at 23,418 bytes, leaving
+     1,158 bytes under the 24,576-byte EIP-170 limit; at audit time it was
+     22,557. docs/evidence/phase3/bytecode-sizes.txt was never updated. If
+     pause, freeze and forced transfer are implemented (D5), the factory will
+     very likely exceed the limit unless you deploy with the production profile
+     or restructure. I have not tested that; it is an expectation.
+  2. The archive hook writes into tracked files during a session. The working
+     tree is dirty right now: a Phase 3 session transcript has 29 new lines. The
+     AUD-008 before run was marked -dirty for the same reason. The issue file
+     discloses this and says no contract or test file differed from 4ce7928.
+     That is plausible, but the run itself doesn't record what differed. Any
+     future evidence run will keep showing -dirty while a session is open.
+     Possible fixes: have evidence.sh ignore docs/ai-logs/raw/ when deciding
+     whether the tree is dirty, or have the hook write the transcript copies to
+     an ignored folder and commit them later.
+  3. Not addressed in any commit: F-11's remaining negative tests (sale
+     de-whitelisted during a buy, overflow), the F-12 prefix-correction table,
+     and a README note on the transcript redaction (D9).
+  4. AUD-001 is still open, pending decision D5 on pause, freeze and forced
+     transfer.
+
+  Working tree
+
+  The only uncommitted change is
+  docs/ai-logs/raw/20261023T080759Z_c567bbec-….jsonl. It comes from the archive
+  hook, not from a code change. There are no untracked files.
+
+✻ Brewed for 1m 5s · done 5:00 PM
+
+> Which "/export" command should I run now?                                     
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Run one export in each session, using the naming convention from
+  docs/ai-logs/README.md (exports/<yyyy-mm-dd>-<topic>.txt). Neither session has
+  a readable export yet; their INDEX rows only point to the raw JSONL copies.
+
+  In this session (audit-1, 7b0eabb6):
+  /export docs/ai-logs/exports/2026-10-23-audit-1.txt
+
+  In the other session (Phase 3 plus the AUD-005 to AUD-008 remediation, 
+  c567bbec):
+  /export docs/ai-logs/exports/2026-10-23-phase3-and-audit-remediation.txt
+
+  Do it before ending either session; the README says to export "before ending
+  them". Before committing:
+  - Check the exports for your email address. Decision D9 redacts emails, but
+    only in the copies the archive hook makes. /export writes the transcript
+    directly and skips that redaction, so search each file for your address.
+  - Update the two INDEX rows. Their transcript column should point to the new
+    exports/ files alongside the raw/ ones. I'm not editing anything, so that's
+    for you or the other session.
+
+✻ Cogitated for 17s · done 5:01 PM
