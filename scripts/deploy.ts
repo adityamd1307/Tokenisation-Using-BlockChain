@@ -1,6 +1,6 @@
 // Deploys the AssetFactory (spec-v1 §4; Phase 3 §3.1) with the first signer as platform admin.
 // Usage: npm run deploy:local (persistent node); npm run deploy:ephemeral (throwaway)
-//        npx hardhat run scripts/deploy.ts --network sepolia
+//        npm run deploy:sepolia (production profile: the unoptimised factory is at the EIP-170 limit, AUD-012)
 // On persistent (HTTP) networks the address is written to frontend/src/config/addresses.json (spec-v1 §7).
 
 import { network } from "hardhat";
