@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | open |
+| Status | fixed (pause and forced transfer implemented in 714366d; freeze dropped by decision D5) |
 | Severity | high |
 | Category | logic |
 | Found by (method) | manual code review and command execution |
@@ -44,3 +44,7 @@ AssetFactory and AssetSale are now implemented under `docs/spec/phase3-requireme
 ## D5 follow-up — 3 November 2026
 
 D5 is decided: pause and forced transfer will be implemented, and freeze is dropped as already covered by whitelist revocation (`docs/spec/phase3-requirements.md`, "D5 decision"; spec-v1 §5 "D5 functions"). This issue remains open until `pause`, `unpause` and `forcedTransfer` are implemented and tested.
+
+## D5 implementation — 4 November 2026
+
+`pause`, `unpause` and `forcedTransfer` are implemented in 714366d (tag `ai-baseline-d5`) and tested by `test/AssetToken.D5.test.ts`: 21 tests, with 4 of 4 mutants killed (`docs/evidence/d5/mutation.log`). The pre-merge review produced AUD-012 and AUD-013, both fixed before merge. See `docs/d5-implementation.md`. Every part of the original finding is now either implemented or formally dropped (freeze), so this tracking issue is closed.
