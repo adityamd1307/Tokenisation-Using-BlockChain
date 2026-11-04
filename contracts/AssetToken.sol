@@ -3,11 +3,13 @@ pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/utils/Pausable.sol";
 
 /// @notice Fixed-supply whole asset units with on-chain investor eligibility.
 /// @dev Governed by docs/spec/phase2-requirements.md §2, superseding spec-v1
-/// where revocation and delegated compliance administration differ.
-contract AssetToken is ERC20, AccessControl {
+/// where revocation and delegated compliance administration differ. Pause and
+/// forced transfer follow spec-v1 §5 "D5 functions".
+contract AssetToken is ERC20, AccessControl, Pausable {
     bytes32 public constant COMPLIANCE_ROLE = keccak256("COMPLIANCE_ROLE");
 
     address public immutable issuer;
@@ -19,8 +21,11 @@ contract AssetToken is ERC20, AccessControl {
     error SenderNotWhitelisted(address sender);
     error RecipientNotWhitelisted(address recipient);
     error IssuerAdminRoleLocked();
+    error ForcedTransferFromZeroAddress();
+    error ForcedTransferFromWhitelisted(address from);
 
     event WhitelistUpdated(address indexed investor, bool approved, address indexed operator);
+    event ForcedTransfer(address indexed from, address indexed to, uint256 amount);
 
     /// @dev Phase 2 §2.1–2.2: assign ownership and roles to issuer_, not deployer.
     constructor(
@@ -59,6 +64,27 @@ contract AssetToken is ERC20, AccessControl {
         emit WhitelistUpdated(investor, approved, _msgSender());
     }
 
+    /// @dev D5: halts every token movement except forcedTransfer.
+    function pause() external onlyRole(DEFAULT_ADMIN_ROLE) {
+        _pause();
+    }
+
+    /// @dev D5: reverts with ExpectedPause if not paused.
+    function unpause() external onlyRole(DEFAULT_ADMIN_ROLE) {
+        _unpause();
+    }
+
+    /// @notice D5 recovery: move tokens out of a revoked holder to an eligible one.
+    /// @dev Bypasses the pause and sender checks in _update by calling ERC20's
+    /// _update directly. A zero `from` is rejected because ERC20 treats it as a mint.
+    function forcedTransfer(address from, address to, uint256 amount) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        if (from == address(0)) revert ForcedTransferFromZeroAddress();
+        if (isWhitelisted[from]) revert ForcedTransferFromWhitelisted(from);
+        if (!isWhitelisted[to]) revert RecipientNotWhitelisted(to);
+        super._update(from, to, amount);
+        emit ForcedTransfer(from, to, amount);
+    }
+
     /// @dev Phase 3 decision D6 (AUD-006): the issuer always keeps DEFAULT_ADMIN_ROLE,
     /// so `issuer` names the ultimate authority and can always restore COMPLIANCE_ROLE.
     /// Both revokeRole and renounceRole route through here.
@@ -69,7 +95,9 @@ contract AssetToken is ERC20, AccessControl {
 
     /// @dev Phase 2 §2.4: covers transfer and transferFrom, checking the holder
     /// rather than the spender. The zero sender is exempt for the initial mint.
+    /// D5: every movement through here reverts while paused.
     function _update(address from, address to, uint256 value) internal override {
+        _requireNotPaused();
         if (from != address(0) && !isWhitelisted[from]) revert SenderNotWhitelisted(from);
         if (to != address(0) && !isWhitelisted[to]) revert RecipientNotWhitelisted(to);
         super._update(from, to, value);

@@ -1,0 +1,14 @@
+﻿
+> rwa-tokenisation-frontend@0.0.1 test:integration
+> vitest run --config vite.integration.config.ts
+
+
+ RUN  v4.1.12 ~/OneDrive - Nanyang Technological University/NTU/Y4S1/SC4053/Project/frontend
+
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  14:07:17
+   Duration  14.40s (transform 382ms, setup 0ms, import 1.29s, tests 12.40s, environment 1ms)
+
+

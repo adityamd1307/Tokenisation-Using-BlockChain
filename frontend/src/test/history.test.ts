@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import { JsonRpcProvider } from "ethers";
 import { Blockchain } from "../services/blockchain";
 import { assetHistory } from "../services/history";
-import { asset, FACTORY, HASH, INVESTOR, SALE } from "./fixtures";
+import { asset, FACTORY, HASH, INVESTOR, RECIPIENT, SALE } from "./fixtures";
 function fixture() {
   const provider = new JsonRpcProvider();
   vi.spyOn(provider, "getBlockNumber").mockResolvedValue(4100);
@@ -92,6 +92,45 @@ describe("On-chain event history", () => {
       "Network unavailable",
     );
     expect(token.queryFilter).toHaveBeenCalledOnce();
+  });
+  // AUD-013: forcedTransfer emits Transfer and ForcedTransfer in one transaction.
+  // Phase 4 §8.4 requires the transaction type, and one operation must not appear twice.
+  it("shows a forced transfer once, typed as forced, to the holder, the recipient and the admin view", async () => {
+    const { api, token, sale } = fixture();
+    const forcedHash = `0x${"cd".repeat(32)}`;
+    sale.queryFilter.mockResolvedValue([]);
+    token.queryFilter.mockImplementation(async (_filter, from) =>
+      from === 100
+        ? [
+            {
+              eventName: "Transfer",
+              args: { value: 40n, from: INVESTOR, to: RECIPIENT },
+              transactionHash: forcedHash,
+              index: 0,
+              blockNumber: 100,
+            },
+            {
+              eventName: "ForcedTransfer",
+              args: { from: INVESTOR, to: RECIPIENT, amount: 40n },
+              transactionHash: forcedHash,
+              index: 1,
+              blockNumber: 100,
+            },
+          ]
+        : [],
+    );
+    for (const account of [INVESTOR, RECIPIENT, undefined]) {
+      const rows = (await assetHistory(api, asset, account)).filter(
+        (r) => r.hash === forcedHash,
+      );
+      expect(rows).toHaveLength(1);
+      expect(rows[0]).toMatchObject({
+        type: "Forced transfer",
+        quantity: 40n,
+        from: INVESTOR,
+        to: RECIPIENT,
+      });
+    }
   });
   it("handles unavailable timestamps without hiding verified events", async () => {
     const { api, provider } = fixture();

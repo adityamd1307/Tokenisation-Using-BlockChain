@@ -181,8 +181,21 @@ describe("Local frontend-service integration", () => {
     await confirm(api.whitelist(wallet(issuer), issuer, dlt, investor1, false));
     expect(await api.eligibility(dlt, investor1)).toBe(false);
     expect((await api.account(dlt, investor1)).balance).toBe(50n);
+    // D5 (AUD-013): recover the revoked holding, then check real-log history types it once.
+    await confirm(api.token(dlt, signers[1]).forcedTransfer(investor1, issuer, 50n));
+    expect((await api.account(dlt, investor1)).balance).toBe(0n);
+    const dltHistory = await assetHistory(api, dlt, investor1);
+    expect(dltHistory.filter((row) => row.type === "Forced transfer")).toEqual([
+      expect.objectContaining({ from: investor1, to: issuer, quantity: 50n }),
+    ]);
+    expect(dltHistory.filter((row) => row.type === "Transfer")).toHaveLength(0);
+    await confirm(api.token(cpt, signers[1]).pause());
+    await expect(
+      api.token(cpt, signers[2]).transfer(investor2, 1n),
+    ).rejects.toThrow();
+    expect((await api.account(cpt, investor1)).balance).toBe(80n);
     console.log(
-      "Verified local lifecycle: CPT 80 / 20 investor balances; 0.1 ETH withdrawn; 4,900 unsold recovered; DLT holding 50; independent eligibility; no duplicate purchase event.",
+      "Verified local lifecycle: CPT 80 / 20 investor balances; 0.1 ETH withdrawn; 4,900 unsold recovered; DLT holding 50 force-transferred after revocation; paused CPT blocks transfers; independent eligibility; no duplicate purchase or forced-transfer event.",
     );
   });
 });

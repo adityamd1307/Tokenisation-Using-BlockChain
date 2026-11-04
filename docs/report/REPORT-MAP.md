@@ -5,7 +5,7 @@
 | 1. Initial Specification & System Scope | `docs/spec/spec-v0.md`, git tag `spec-v0` (its date proves it came before AI use) |
 | 2. Development Methodology & AI Tooling | `CLAUDE.md`, `.claude/settings.json`, `.claude/hooks/`, `scripts/`, `docs/ai-logs/INDEX.md` (Who and Tool columns show division of labour) |
 | 3. Specification Engineering & Prompt Logs | `docs/spec/spec-v1.md` and its git history, `git log -p CLAUDE.md` (how our instructions to the AI evolved), `docs/ai-logs/exports/` |
-| 4. AI-Generated Architecture | Branch and tag `ai-baseline`: the first complete AI generation, never edited |
+| 4. AI-Generated Architecture | Per-phase tags marking each first complete AI generation, never edited: `ai-baseline-phase2`, `ai-baseline-phase3` (both created retroactively), `ai-baseline-phase4`, `ai-baseline-d5`. A single `ai-baseline` tag was planned but never created; each tag's annotation says how and when it was made |
 | 5. Problems Discovered & Vulnerability Analysis | `docs/issues/INDEX.md` and each `AUD-NNN` file |
 | 6. Validation Process & Testing Strategy | `test/`, `docs/evidence/runs/`, `docs/evidence/testnet-log.md` |
 | 7. Improvements & Refinements | `git diff ai-baseline..main`, commits prefixed `human:` and `fix(...)` |

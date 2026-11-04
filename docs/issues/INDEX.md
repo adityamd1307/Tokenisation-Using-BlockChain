@@ -4,7 +4,7 @@ Inventory for Report Section 5. AUD-001 to AUD-003 are tracking issues for unbui
 
 | ID | Title | Severity | Category | Status |
 |---|---|---|---|---|
-| [AUD-001](AUD-001-core-contracts-and-compliance-controls-are-unimple.md) | Core contracts and compliance controls are unimplemented | high | tracking (unbuilt phase work) | open: pause/forcedTransfer only (D5 decided 2026-11-03; freeze dropped) |
+| [AUD-001](AUD-001-core-contracts-and-compliance-controls-are-unimple.md) | Core contracts and compliance controls are unimplemented | high | tracking (unbuilt phase work) | fixed (714366d; freeze dropped by D5) |
 | [AUD-002](AUD-002-frontend-dashboards-and-wallet-integration-are-uni.md) | Frontend dashboards and wallet integration are unimplemented | high | tracking (unbuilt phase work) | implemented; manual MetaMask/browser acceptance pending |
 | [AUD-003](AUD-003-deployment-and-verification-tooling-are-incomplete.md) | Deployment and verification tooling are incomplete | high | tracking (tooling) | open (Sepolia deploy outstanding) |
 | [AUD-004](AUD-004-assettoken-does-not-enforce-transfer-eligibility.md) | AssetToken does not enforce transfer eligibility | high | access control / logic | fixed (4faf156; test+fix in one commit) |
@@ -15,3 +15,5 @@ Inventory for Report Section 5. AUD-001 to AUD-003 are tracking issues for unbui
 | [AUD-009](AUD-009-issuer-inventory-form-loses-quantity-after-allowan.md) | Issuer inventory form loses quantity after allowance confirmation | low | frontend state | corrected; targeted before/after evidence |
 | [AUD-010](AUD-010-receipt-timeout-incorrectly-reported-as-transactio.md) | Receipt timeout incorrectly reported as transaction failure | medium | transaction correctness | corrected; targeted before/after evidence |
 | [AUD-011](AUD-011-frontend-lockfile-omits-non-macos-platform-binarie.md) | Frontend lockfile omits non-macOS platform binaries so npm ci fails on Windows and Linux | medium | build tooling | fixed (cdea4e9) |
+| [AUD-012](AUD-012-assetfactory-is-exactly-at-the-eip-170-size-limit-.md) | AssetFactory is exactly at the EIP-170 size limit because the Sepolia deploy uses the unoptimised profile | low | deployment / contract size | fixed (74af940) |
+| [AUD-013](AUD-013-transaction-history-shows-a-forced-transfer-as-an-.md) | Transaction history shows a forced transfer as an ordinary transfer sent by the holder | low | frontend | fixed (7da8dda) |

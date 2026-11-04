@@ -1,0 +1,47 @@
+﻿
+ RUN  v4.1.12 ~/OneDrive - Nanyang Technological University/NTU/Y4S1/SC4053/Project/frontend
+
+ ❯ src/test/history.test.ts (5 tests | 1 failed) 53ms
+     × shows a forced transfer once, typed as forced, to the holder, the recipient and the admin view 22ms
+node.exe : 
+At line:1 char:1
++ & "~\AppData\Local\Microsoft\WinGet\Packages\OpenJS.Node ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/history.test.ts > On-chain event history > shows a forced transfer once, typed as forced, to the 
+holder, the recipient and the admin view
+AssertionError: expected { …(10) } to match object { type: 'Forced transfer', …(3) }
+(6 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+    "from": "0x3000000000000000000000000000000000000003",
+    "quantity": 40n,
+    "to": "0x4000000000000000000000000000000000000004",
+-   "type": "Forced transfer",
++   "type": "Transfer",
+  }
+
+ ❯ src/test/history.test.ts:127:23
+    125|       );
+    126|       expect(rows).toHaveLength(1);
+    127|       expect(rows[0]).toMatchObject({
+       |                       ^
+    128|         type: "Forced transfer",
+    129|         quantity: 40n,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 4 passed (5)
+   Start at  14:03:44
+   Duration  4.03s (transform 362ms, setup 791ms, import 858ms, tests 53ms, environment 1.72s)
+
+
