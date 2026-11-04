@@ -12,7 +12,7 @@ History of the hook:
 - The three sessions that existed by then (Phase 1 setup, Phase 3, audit 1) were archived by running the hook by hand. Their `first_seen_utc` in `sessions.tsv` is therefore the archive time, not the session start.
 - The Phase 2 Codex session ran outside Claude Code. No verbatim log of it is held; see `phase2-session.md`.
 
-**Redaction.** The copies in `raw/` are verbatim except for one mechanical rule, applied by the hook: every email address is replaced with `[email-redacted]`. GitHub `@users.noreply.github.com` addresses are left alone, because they are already public in the commit history. This keeps team members' personal and work addresses out of a public repository. It is the only exception to "do not edit transcripts" below.
+**Redaction.** The copies in `raw/` are verbatim except for one mechanical rule, applied by the hook: every email address is replaced with `[email-redacted]`. GitHub `@users.noreply.github.com` addresses are left alone, because they are already public in the commit history. This keeps team members' personal and work addresses out of a public repository. It is the only exception to "do not edit transcripts" below. The same rule, with the hook's regular expression, is applied by hand to the readable copies in `exports/` before they are committed. On 4 November 2026 it replaced one address in `exports/2026-10-23-phase3-and-audit-remediation.txt` (line 2635).
 
 Claude Code only keeps its own transcripts for a limited time, so the copies in `raw/` are the record we rely on. Commit them.
 

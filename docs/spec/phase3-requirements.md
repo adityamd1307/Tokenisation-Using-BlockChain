@@ -139,7 +139,7 @@ Claude Code raised these conflicts between this request and `spec-v1.md` before 
 
 ## D5 decision (3 November 2026)
 
-Chordia Laksh decided this in a Claude Code (claude-opus-5-5) session, as joint owner of D5 with adityamd-1307. It came after the deadline ("before Phase 4 starts"), because the phase-4 frontend work went ahead first. Claude Code proposed the main option and the three sub-choices, marking each as its recommendation. The user picked every recommendation. The normative rows are in spec-v1 §5 under "D5 functions", and invariants 1, 5, 6 and 7 are restated there.
+Chordia Laksh decided this in a Claude Code (claude-opus-5-5) session, as joint owner of D5 with adityamd-1307. adityamd-1307's agreement was relayed to that session by Chordia Laksh on 4 November 2026, after the code was merged. It was not given in a logged session. It came after the deadline ("before Phase 4 starts"), because the phase-4 frontend work went ahead first. Claude Code proposed the main option and the three sub-choices, marking each as its recommendation. The user picked every recommendation. The normative rows are in spec-v1 §5 under "D5 functions", and invariants 1, 5, 6 and 7 are restated there.
 
 | Question | Decision | Reason given in the session |
 |---|---|---|
