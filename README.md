@@ -1,14 +1,22 @@
-# AssetToken — Tokenisation Using Blockchain
+# AssetToken: Tokenisation Using Blockchain
 
-React + Ethereum academic dApp for NTU SC4053. Phase 4 implements the marketplace,
-wallet integration, administration, issuance, purchases, portfolio and transfers
-against the existing Phase 2/3 contracts. Solidity contracts are unchanged.
+An academic dApp for NTU SC4053. Authorised issuers tokenise fictional real-world and digital assets as ERC-20 tokens and sell them at a fixed price to whitelisted investors. All ownership records and compliance rules live on Ethereum. The repository is also graded on how the AI-written code was audited, so every change carries an evidence trail (see [Audit trail](#audit-trail)).
 
-**Implemented and automated-tested locally. Genuine MetaMask signing and responsive
-browser verification remain manual; no browser was connected during this session.**
+**Status (4 November 2026):** contracts, frontend and local tests are complete. Two things remain: a genuine MetaMask browser check ([AUD-002](docs/issues/AUD-002-frontend-dashboards-and-wallet-integration-are-uni.md)) and the public Sepolia deployment ([AUD-003](docs/issues/AUD-003-deployment-and-verification-tooling-are-incomplete.md)).
 
-Use Node 22.18.0 or a compatible Node version supported by the locked Hardhat 3
-toolchain. Install from the repository root:
+## What it does
+
+| Contract | Role |
+|---|---|
+| `AssetFactory` | The platform admin authorises or revokes issuers. An authorised issuer creates an asset, which deploys an `AssetToken` and an `AssetSale` and records them in the registry (`getAsset`, `getAssetCount`). |
+| `AssetToken` | A fixed-supply ERC-20 with 0 decimals. Every transfer requires a whitelisted sender and recipient. Revoking an investor keeps their balance but blocks sending, receiving and buying. The issuer can **pause** all token movement and **force-transfer** tokens out of a revoked address, for example to recover a lost key (decision D5). |
+| `AssetSale` | Holds sale inventory and sells it at a fixed price, with exact ETH payment. The issuer withdraws proceeds, closes the sale and recovers unsold tokens. ETH forced in from outside can be swept. |
+
+The frontend (React 18, Vite, ethers 6) has a marketplace, an investor portfolio with transfers, issuer and admin dashboards, and on-chain transaction history. The specification is [`docs/spec/spec-v1.md`](docs/spec/spec-v1.md). Where the later phase requirements in [`docs/spec/`](docs/spec/) differ from it, those requirements and their recorded decisions (D1–D10) govern.
+
+## Setup
+
+Validated with Node 22.18.0 (macOS) and Node 24.15.0 with npm 11 (Windows). From the repository root:
 
 ```bash
 npm ci
@@ -16,7 +24,9 @@ npm ci --prefix frontend
 npm run compile
 ```
 
-Run the application in three terminals, all starting in the repository root:
+## Run locally
+
+Use three terminals, all started in the repository root:
 
 ```bash
 # Terminal 1: leave the local blockchain running
@@ -27,7 +37,7 @@ npm run node
 # Terminal 2: deploy to that persistent chain and sync ABIs/configuration
 npm run deploy:local
 
-# Optional: explicitly seed CPT/DLT for exploration, only on an empty local registry
+# Optional: seed CPT/DLT for exploration, only on an empty local registry
 npm run demo:local
 ```
 
@@ -36,45 +46,47 @@ npm run demo:local
 npm run dev --prefix frontend
 ```
 
-Open **http://127.0.0.1:5173**. Browse without a wallet, or connect MetaMask and switch
-to **Local Ethereum**, chain **31337**, RPC **http://127.0.0.1:8545**, symbol **ETH**.
-The app supports adding this network after a user-requested switch.
+Open **http://127.0.0.1:5173**. You can browse without a wallet. To sign transactions, connect MetaMask and switch to **Local Ethereum**: chain **31337**, RPC **http://127.0.0.1:8545**, symbol **ETH**. The app offers to add this network when you ask to switch.
 
-Use Hardhat local accounts 0–4 for admin, issuer, investor 1, investor 2 and an
-unapproved investor. Only import local development accounts into a separate
-development wallet/profile. Hardhat prints their publicly known keys in your
-terminal; never use them for real funds or commit them. This application never
-asks for, stores, or reads wallet private keys or seed phrases.
+Use Hardhat local accounts 0–4 for the admin, the issuer, investor 1, investor 2 and an unapproved investor. Only import these development accounts into a separate development wallet or profile. Hardhat prints their publicly known keys in your terminal; never use them for real funds or commit them. The application never asks for, stores or reads wallet private keys or seed phrases.
 
-`deploy:local` now targets persistent `localhost`; the old throwaway deployment is
-available as `npm run deploy:ephemeral`. Every deployment generates
-`frontend/src/config/addresses.json` and synchronises the three compiled ABIs.
-After restarting/resetting the blockchain, deploy again and restart Vite. A local
-address alone is insufficient evidence of the correct deployment: the app also
-checks its block hash and runtime bytecode hash.
+Every deployment writes `frontend/src/config/addresses.json` and syncs the three compiled ABIs. After restarting or resetting the chain, deploy again and restart Vite. The app checks the deployment's block hash and runtime bytecode hash, not just its address. `npm run deploy:ephemeral` deploys to a throwaway in-process chain instead.
 
-Validation:
+The UI has no pause or forced-transfer controls (spec-v1 §7 does not require them). The issuer calls them directly on the token contract. Forced transfers do appear in the transaction history.
+
+## Tests
 
 ```bash
-npm test                              # 108 existing contract tests
-npm test --prefix frontend            # 112 frontend behavior tests
+npm test                              # 132 contract tests
+npm test --prefix frontend            # 113 frontend behaviour tests
 npm run build --prefix frontend       # TypeScript + production Vite build
-npx tsc --noEmit                      # root scripts / contract tests
-npm run test:integration              # needs Terminal 1; isolated fixture, no reset
+npx tsc --noEmit                      # root scripts and contract tests
+npm run test:integration              # needs `npm run node` running; deploys its own fixture
+bash scripts/evidence.sh <label>      # build, test, gas, coverage (slither if installed) into docs/evidence/runs/
 ```
 
-The integration suite uses the production frontend services and actual local
-contracts with an EIP-1193 adapter over Hardhat's unlocked accounts. It does not
-verify MetaMask. It deploys its own factory without modifying the seeded UI
-registry. No public RPC access is required for test execution.
+The integration suite runs the production frontend services against real local contracts. It signs through an EIP-1193 adapter over Hardhat's unlocked accounts, so it does not test MetaMask. It covers the full lifecycle, including a forced transfer and a pause. The counts above are from 4 November 2026. Contract line coverage is 98.79%.
 
-See [Phase 4 implementation, workflows and manual checklist](docs/phase4-implementation.md),
-[validation evidence](docs/evidence/phase4/README.md),
-[AI-assisted development audit](docs/ai-logs/phase4-session.md), and
-[the complete changed-file manifest](docs/evidence/phase4/changed-files.md).
-Earlier [Phase 2](docs/phase2-implementation.md) and [Phase 3](docs/phase3-implementation.md)
-reports remain historical evidence.
+## Sepolia deployment
 
-Academic demonstration only. Assets and token prices are simulated. Tokens do
-not represent legally enforceable ownership or investment claims. Public testnet
-deployment and final end-to-end verification belong to Phase 5.
+```bash
+npm run deploy:sepolia
+```
+
+This builds with the optimised `production` profile (AUD-012). Every profile has the optimizer on (AUD-014): unoptimised, `AssetFactory` is right at the 24 576-byte EIP-170 limit, because it embeds the other two contracts. `hardhat.config.ts` reads `TESTNET_RPC_URL` and `PRIVATE_KEY` with `configVariable`, from environment variables or Hardhat's encrypted keystore (`npx hardhat keystore set PRIVATE_KEY`). Nothing loads a `.env` file automatically; [`.env.example`](.env.example) lists the names. Use a testnet burner wallet only.
+
+## Audit trail
+
+AI tools (Claude Code, Codex, claude.ai) wrote most of the code. [`CLAUDE.md`](CLAUDE.md) sets the rules every AI session follows, including rules learned from each audit finding.
+
+| Where | What |
+|---|---|
+| [`docs/issues/INDEX.md`](docs/issues/INDEX.md) | AUD-001 to AUD-014. Each defect has a failing test commit, a fix commit, before/after evidence and an analysis of why the AI made the mistake |
+| [`docs/ai-logs/INDEX.md`](docs/ai-logs/INDEX.md) | Every AI session: tool, model, context given and outcome. Transcripts are in `docs/ai-logs/raw/` (emails and Hardhat dev keys redacted, decisions D9 and D10) |
+| Tags `spec-v0`, `ai-baseline-phase2`, `-phase3`, `-phase4`, `-d5` | The pre-AI spec, and each first complete AI generation, never edited afterwards |
+| [`docs/evidence/`](docs/evidence/) | Evidence runs and per-issue logs |
+| [`docs/report/REPORT-MAP.md`](docs/report/REPORT-MAP.md) | Which evidence backs each section of the AI Audit Report |
+
+Commit prefixes show who wrote what: `ai:`, `human:`, `test(AUD-NNN):`, `fix(AUD-NNN):`, `docs:`, `evidence:`, `chore:`. Implementation notes: [Phase 2](docs/phase2-implementation.md), [Phase 3](docs/phase3-implementation.md), [Phase 4](docs/phase4-implementation.md), [D5](docs/d5-implementation.md).
+
+Academic demonstration only. Assets and token prices are simulated. Tokens do not represent legally enforceable ownership or investment claims.
