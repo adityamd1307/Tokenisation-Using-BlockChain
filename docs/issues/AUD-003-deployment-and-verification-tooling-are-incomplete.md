@@ -52,3 +52,16 @@ Token tests are now executable; only the 22 factory/sale placeholders remain ski
 Persistent `npm run deploy:local` now targets explicit localhost chain 31337 and writes deployment address, block/hash, runtime bytecode hash and all three compiled ABI arrays. The frontend has its own TypeScript/Vite/test configuration and lockfile. Both TypeScript checks, the production frontend build, 112 frontend behavior tests, 108 existing contract tests, actual local frontend-service lifecycle and HTTP route smoke checks pass. See [Phase 4 evidence](../evidence/phase4/README.md). `deploy:ephemeral` retains the throwaway workflow; `demo:local` explicitly seeds the two demo assets only on an empty local registry.
 
 Still open: genuine browser/MetaMask validation, Sepolia deployment and a multi-wallet public-testnet demonstration. No public deployment or interactive pass is claimed; Phase 5 remains outside this task.
+
+## Deferral — 4 November 2026
+
+The Sepolia deployment was attempted on 4 November 2026 and did not run: the project root has no `.env` (only `.env.example`), and no Sepolia RPC endpoint has been provisioned yet. Chordia Laksh deferred the deployment until Phase 5. The Phase 1 roadmap places public-testnet integration inside Phase 5 ("End-to-End Integration & Testing"), so the Phase 5 plan must include it.
+
+Ready now: `npm run deploy:sepolia` builds with the optimised `production` profile (AUD-012, AUD-014). It reads `TESTNET_RPC_URL` and `PRIVATE_KEY` from environment variables or Hardhat's keystore; nothing loads `.env` automatically. The README's "Sepolia deployment" section documents this.
+
+Needed for Phase 5:
+- A Sepolia RPC endpoint.
+- A funded Sepolia burner wallet for the platform admin.
+- Two or more further burner wallets for the issuer and investors. `setupDemo.ts` needs three signers, and the Sepolia network config currently has one.
+
+Claude Code does not read `.env` (`.claude/settings.json`, CLAUDE.md), so the deploy command must be run by a person, outside the logged session.
