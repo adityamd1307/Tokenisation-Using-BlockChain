@@ -1,5 +1,7 @@
 > Phase 4 update (28 October 2026): the current reproducible setup is in [README.md](README.md) and [the Phase 4 workflow](docs/phase4-implementation.md#reproducible-local-workflow). This file retains historical Phase 1 setup notes; use the current instructions for persistent localhost deployment, ABI sync, and frontend tests.
 
+> Note (4 November 2026): the Foundry and `forge` steps below are superseded. The project uses Hardhat 3 (commit 9884a9b), and `scripts/evidence.sh` runs Hardhat (d87cd66). A single `ai-baseline` branch and tag was never created; each phase has its own `ai-baseline-<phase>` tag (see `docs/report/REPORT-MAP.md`).
+
 # Setting up the evidence pipeline
 
 Do the steps in order. Step 2 has to happen before any AI tool touches the repo.

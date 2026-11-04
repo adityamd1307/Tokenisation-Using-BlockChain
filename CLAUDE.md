@@ -10,7 +10,7 @@ This repo is graded on two things: the dApp, and how well we audit the code AI t
 
 ## Branches and tags
 
-- Never commit to, rebase, or rewrite the `ai-baseline` branch, or move the `spec-v0` or `ai-baseline` tags.
+- Never commit to, rebase, or rewrite an `ai-baseline` branch, or move the `spec-v0` or `ai-baseline` tags. The project tags each phase separately: `ai-baseline-phase2`, `ai-baseline-phase3`, `ai-baseline-phase4` and `ai-baseline-d5` are all covered. A new phase gets a new `ai-baseline-<phase>` tag on its first complete AI generation.
 - Never amend published commits or force-push.
 
 ## When a bug, vulnerability or spec gap is found

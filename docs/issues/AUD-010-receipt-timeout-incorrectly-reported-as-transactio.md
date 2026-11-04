@@ -34,3 +34,7 @@ Non-revert receipt errors are tagged as confirmation unknown. The context preser
 - The test asserts that another purchase remains disabled and that success appears only after `getTransactionReceipt` returns status 1 for the submitted hash.
 - Separate service tests cover status-0 receipts, successful repricing and cancelled replacements.
 - No real funds, testnet deployment, commits or claimed browser signing evidence were involved.
+
+## Status follow-up — 4 November 2026
+
+The correction described above is now committed: it was committed by adityamd-1307 in f943f9c (tag `ai-baseline-phase4`) and merged into `main` in 133a5d2. The regression test and the fix landed in the same commit, so there are no separate `test(...)`/`fix(...)` commits or `evidence.sh` runs. The before/after evidence is the targeted frontend log cited above. The regression still passes in the current frontend suite (113 tests, `docs/evidence/aud-014/frontend-tests-after.log`).

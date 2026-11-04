@@ -33,3 +33,7 @@ Approval and deposit are separate transactions. Erasing the user's quantity in b
 - After: [frontend-tests-after-refresh-fix.log](../evidence/phase4/frontend-tests-after-refresh-fix.log), 103 pass; final [frontend-tests.log](../evidence/phase4/frontend-tests.log) also includes this regression.
 - The test confirms the approval does not automatically deposit, the deposit becomes enabled after receipt/allowance refresh, and the subsequent explicit deposit uses the original `5000` input.
 - No commits, testnet transactions or project-wide evidence-script runs were made; the user's no-commit instruction was followed with actual targeted command logs.
+
+## Status follow-up — 4 November 2026
+
+The correction described above is now committed: it was committed by adityamd-1307 in f943f9c (tag `ai-baseline-phase4`) and merged into `main` in 133a5d2. The regression test and the fix landed in the same commit, so there are no separate `test(...)`/`fix(...)` commits or `evidence.sh` runs. The before/after evidence is the targeted frontend log cited above. The regression still passes in the current frontend suite (113 tests, `docs/evidence/aud-014/frontend-tests-after.log`).
