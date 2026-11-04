@@ -47,7 +47,7 @@ With no headroom left, the next change to `AssetToken`, `AssetSale` or `AssetFac
 
 74af940 changes `deploy:sepolia` to `hardhat run --build-profile production scripts/deploy.ts --network sepolia` and updates the usage comment in `scripts/deploy.ts`. Local scripts and tests keep the `default` profile, so the gas and coverage figures in earlier evidence runs stay comparable.
 
-Not changed (user decision, 4 November 2026): the `default` profile stays unoptimised. Local deploys (`deploy:local`, `deploy:ephemeral`) still use the 24 576-byte build. The regression test guards the Sepolia path only.
+Not changed (user decision, 4 November 2026): the `default` profile stays unoptimised. Local deploys (`deploy:local`, `deploy:ephemeral`) still use the 24 576-byte build. The regression test guards the Sepolia path only. *Follow-up: the remaining paths were fixed later as [AUD-014](AUD-014-default-build-profile-leaves-assetfactory-at-the-e.md) (e1fc698), which enables the optimizer in `default`.*
 
 New CLAUDE.md rule: see the AUD-012 entry under "Rules learned from audit findings".
 
