@@ -1,0 +1,15 @@
+﻿# integration run straight after evidence.sh (coverage-instrumented artifacts, factory 19944 bytes), no recompile
+
+> rwa-tokenisation-frontend@0.0.1 test:integration
+> vitest run --config vite.integration.config.ts
+
+
+ RUN  v4.1.12 ~/OneDrive - Nanyang Technological University/NTU/Y4S1/SC4053/Project/frontend
+
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  21:32:38
+   Duration  18.24s (transform 539ms, setup 0ms, import 6.03s, tests 8.62s, environment 0ms)
+
+

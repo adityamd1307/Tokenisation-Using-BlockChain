@@ -1,0 +1,4 @@
+﻿# Runtime bytecode sizes from artifacts (deployedBytecode), EIP-170 limit 24576 bytes.
+before (b89f4b6, default profile, optimizer off): AssetFactory 24576 (100.0%), AssetToken 8002, AssetSale 4925
+after  (e1fc698, default profile, optimizer on, runs 200): AssetFactory 13545 (55.1%), AssetToken 4124 (16.8%), AssetSale 3132 (12.7%)
+after, coverage-instrumented build left by evidence.sh: AssetFactory 19944 (81.2%), previously 31817 (above the limit)
