@@ -59,6 +59,28 @@ describe("AssetToken — D5 pause and forced transfer (spec-v1 §5 D5 functions)
       await expect(token.connect(outsider).pause()).to.emit(token, "Paused").withArgs(outsider.address);
     });
 
+    // CLAUDE.md AUD-006 rule: test every role path (grant, revoke, renounce).
+    for (const removal of ["revoked", "renounced"] as const) {
+      it(`removes pause and forcedTransfer from a delegated admin whose role is ${removal}`, async function () {
+        const { token, issuer, investor, investorC, outsider } = await networkHelpers.loadFixture(fundedSale);
+        const adminRole = await token.DEFAULT_ADMIN_ROLE();
+        await token.grantRole(adminRole, outsider.address);
+        await token.connect(outsider).pause();
+        await token.connect(outsider).unpause();
+        if (removal === "revoked") await token.revokeRole(adminRole, outsider.address);
+        else await token.connect(outsider).renounceRole(adminRole, outsider.address);
+        await token.setWhitelisted(investor.address, false);
+        await expect(token.connect(outsider).pause())
+          .to.be.revertedWithCustomError(token, "AccessControlUnauthorizedAccount").withArgs(outsider.address, adminRole);
+        await expect(token.connect(outsider).forcedTransfer(investor.address, investorC.address, 1n))
+          .to.be.revertedWithCustomError(token, "AccessControlUnauthorizedAccount").withArgs(outsider.address, adminRole);
+        expect(await token.balanceOf(investor.address)).to.equal(100n);
+        // D6: the issuer keeps both powers throughout.
+        expect(await token.hasRole(adminRole, issuer.address)).to.equal(true);
+        await token.forcedTransfer(investor.address, investorC.address, 1n);
+      });
+    }
+
     it("rejects pausing twice and unpausing when not paused", async function () {
       const { token } = await networkHelpers.loadFixture(fundedSale);
       await expect(token.unpause()).to.be.revertedWithCustomError(token, "ExpectedPause");
