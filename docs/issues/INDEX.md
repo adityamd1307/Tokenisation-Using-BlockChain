@@ -14,3 +14,4 @@ Inventory for Report Section 5. AUD-001 to AUD-003 are tracking issues for unbui
 | [AUD-008](AUD-008-platform-admin-can-authorise-itself-as-an-issuer.md) | Platform admin can authorise itself as an issuer | low | access control / spec gap | fixed (118d13b) |
 | [AUD-009](AUD-009-issuer-inventory-form-loses-quantity-after-allowan.md) | Issuer inventory form loses quantity after allowance confirmation | low | frontend state | corrected; targeted before/after evidence |
 | [AUD-010](AUD-010-receipt-timeout-incorrectly-reported-as-transactio.md) | Receipt timeout incorrectly reported as transaction failure | medium | transaction correctness | corrected; targeted before/after evidence |
+| [AUD-011](AUD-011-frontend-lockfile-omits-non-macos-platform-binarie.md) | Frontend lockfile omits non-macOS platform binaries so npm ci fails on Windows and Linux | | | open |
