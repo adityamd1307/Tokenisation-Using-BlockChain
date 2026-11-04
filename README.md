@@ -16,7 +16,7 @@ The frontend (React 18, Vite, ethers 6) has a marketplace, an investor portfolio
 
 ## Setup
 
-Validated with Node 22.18.0 (macOS) and Node 24.15.0 with npm 11 (Windows). From the repository root:
+Validated with Node 22.18.0 (Phase 4 session) and Node 24.15.0 with npm 11.12.1 on Windows. From the repository root:
 
 ```bash
 npm ci
@@ -77,13 +77,13 @@ This builds with the optimised `production` profile (AUD-012). Every profile has
 
 ## Audit trail
 
-AI tools (Claude Code, Codex, claude.ai) wrote most of the code. [`CLAUDE.md`](CLAUDE.md) sets the rules every AI session follows, including rules learned from each audit finding.
+AI tools (Claude Code, Codex, claude.ai) generated the contracts, tests and frontend. Commit prefixes record who wrote each change. [`CLAUDE.md`](CLAUDE.md) sets the rules every AI session follows, including rules learned from each audit finding.
 
 | Where | What |
 |---|---|
-| [`docs/issues/INDEX.md`](docs/issues/INDEX.md) | AUD-001 to AUD-014. Each defect has a failing test commit, a fix commit, before/after evidence and an analysis of why the AI made the mistake |
+| [`docs/issues/INDEX.md`](docs/issues/INDEX.md) | AUD-001 to AUD-014. AUD-001 to AUD-003 are tracking issues; the rest are defects. Each defect has before/after evidence and an analysis of why the AI made the mistake. Defects from AUD-005 onward, except AUD-009 and AUD-010 (Phase 4, uncommitted at the time), also have a separate failing-test commit and fix commit |
 | [`docs/ai-logs/INDEX.md`](docs/ai-logs/INDEX.md) | Every AI session: tool, model, context given and outcome. Transcripts are in `docs/ai-logs/raw/` (emails and Hardhat dev keys redacted, decisions D9 and D10) |
-| Tags `spec-v0`, `ai-baseline-phase2`, `-phase3`, `-phase4`, `-d5` | The pre-AI spec, and each first complete AI generation, never edited afterwards |
+| Tags `ai-baseline-phase2`, `-phase3`, `-phase4`, `-d5` | Each first complete AI generation, never edited afterwards. The pre-AI spec is tagged `spec-v0` in the local repository but has not been pushed |
 | [`docs/evidence/`](docs/evidence/) | Evidence runs and per-issue logs |
 | [`docs/report/REPORT-MAP.md`](docs/report/REPORT-MAP.md) | Which evidence backs each section of the AI Audit Report |
 
