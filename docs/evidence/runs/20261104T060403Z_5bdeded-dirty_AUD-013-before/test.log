@@ -1,0 +1,186 @@
+$ npx hardhat test --no-compile
+
+
+Running Solidity tests
+
+
+Running Mocha tests
+
+
+  AssetFactory — Phase 3
+    deployment
+      √ deploys with correct admin address and an empty registry (202ms)
+      √ rejects a zero admin
+    issuer authorisation
+      √ admin can authorise an issuer
+      √ authorising an already-authorised issuer or the zero address reverts (45ms)
+      √ admin can revoke an issuer
+      √ revoking an address that is not authorised reverts
+      √ non-admin cannot authorise or revoke an issuer
+    asset creation
+      √ authorised issuer can create an asset (deploys AssetToken + AssetSale) (47ms)
+      √ created asset is recorded in the registry with full metadata and tokenToSale (44ms)
+      √ issuer creates two different assets that are registered independently
+      √ unauthorised address, including the admin, cannot create an asset
+      √ createAsset with unitPriceWei == 0 reverts
+      √ createAsset with totalSupply == 0 reverts
+      √ getAsset reverts for an ID that was never assigned (51ms)
+      √ rejects an out-of-range assetType
+    revocation scope
+      √ revoked issuer cannot create new assets but existing contracts keep operating (78ms)
+    issuer isolation
+      √ issuer A cannot whitelist investors on issuer B's token
+      √ issuer A cannot allocate, withdraw, close or recover on issuer B's sale
+
+  AssetSale — Phase 3
+    deployment
+      √ deploys with correct assetToken, pricePerToken, and issuer (51ms)
+      √ rejects a zero token, zero issuer, or zero price
+      √ exposes no function to change the price after creation (42ms)
+    allocation
+      √ issuer can allocate tokens (whitelist sale, approve, allocate) (40ms)
+      √ allocate reverts until the issuer whitelists the sale contract
+      √ allocate without an approval reverts
+      √ non-issuer cannot allocate (76ms)
+      √ allocate with insufficient issuer balance reverts
+      √ allocate of zero reverts
+    buying (instant subscription flow)
+      √ whitelisted investor buys 100 tokens with exact ETH payment
+      √ investor underpays: reverts
+      √ investor overpays: reverts
+      √ unapproved investor attempts purchase: reverts
+      √ revoked investor cannot buy
+      √ investor buys more than inventory: reverts
+      √ buying the entire inventory succeeds and leaves nothing for sale
+      √ buy of zero quantity reverts
+      √ rejects plain ETH sent outside buyTokens
+    proceeds
+      √ issuer can withdraw ETH proceeds after a purchase (181ms)
+      √ non-issuer withdraws proceeds: reverts
+      √ withdrawProceeds with zero balance reverts
+      √ invariant 8: a re-entrant contract issuer is paid exactly once and the balance is zero (223ms)
+      √ a failed payout reverts and leaves the proceeds claimable
+    closing and inventory recovery
+      √ issuer can close the sale, after which buying and allocating revert (104ms)
+      √ recoverUnsoldTokens reverts while the sale is open
+      √ issuer recovers all unsold inventory after closing and can still withdraw proceeds (43ms)
+      √ non-issuer cannot close the sale or recover inventory
+    invariants
+      √ invariant 3: sale ETH balance equals tokens sold times pricePerToken minus withdrawals (77ms)
+      √ invariant 2: supply equals the sum of balances, and holders are eligible absent revocation (113ms)
+    Phase 3 lifecycle demonstration
+      √ create 10,000 CPT, whitelist sale, deposit 5,000, investor pays 0.1 ETH for 100 CPT
+
+  AssetToken — D5 pause and forced transfer (spec-v1 §5 D5 functions)
+    pause / unpause
+      √ the issuer pauses and unpauses, emitting OpenZeppelin's Paused and Unpaused (135ms)
+      √ rejects pause and unpause from an account without DEFAULT_ADMIN_ROLE
+      √ rejects pause from a compliance-only delegate
+      √ lets a delegated DEFAULT_ADMIN_ROLE holder pause, because authority is the role
+      √ rejects pausing twice and unpausing when not paused
+      √ does not let one issuer pause another issuer's token (invariant 7)
+    pause invariant (restated invariant 5)
+      √ blocks transfer and transferFrom while paused and restores them after unpause (41ms)
+      √ blocks AssetSale allocate, buyTokens and recoverUnsoldTokens while paused (38ms)
+      √ still allows whitelist changes and ETH withdrawal while paused
+    forcedTransfer
+      √ moves a revoked holder's balance to a whitelisted address with Transfer and ForcedTransfer
+      √ works while paused
+      √ rejects callers without DEFAULT_ADMIN_ROLE, including a compliance delegate
+      √ rejects taking from a whitelisted holder: a live investor or the sale contract
+      √ rejects the zero address as source, so it cannot mint
+      √ rejects a recipient that is not whitelisted, including the zero address
+      √ rejects an amount above the holder's balance
+      √ does not let one issuer force-transfer on another issuer's token (invariant 7)
+      √ recovers a lost-key holding: revoke, then force-transfer to a new wallet
+    forced-transfer invariant (restated invariant 6)
+      √ only succeeds from a non-zero revoked address to a whitelisted one, and never changes totalSupply (337ms)
+
+  AssetToken AUD-004 regression
+    √ rejects a transfer to an unapproved investor without changing balances (53ms)
+
+  AssetToken — Phase 2
+    A — deployment and fixed supply
+      √ sets the name, symbol, and whole-unit decimals (43ms)
+      √ mints exactly 10,000 whole units to the designated issuer
+      √ emits the standard mint Transfer from the zero address
+      √ whitelists the issuer and leaves other addresses, including zero, ineligible
+      √ grants the issuer the administrator and compliance roles
+      √ rejects a zero issuer
+      √ rejects a zero supply
+      √ exposes no mint or burn entry point, even to the administrator
+      √ assigns supply and roles to the issuer instead of a different deploying account (50ms)
+      √ supports construction by a contract without granting that contract authority (72ms)
+    B — whitelist and role administration
+      √ approves investors B and C with publicly readable status
+      √ emits investor, status, and operator on approval and revocation
+      √ rejects unauthorised whitelist update approved=true
+      √ rejects a zero investor when approved=true
+      √ rejects unauthorised whitelist update approved=false (46ms)
+      √ rejects a zero investor when approved=false
+      √ treats repeated status updates as no-ops without duplicate events
+      √ revokes a funded investor without confiscation, burning, or Transfer events (61ms)
+      √ delegates compliance and records the actual delegate as operator
+      √ prevents unauthorised accounts from granting themselves compliance authority
+      √ prevents compliance-only delegates from granting roles
+      √ removes compliance authority immediately when the role is revoked
+      √ requires compliance authority even for an administrator whose compliance role was revoked
+    C — direct transfers and revocation
+      √ transfers 100 units to B and emits the standard Transfer event
+      √ rejects an unapproved recipient and preserves balances and supply (48ms)
+      √ allows B to transfer 20 units to approved C
+      √ rejects a revoked sender even when the recipient is approved
+      √ rejects transfers into a revoked holder with a positive balance
+      √ rejects transfers when both holder and recipient are ineligible
+      √ restores sending and receiving after reapproval
+      √ applies the same eligibility requirements to the issuer
+    D — approvals and delegated transfers
+      √ creates and replaces allowances with standard Approval events
+      √ allows an unwhitelisted spender to transfer between approved holders
+      √ rolls back balances and allowance for an ineligible delegated recipient
+      √ checks the actual holder and rolls back allowance when that holder is revoked (42ms)
+      √ preserves the standard insufficient-allowance error and unchanged state
+      √ preserves approvals and approval revocation for ineligible wallets
+      √ preserves unlimited allowances across successful transfers
+      √ rolls back allowance spending when the delegated holder has insufficient balance
+    E — edge cases, contract holders, and instance isolation
+      √ rejects a direct transfer exceeding the balance
+      √ permits a zero-value transfer between eligible accounts and emits Transfer
+      √ enforces both eligibility checks even for zero-value transfers
+      √ allows zero-value delegated transfers but still checks holder eligibility
+      √ preserves standard zero-recipient errors for direct and delegated transfers
+      √ preserves standard errors for a zero spender or a zero delegated owner
+      √ supports self-transfers without altering balance or supply
+      √ allows an approved smart-contract holder to receive and forward inventory (39ms)
+      √ isolates roles, whitelist, allowances, balances, and supply across assets (117ms)
+      √ conserves supply across deterministic transfers, revocation, and failures (75ms)
+    Local demonstration
+      √ demonstrates CPT issuance, unapproved D rejection, and final balances 9,900 / 80 / 20 (38ms)
+
+  AUD-012 Sepolia deployment build profile
+    √ deploy:sepolia builds with a profile that enables the optimizer for every compiler
+
+  AUD-011 frontend lockfile portability
+    √ records every optional dependency, so npm ci works on every platform
+
+  Phase 3 audit-1 regressions
+    AUD-005 invariant 1 through a revocation
+      √ a revoked holder keeps its balance but cannot send, receive or buy until re-approved (235ms)
+    AUD-006 issuer admin role cannot be removed
+      √ the issuer cannot renounce DEFAULT_ADMIN_ROLE
+      √ a delegated administrator cannot revoke the issuer's DEFAULT_ADMIN_ROLE but can drop its own
+      √ compliance stays revocable, and the issuer can always restore it and recover locked inventory (104ms)
+    AUD-007 forced ETH
+      √ selfdestruct really forces ETH past the missing receive function (90ms)
+      √ the issuer can recover forced ETH after withdrawing proceeds, leaving the sale empty
+      √ sweeping before withdrawal takes only the excess and leaves owed proceeds claimable
+      √ only the issuer can sweep, and only when there is excess
+    AUD-008 admin cannot be an issuer
+      √ authorizeIssuer(admin) reverts and the admin stays unauthorised
+
+
+  129 passing (5s)
+
+
+129 passing (129 mocha)
+
