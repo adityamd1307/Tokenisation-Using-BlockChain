@@ -1,0 +1,258 @@
+$ npx hardhat test --coverage
+
+
+Warning: "selfdestruct" has been deprecated. Note that, starting from the Cancun hard fork, the underlying opcode no longer deletes the code and data associated with an account and only transfers its Ether to the beneficiary, unless executed in the same transaction in which the contract was created (see EIP-6780). Any use in newly deployed contracts is strongly discouraged even if the new behavior is taken into account. Future changes to the EVM might further reduce the functionality of the opcode.
+ --> .\contracts\test\ForceSendHarness.sol:9:112:
+  |
+9 | __NomicFoundationCoverage.sendHit(0xefecc6c61b9d77b637bbdf0c1f3da5fd5f4895ba22f7eb59e613911c6733276b);         selfdestruct(target);
+  |                                                                                                                ^^^^^^^^^^^^
+
+Compiled 6 Solidity files with solc 0.8.24 (evm target: shanghai)
+
+Running Solidity tests
+
+
+Running Mocha tests
+
+
+  AssetFactory — Phase 3
+    deployment
+      √ deploys with correct admin address and an empty registry (354ms)
+      √ rejects a zero admin (153ms)
+    issuer authorisation
+      √ admin can authorise an issuer
+      √ authorising an already-authorised issuer or the zero address reverts (341ms)
+      √ admin can revoke an issuer
+      √ revoking an address that is not authorised reverts
+      √ non-admin cannot authorise or revoke an issuer
+    asset creation
+      √ authorised issuer can create an asset (deploys AssetToken + AssetSale) (84ms)
+      √ created asset is recorded in the registry with full metadata and tokenToSale (107ms)
+      √ issuer creates two different assets that are registered independently (77ms)
+      √ unauthorised address, including the admin, cannot create an asset
+      √ createAsset with unitPriceWei == 0 reverts
+      √ createAsset with totalSupply == 0 reverts
+      √ getAsset reverts for an ID that was never assigned (180ms)
+      √ rejects an out-of-range assetType
+    revocation scope
+      √ revoked issuer cannot create new assets but existing contracts keep operating (304ms)
+    issuer isolation
+      √ issuer A cannot whitelist investors on issuer B's token
+      √ issuer A cannot allocate, withdraw, close or recover on issuer B's sale
+
+  AssetSale — Phase 3
+    deployment
+      √ deploys with correct assetToken, pricePerToken, and issuer (139ms)
+      √ rejects a zero token, zero issuer, or zero price (68ms)
+      √ exposes no function to change the price after creation
+    allocation
+      √ issuer can allocate tokens (whitelist sale, approve, allocate) (95ms)
+      √ allocate reverts until the issuer whitelists the sale contract
+      √ allocate without an approval reverts
+      √ non-issuer cannot allocate (124ms)
+      √ allocate with insufficient issuer balance reverts
+      √ allocate of zero reverts
+    buying (instant subscription flow)
+      √ whitelisted investor buys 100 tokens with exact ETH payment
+      √ investor underpays: reverts
+      √ investor overpays: reverts
+      √ unapproved investor attempts purchase: reverts
+      √ revoked investor cannot buy
+      √ investor buys more than inventory: reverts
+      √ buying the entire inventory succeeds and leaves nothing for sale
+      √ buy of zero quantity reverts
+      √ rejects plain ETH sent outside buyTokens
+    proceeds
+      √ issuer can withdraw ETH proceeds after a purchase (191ms)
+      √ non-issuer withdraws proceeds: reverts
+      √ withdrawProceeds with zero balance reverts
+      √ invariant 8: a re-entrant contract issuer is paid exactly once and the balance is zero (317ms)
+      √ a failed payout reverts and leaves the proceeds claimable (44ms)
+    closing and inventory recovery
+      √ issuer can close the sale, after which buying and allocating revert (144ms)
+      √ recoverUnsoldTokens reverts while the sale is open
+      √ issuer recovers all unsold inventory after closing and can still withdraw proceeds (81ms)
+      √ non-issuer cannot close the sale or recover inventory
+    invariants
+      √ invariant 3: sale ETH balance equals tokens sold times pricePerToken minus withdrawals (160ms)
+      √ invariant 2: supply equals the sum of balances, and holders are eligible absent revocation (300ms)
+    Phase 3 lifecycle demonstration
+      √ create 10,000 CPT, whitelist sale, deposit 5,000, investor pays 0.1 ETH for 100 CPT (87ms)
+
+  AssetToken AUD-004 regression
+    √ rejects a transfer to an unapproved investor without changing balances (81ms)
+
+  AssetToken — Phase 2
+    A — deployment and fixed supply
+      √ sets the name, symbol, and whole-unit decimals (111ms)
+      √ mints exactly 10,000 whole units to the designated issuer
+      √ emits the standard mint Transfer from the zero address
+      √ whitelists the issuer and leaves other addresses, including zero, ineligible
+      √ grants the issuer the administrator and compliance roles (50ms)
+      √ rejects a zero issuer
+      √ rejects a zero supply
+      √ exposes no mint or burn entry point, even to the administrator
+      √ assigns supply and roles to the issuer instead of a different deploying account (76ms)
+      √ supports construction by a contract without granting that contract authority (73ms)
+    B — whitelist and role administration
+      √ approves investors B and C with publicly readable status
+      √ emits investor, status, and operator on approval and revocation (47ms)
+      √ rejects unauthorised whitelist update approved=true
+      √ rejects a zero investor when approved=true
+      √ rejects unauthorised whitelist update approved=false (55ms)
+      √ rejects a zero investor when approved=false
+      √ treats repeated status updates as no-ops without duplicate events (48ms)
+      √ revokes a funded investor without confiscation, burning, or Transfer events (85ms)
+      √ delegates compliance and records the actual delegate as operator
+      √ prevents unauthorised accounts from granting themselves compliance authority
+      √ prevents compliance-only delegates from granting roles
+      √ removes compliance authority immediately when the role is revoked
+      √ requires compliance authority even for an administrator whose compliance role was revoked (49ms)
+    C — direct transfers and revocation
+      √ transfers 100 units to B and emits the standard Transfer event
+      √ rejects an unapproved recipient and preserves balances and supply (70ms)
+      √ allows B to transfer 20 units to approved C
+      √ rejects a revoked sender even when the recipient is approved
+      √ rejects transfers into a revoked holder with a positive balance
+      √ rejects transfers when both holder and recipient are ineligible
+      √ restores sending and receiving after reapproval (69ms)
+      √ applies the same eligibility requirements to the issuer (39ms)
+    D — approvals and delegated transfers
+      √ creates and replaces allowances with standard Approval events
+      √ allows an unwhitelisted spender to transfer between approved holders
+      √ rolls back balances and allowance for an ineligible delegated recipient
+      √ checks the actual holder and rolls back allowance when that holder is revoked (216ms)
+      √ preserves the standard insufficient-allowance error and unchanged state (55ms)
+      √ preserves approvals and approval revocation for ineligible wallets (286ms)
+      √ preserves unlimited allowances across successful transfers
+      √ rolls back allowance spending when the delegated holder has insufficient balance
+    E — edge cases, contract holders, and instance isolation
+      √ rejects a direct transfer exceeding the balance
+      √ permits a zero-value transfer between eligible accounts and emits Transfer
+      √ enforces both eligibility checks even for zero-value transfers
+      √ allows zero-value delegated transfers but still checks holder eligibility
+      √ preserves standard zero-recipient errors for direct and delegated transfers
+      √ preserves standard errors for a zero spender or a zero delegated owner
+      √ supports self-transfers without altering balance or supply
+      √ allows an approved smart-contract holder to receive and forward inventory (132ms)
+      √ isolates roles, whitelist, allowances, balances, and supply across assets (322ms)
+      √ conserves supply across deterministic transfers, revocation, and failures (278ms)
+    Local demonstration
+      √ demonstrates CPT issuance, unapproved D rejection, and final balances 9,900 / 80 / 20 (91ms)
+
+  AUD-011 frontend lockfile portability
+    1) records every optional dependency, so npm ci works on every platform
+
+  Phase 3 audit-1 regressions
+    AUD-005 invariant 1 through a revocation
+      √ a revoked holder keeps its balance but cannot send, receive or buy until re-approved (289ms)
+    AUD-006 issuer admin role cannot be removed
+      √ the issuer cannot renounce DEFAULT_ADMIN_ROLE
+      √ a delegated administrator cannot revoke the issuer's DEFAULT_ADMIN_ROLE but can drop its own
+      √ compliance stays revocable, and the issuer can always restore it and recover locked inventory (127ms)
+    AUD-007 forced ETH
+      √ selfdestruct really forces ETH past the missing receive function (425ms)
+      √ the issuer can recover forced ETH after withdrawing proceeds, leaving the sale empty (38ms)
+      √ sweeping before withdrawal takes only the excess and leaves owed proceeds claimable (38ms)
+      √ only the issuer can sweep, and only when there is excess
+    AUD-008 admin cannot be an issuer
+      √ authorizeIssuer(admin) reverts and the admin stays unauthorised
+
+
+  108 passing (8s)
+  1 failing
+
+  1) AUD-011 frontend lockfile portability
+       records every optional dependency, so npm ci works on every platform:
+     AssertionError: expected [
+  'node_modules/esbuild -> @esbuild/aix-ppc64',
+  'node_modules/esbuild -> @esbuild/android-arm',
+  'node_modules/esbuild -> @esbuild/android-arm64',
+  'node_modules/esbuild -> @esbuild/android-x64',
+  'node_modules/esbuild -> @esbuild/darwin-x64',
+  'node_modules/esbuild -> @esbuild/freebsd-arm64',
+  'node_modules/esbuild -> @esbuild/freebsd-x64',
+  'node_modules/esbuild -> @esbuild/linux-arm',
+  'node_modules/esbuild -> @esbuild/linux-arm64',
+  'node_modules/esbuild -> @esbuild/linux-ia32',
+  'node_modules/esbuild -> @esbuild/linux-loong64',
+  'node_modules/esbuild -> @esbuild/linux-mips64el',
+  'node_modules/esbuild -> @esbuild/linux-ppc64',
+  'node_modules/esbuild -> @esbuild/linux-riscv64',
+  'node_modules/esbuild -> @esbuild/linux-s390x',
+  'node_modules/esbuild -> @esbuild/linux-x64',
+  'node_modules/esbuild -> @esbuild/netbsd-arm64',
+  'node_modules/esbuild -> @esbuild/netbsd-x64',
+  'node_modules/esbuild -> @esbuild/openbsd-arm64',
+  'node_modules/esbuild -> @esbuild/openbsd-x64',
+  'node_modules/esbuild -> @esbuild/openharmony-arm64',
+  'node_modules/esbuild -> @esbuild/sunos-x64',
+  'node_modules/esbuild -> @esbuild/win32-arm64',
+  'node_modules/esbuild -> @esbuild/win32-ia32',
+  'node_modules/esbuild -> @esbuild/win32-x64',
+  'node_modules/rollup -> @napi-rs/lzma-linux-x64-gnu',
+  'node_modules/rollup -> @rollup/rollup-android-arm-eabi',
+  'node_modules/rollup -> @rollup/rollup-android-arm64',
+  'node_modules/rollup -> @rollup/rollup-darwin-x64',
+  'node_modules/rollup -> @rollup/rollup-freebsd-arm64',
+  'node_modules/rollup -> @rollup/rollup-freebsd-x64',
+  'node_modules/rollup -> @rollup/rollup-linux-arm-gnueabihf',
+  'node_modules/rollup -> @rollup/rollup-linux-arm-musleabihf',
+  'node_modules/rollup -> @rollup/rollup-linux-arm64-gnu',
+  'node_modules/rollup -> @rollup/rollup-linux-arm64-musl',
+  'node_modules/rollup -> @rollup/rollup-linux-loong64-gnu',
+  'node_modules/rollup -> @rollup/rollup-linux-loong64-musl',
+  'node_modules/rollup -> @rollup/rollup-linux-ppc64-gnu',
+  'node_modules/rollup -> @rollup/rollup-linux-ppc64-musl',
+  'node_modules/rollup -> @rollup/rollup-linux-riscv64-gnu',
+  'node_modules/rollup -> @rollup/rollup-linux-riscv64-musl',
+  'node_modules/rollup -> @rollup/rollup-linux-s390x-gnu',
+  'node_modules/rollup -> @rollup/rollup-linux-x64-gnu',
+  'node_modules/rollup -> @rollup/rollup-linux-x64-musl',
+  'node_modules/rollup -> @rollup/rollup-openbsd-x64',
+  'node_modules/rollup -> @rollup/rollup-openharmony-arm64',
+  'node_modules/rollup -> @rollup/rollup-win32-arm64-msvc',
+  'node_modules/rollup -> @rollup/rollup-win32-ia32-msvc',
+  'node_modules/rollup -> @rollup/rollup-win32-x64-gnu',
+  'node_modules/rollup -> @rollup/rollup-win32-x64-msvc',
+  'node_modules/rollup -> fsevents',
+  'node_modules/vite -> fsevents'
+] to deeply equal []
+      at Context.<anonymous> (test\FrontendLockfile.regression.test.ts:21:29)
+      at callFn (file:///C:/Users/laksh/OneDrive%20-%20Nanyang%20Technological%20University/NTU/Y4S1/SC4053/Project/node_modules/mocha/lib/runnable.js:360:23)
+      at Test.run (file:///C:/Users/laksh/OneDrive%20-%20Nanyang%20Technological%20University/NTU/Y4S1/SC4053/Project/node_modules/mocha/lib/runnable.js:348:7)
+      at Runner.runTest (file:///C:/Users/laksh/OneDrive%20-%20Nanyang%20Technological%20University/NTU/Y4S1/SC4053/Project/node_modules/mocha/lib/runner.js:809:10)
+      at file:///C:/Users/laksh/OneDrive%20-%20Nanyang%20Technological%20University/NTU/Y4S1/SC4053/Project/node_modules/mocha/lib/runner.js:949:12
+      at next (file:///C:/Users/laksh/OneDrive%20-%20Nanyang%20Technological%20University/NTU/Y4S1/SC4053/Project/node_modules/mocha/lib/runner.js:724:14)
+      at file:///C:/Users/laksh/OneDrive%20-%20Nanyang%20Technological%20University/NTU/Y4S1/SC4053/Project/node_modules/mocha/lib/runner.js:734:7
+      at next (file:///C:/Users/laksh/OneDrive%20-%20Nanyang%20Technological%20University/NTU/Y4S1/SC4053/Project/node_modules/mocha/lib/runner.js:595:14)
+      at Immediate._onImmediate (file:///C:/Users/laksh/OneDrive%20-%20Nanyang%20Technological%20University/NTU/Y4S1/SC4053/Project/node_modules/mocha/lib/runner.js:702:5)
+      at process.processImmediate (node:internal/timers:504:21)
+
+
+
+
+108 passing (108 mocha)
+1 failing (1 mocha)
+
+Saved html report to C:\Users\laksh\OneDrive - Nanyang Technological University\NTU\Y4S1\SC4053\Project\coverage\html
+╔════════════════════════════════════════════════════════════════════════════════════╗
+║                                  Coverage Report                                   ║
+╚════════════════════════════════════════════════════════════════════════════════════╝
+╔════════════════════════════════════════════════════════════════════════════════════╗
+║ File Coverage                                                                      ║
+╟───────────────────────────────────────────┬────────┬─────────────┬─────────────────╢
+║ File Path                                 │ Line % │ Statement % │ Uncovered Lines ║
+╟───────────────────────────────────────────┼────────┼─────────────┼─────────────────╢
+║ contracts\test\ForceSendHarness.sol       │ 100.00 │ 100.00      │ -               ║
+║ contracts\AssetToken.sol                  │ 100.00 │ 100.00      │ -               ║
+║ contracts\AssetFactory.sol                │ 100.00 │ 100.00      │ -               ║
+║ contracts\AssetSale.sol                   │ 98.28  │ 98.25       │ 111             ║
+║ contracts\test\AssetTokenHarness.sol      │ 100.00 │ 100.00      │ -               ║
+║ contracts\test\AssetSaleIssuerHarness.sol │ 92.31  │ 92.86       │ 38              ║
+╟───────────────────────────────────────────┼────────┼─────────────┼─────────────────╢
+║ Total                                     │ 98.68  │ 98.51       │                 ║
+╚═══════════════════════════════════════════╧════════╧═════════════╧═════════════════╝
+
+
+Test run failed
