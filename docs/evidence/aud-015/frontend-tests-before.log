@@ -1,0 +1,62 @@
+﻿
+> rwa-tokenisation-frontend@0.0.1 pretest
+> node ../scripts/syncFrontend.mjs
+
+Synced all three frontend ABIs from compiled artifacts.
+
+> rwa-tokenisation-frontend@0.0.1 test
+> vitest run
+
+
+ RUN  v4.1.12 C:/Users/laksh/OneDrive - Nanyang Technological University/NTU/Y4S1/SC4053/Project/frontend
+
+ ❯ src/test/deploymentIsolation.regression.test.ts (1 test | 1 failed) 35ms
+     × targets the local test chain even when addresses.json points at Sepolia 30ms
+node.exe : 
+At line:1 char:1
++ & "C:\Users\laksh\AppData\Local\Microsoft\WinGet\Packages\OpenJS.Node ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/deploymentIsolation.regression.test.ts > AUD-015 unit tests are isolated from the committed deployment 
+> targets the local test chain even when addresses.json points at Sepolia
+AssertionError: expected "vi.fn()" to be called with arguments: [ { …(2) } ]
+
+Received:
+
+  1st vi.fn() call:
+
+  [
+    {
+      "method": "wallet_switchEthereumChain",
+      "params": [
+        {
+-         "chainId": "0x7a69",
++         "chainId": "0xaa36a7",
+        },
+      ],
+    },
+  ]
+
+
+Number of calls: 1
+
+ ❯ src/test/deploymentIsolation.regression.test.ts:29:28
+
+ Test Files  1 failed | 8 passed (9)
+      Tests  1 failed | 117 passed (118)
+   Start at  11:45:56
+   Duration  11.87s (transform 3.16s, setup 7.93s, import 10.07s, tests 11.90s, environment 20.94s)
+
+     27|     const wallet = new MockWallet(); // the unit tests' wallet, on 0x7…
+     28|     await switchNetwork(wallet);
+     29|     expect(wallet.request).toHaveBeenCalledWith({
+       |                            ^
+     30|       method: "wallet_switchEthereumChain",
+     31|       params: [{ chainId: "0x7a69" }],
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
