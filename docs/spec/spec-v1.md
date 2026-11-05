@@ -10,6 +10,8 @@ Decision D5 (opened 23 October 2026 in [phase3-requirements.md](phase3-requireme
 
 Phase 4 update (28 October 2026): the later [Phase 4 requirements](phase4-requirements.md) authorise building the frontend against the already implemented contracts and prohibit unnecessary Solidity redesign. They supersede the historical instruction to block Phase 4 on D5. Pause/freeze/forced transfer remain unsupported and are not fabricated in the UI. See [Phase 4 implementation and verification limits](../phase4-implementation.md). *(Note added at the D5 merge, 4 November 2026: this was true when written. Pause and forced transfer are now implemented on the contract. The UI still has no controls for them, but its history shows forced transfers (AUD-013).)*
 
+Phase 5 update (5 November 2026): the later [Phase 5 requirements](phase5-requirements.md) govern the demo wallets and networks. Task 5.1 uses four wallets: A is the platform administrator, B the authorised issuer, C an approved investor and D an initially unapproved investor. This replaces the wallet rows in §2 and the test-wallet line in §9. Sepolia keys are `SEPOLIA_KEY_A` to `SEPOLIA_KEY_D` (D12), which replace `PRIVATE_KEY` in §9. The second demo asset is DLP as in §2, with the quantities in D17.
+
 How this version was produced: human decisions, with AI-assisted research. The research sessions are logged in `docs/ai-logs/INDEX.md`. Changes from `spec-v0.md` are explained in section 10.
 
 ## 1. Problem and trust model
@@ -33,9 +35,10 @@ Instrument: **fictional real estate investment fund** — Campus Property Fund.
 | Total supply | 10 000 CPT |
 | Token decimals | 0 (whole units) |
 | Initial sale price | 0.001 testnet ETH / token |
-| Issuer | MetaMask Wallet A |
-| Investor 1 | MetaMask Wallet B |
-| Investor 2 | MetaMask Wallet C |
+| Platform admin | MetaMask Wallet A (Phase 5) |
+| Issuer | MetaMask Wallet B (Phase 5). *Superseded: Wallet A* |
+| Investor 1 (approved) | MetaMask Wallet C (Phase 5). *Superseded: Wallet B* |
+| Investor 2 (initially unapproved) | MetaMask Wallet D (Phase 5). *Superseded: Wallet C* |
 
 A second demo asset, Digital Licensing Revenue Pool (symbol: DLP), will be deployed using the same contracts with different metadata to demonstrate the multi-asset registry.
 
@@ -179,10 +182,10 @@ Each page connects via MetaMask using ethers.js `BrowserProvider`. Deployed cont
 
 - Network: Sepolia testnet (chain ID 11155111) for integration; Hardhat local network (chain ID 31337) for development
 - Token decimals: 0 — whole units only, consistent with fractional-unit model where each token represents one equal share
-- Test wallets: three Hardhat accounts (index 0 = admin, 1 = issuer, 2 = investor) for local tests; three MetaMask burner wallets on Sepolia for demo
+- Test wallets (restated for Phase 5): Hardhat accounts 0–3 play Wallets A–D in the local runs of the Phase 5 scripts, and four MetaMask burner wallets A–D are used on Sepolia. *Superseded: "three Hardhat accounts (index 0 = admin, 1 = issuer, 2 = investor) for local tests; three MetaMask burner wallets on Sepolia for demo". The Phase 3 tests still use indices 0–2 that way.*
 - Toolchain: Node.js ≥ 18, Hardhat 3.x (installed: 3.21.0), OpenZeppelin Contracts 5.x (installed: 5.6.1), ethers.js 6.x
 - Frontend: React 18, Vite, ethers.js 6.x
-- `.env` holds `TESTNET_RPC_URL`, `PRIVATE_KEY`, `ETHERSCAN_API_KEY` — never committed
+- Secrets (restated for Phase 5, D12): `TESTNET_RPC_URL` and `SEPOLIA_KEY_A` to `SEPOLIA_KEY_D` come from environment variables or Hardhat's encrypted keystore. They are never committed. *Superseded: "`.env` holds `TESTNET_RPC_URL`, `PRIVATE_KEY`, `ETHERSCAN_API_KEY` — never committed". Nothing loads `.env` automatically, and the Phase 5 brief does not ask for Etherscan verification.*
 
 ## 10. Changes from v0
 

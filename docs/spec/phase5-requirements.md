@@ -84,6 +84,17 @@ Claude Code raised these conflicts between this request and the current code bef
 | D13 | Scenario 7 ("Wallet C tries transferring 20 CPT to Wallet D; transaction fails"): the frontend checks the recipient's eligibility before asking MetaMask to sign (`frontend/src/services/blockchain.ts:310`), so no transaction or hash exists. | **UI block plus on-chain revert.** The live demo records the UI's rejection (screenshot). The replay script also sends the same transfer directly, with a fixed gas limit so that gas estimation does not stop it, so a reverted transaction (`RecipientNotWhitelisted`) is recorded on Sepolia. The frontend's preflight is unchanged. |
 | D14 | Phase 4's 13 manual MetaMask and browser scenarios (`docs/phase4-implementation.md`) are all Pending, and the roadmap says not to start a phase before the previous phase's acceptance criteria are met. | **Local rehearsal first.** Before any Sepolia transaction, run Phase 4's manual checklist with MetaMask on the local chain and record the results and screenshots as Phase 4 acceptance (AUD-002). Then run Task 5.1 on Sepolia. |
 
-Still open (not blocking the start of Phase 5):
-- "Working deployed application": whether the frontend must be hosted publicly or only run locally against the Sepolia contracts.
-- The frontend's read RPC (`VITE_RPC_URL`) is compiled into the browser bundle. It must be a keyless public endpoint, or a key the team accepts as public.
+*Superseded list, kept for audit comparison: "Still open (not blocking the start of Phase 5): 'Working deployed application': whether the frontend must be hosted publicly or only run locally against the Sepolia contracts. The frontend's read RPC (`VITE_RPC_URL`) is compiled into the browser bundle. It must be a keyless public endpoint, or a key the team accepts as public." Both were decided as D15 and D16 below.*
+
+## Decisions made by the user (5 November 2026)
+
+Raised by Claude Code (claude-opus-5-5) at the start of the Phase 5 build session, before any Phase 5 code was written. Claude Code proposed the options and marked a recommendation for each; the user chose the recommendation every time. D15 and D16 close the two questions that were still open above. D17 and D18 cover gaps Claude Code found between the brief and the code.
+
+| # | Question | Decision |
+|---|---|---|
+| D15 | Does "working deployed application" mean hosting the frontend publicly? | **Local frontend against Sepolia.** The contracts are deployed on Sepolia. The frontend runs on the presenter's machine (`npm run dev` or `vite preview`) and talks to the Sepolia contracts. No public hosting. |
+| D16 | Which read RPC does the frontend use on Sepolia? | **PublicNode, `https://ethereum-sepolia-rpc.publicnode.com`**, a keyless endpoint. It is the default for chain 11155111, and `VITE_RPC_URL` can still override it. No keyed endpoint goes into a frontend variable. |
+| D17 | Task 5.1 step 12, "Wallet B creates a second asset and verifies separate balances", names no asset and no check. | **DLP, and C buys 10.** The second asset is spec-v1 §2's Digital Licensing Revenue Pool: symbol DLP, 5,000 units, 0.002 ETH each, asset type Digital. B whitelists the DLP sale contract and C, deposits 1,000 DLP, and C buys 10 DLP for 0.02 ETH. The check: C holds 80 CPT and 10 DLP, D holds 20 CPT and 0 DLP, and neither token's total supply changes. |
+| D18 | Task 5.2 says to save the factory address, chain ID and ABIs, but `frontend/src/config/addresses.json` holds one deployment and every deploy overwrites it. | **A record per network.** Every persistent deploy also writes `deployments/<network>.json`: factory address, chain ID, deployment block and hash, admin, runtime code hash and the three ABIs. `addresses.json` keeps the latest deployment only. Once the Sepolia deploy is committed it points at Sepolia, and `npm run deploy:local` switches a working copy back to the local chain. |
+
+Task 5.1 step 3 does not mention it, but the sale contract must be whitelisted before it can receive the deposit (Phase 3 §3.3 lifecycle, invariant 1). The replay does this as part of step 3.
