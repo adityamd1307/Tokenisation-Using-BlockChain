@@ -1,0 +1,18 @@
+﻿
+> rwa-tokenisation-frontend@0.0.1 pretest
+> node ../scripts/syncFrontend.mjs
+
+Synced all three frontend ABIs from compiled artifacts.
+
+> rwa-tokenisation-frontend@0.0.1 test
+> vitest run
+
+
+ RUN  v4.1.12 C:/Users/laksh/OneDrive - Nanyang Technological University/NTU/Y4S1/SC4053/Project/frontend
+
+
+ Test Files  8 passed (8)
+      Tests  117 passed (117)
+   Start at  11:41:00
+   Duration  13.60s (transform 4.78s, setup 9.29s, import 14.49s, tests 13.26s, environment 17.27s)
+

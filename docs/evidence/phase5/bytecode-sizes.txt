@@ -1,0 +1,4 @@
+﻿# Runtime bytecode sizes from artifacts (deployedBytecode), EIP-170 limit 24576 bytes (CLAUDE.md AUD-012 rule).
+# Measured 2026-11-05 on branch phase-5-sepolia at 72a75a7 plus the uncommitted Phase 5 generation. No Solidity changed in Phase 5.
+production profile (npx hardhat compile --force --build-profile production; used by deploy:sepolia and replay:sepolia): AssetFactory 13545 (55.1%), AssetToken 4124 (16.8%), AssetSale 3132 (12.7%)
+default profile (npx hardhat compile --force; used by tests, deploy:local, replay:ephemeral): AssetFactory 13545 (55.1%), AssetToken 4124 (16.8%), AssetSale 3132 (12.7%)
