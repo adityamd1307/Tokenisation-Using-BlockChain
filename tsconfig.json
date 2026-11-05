@@ -6,7 +6,8 @@
     "skipLibCheck": true,
     "outDir": "dist",
     "types": ["node", "mocha"],
-    "verbatimModuleSyntax": true
+    "verbatimModuleSyntax": true,
+    "rewriteRelativeImportExtensions": true
   },
   "exclude": ["node_modules", "frontend"]
 }
