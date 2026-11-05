@@ -65,3 +65,13 @@ Needed for Phase 5:
 - Two or more further burner wallets for the issuer and investors. `setupDemo.ts` needs three signers, and the Sepolia network config currently has one.
 
 Claude Code does not read `.env` (`.claude/settings.json`, CLAUDE.md), so the deploy command must be run by a person, outside the logged session.
+
+## Phase 5 follow-up — 5 November 2026
+
+The tooling for the Sepolia deployment now exists and is verified locally ([Phase 5 implementation](../phase5-implementation.md), tag `ai-baseline-phase5`):
+- Decision D12: `hardhat.config.ts` reads four keys, `SEPOLIA_KEY_A` to `SEPOLIA_KEY_D`, with `configVariable`, plus `TESTNET_RPC_URL`. **`PRIVATE_KEY` is no longer used.** The "one signer" gap above is closed. *Superseded: "It reads `TESTNET_RPC_URL` and `PRIVATE_KEY` from environment variables or Hardhat's keystore."*
+- `npm run deploy:sepolia` deploys an empty main factory with Wallet A as admin. It writes `frontend/src/config/addresses.json` and `deployments/sepolia.json` (address, chain ID, block, ABIs) (D11, D18).
+- `npm run replay:sepolia` runs all 12 Task 5.1 steps on its own factory with Wallets A–D and writes every hash to `docs/evidence/phase5/`. Scenario 7 is recorded as a reverted transaction (D13). It checks every wallet's balance before sending anything.
+- Both scripts run locally (`deploy:ephemeral`, `deploy:local`, `replay:ephemeral`), and `test/Phase5.scripts.test.ts` covers them.
+
+Still open: running both on Sepolia (a person must do it, outside the logged session), then recording the hashes in `docs/evidence/testnet-log.md`. Etherscan verification is not part of the Phase 5 brief and has not been built. Status stays open until the Sepolia transactions are recorded.

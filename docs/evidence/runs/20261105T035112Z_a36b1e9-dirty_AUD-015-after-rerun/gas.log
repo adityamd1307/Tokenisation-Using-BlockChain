@@ -1,0 +1,346 @@
+$ npx hardhat test --gas-stats
+
+No contracts to compile
+
+Running Solidity tests
+
+
+Running Mocha tests
+
+
+  AssetFactory — Phase 3
+    deployment
+      √ deploys with correct admin address and an empty registry (206ms)
+      √ rejects a zero admin (49ms)
+    issuer authorisation
+      √ admin can authorise an issuer
+      √ authorising an already-authorised issuer or the zero address reverts (63ms)
+      √ admin can revoke an issuer
+      √ revoking an address that is not authorised reverts
+      √ non-admin cannot authorise or revoke an issuer
+    asset creation
+      √ authorised issuer can create an asset (deploys AssetToken + AssetSale) (63ms)
+      √ created asset is recorded in the registry with full metadata and tokenToSale (53ms)
+      √ issuer creates two different assets that are registered independently (56ms)
+      √ unauthorised address, including the admin, cannot create an asset
+      √ createAsset with unitPriceWei == 0 reverts
+      √ createAsset with totalSupply == 0 reverts
+      √ getAsset reverts for an ID that was never assigned (88ms)
+      √ rejects an out-of-range assetType
+    revocation scope
+      √ revoked issuer cannot create new assets but existing contracts keep operating (103ms)
+    issuer isolation
+      √ issuer A cannot whitelist investors on issuer B's token
+      √ issuer A cannot allocate, withdraw, close or recover on issuer B's sale
+
+  AssetSale — Phase 3
+    deployment
+      √ deploys with correct assetToken, pricePerToken, and issuer (60ms)
+      √ rejects a zero token, zero issuer, or zero price (38ms)
+      √ exposes no function to change the price after creation
+    allocation
+      √ issuer can allocate tokens (whitelist sale, approve, allocate) (38ms)
+      √ allocate reverts until the issuer whitelists the sale contract
+      √ allocate without an approval reverts
+      √ non-issuer cannot allocate (68ms)
+      √ allocate with insufficient issuer balance reverts
+      √ allocate of zero reverts
+    buying (instant subscription flow)
+      √ whitelisted investor buys 100 tokens with exact ETH payment
+      √ investor underpays: reverts
+      √ investor overpays: reverts
+      √ unapproved investor attempts purchase: reverts
+      √ revoked investor cannot buy
+      √ investor buys more than inventory: reverts
+      √ buying the entire inventory succeeds and leaves nothing for sale
+      √ buy of zero quantity reverts
+      √ rejects plain ETH sent outside buyTokens
+    proceeds
+      √ issuer can withdraw ETH proceeds after a purchase (86ms)
+      √ non-issuer withdraws proceeds: reverts
+      √ withdrawProceeds with zero balance reverts
+      √ invariant 8: a re-entrant contract issuer is paid exactly once and the balance is zero (85ms)
+      √ a failed payout reverts and leaves the proceeds claimable
+    closing and inventory recovery
+      √ issuer can close the sale, after which buying and allocating revert (84ms)
+      √ recoverUnsoldTokens reverts while the sale is open
+      √ issuer recovers all unsold inventory after closing and can still withdraw proceeds
+      √ non-issuer cannot close the sale or recover inventory
+    invariants
+      √ invariant 3: sale ETH balance equals tokens sold times pricePerToken minus withdrawals (107ms)
+      √ invariant 2: supply equals the sum of balances, and holders are eligible absent revocation (181ms)
+    Phase 3 lifecycle demonstration
+      √ create 10,000 CPT, whitelist sale, deposit 5,000, investor pays 0.1 ETH for 100 CPT (40ms)
+
+  AssetToken — D5 pause and forced transfer (spec-v1 §5 D5 functions)
+    pause / unpause
+      √ the issuer pauses and unpauses, emitting OpenZeppelin's Paused and Unpaused (125ms)
+      √ rejects pause and unpause from an account without DEFAULT_ADMIN_ROLE
+      √ rejects pause from a compliance-only delegate
+      √ lets a delegated DEFAULT_ADMIN_ROLE holder pause, because authority is the role
+      √ removes pause and forcedTransfer from a delegated admin whose role is revoked (51ms)
+      √ removes pause and forcedTransfer from a delegated admin whose role is renounced (50ms)
+      √ rejects pausing twice and unpausing when not paused
+      √ does not let one issuer pause another issuer's token (invariant 7)
+    pause invariant (restated invariant 5)
+      √ blocks transfer and transferFrom while paused and restores them after unpause (43ms)
+      √ blocks AssetSale allocate, buyTokens and recoverUnsoldTokens while paused (79ms)
+      √ still allows whitelist changes and ETH withdrawal while paused
+    forcedTransfer
+      √ moves a revoked holder's balance to a whitelisted address with Transfer and ForcedTransfer
+      √ works while paused
+      √ rejects callers without DEFAULT_ADMIN_ROLE, including a compliance delegate
+      √ rejects taking from a whitelisted holder: a live investor or the sale contract
+      √ rejects the zero address as source, so it cannot mint
+      √ rejects a recipient that is not whitelisted, including the zero address
+      √ rejects an amount above the holder's balance
+      √ does not let one issuer force-transfer on another issuer's token (invariant 7)
+      √ recovers a lost-key holding: revoke, then force-transfer to a new wallet (52ms)
+    forced-transfer invariant (restated invariant 6)
+      √ only succeeds from a non-zero revoked address to a whitelisted one, and never changes totalSupply (610ms)
+
+  AssetToken AUD-004 regression
+    √ rejects a transfer to an unapproved investor without changing balances (116ms)
+
+  AssetToken — Phase 2
+    A — deployment and fixed supply
+      √ sets the name, symbol, and whole-unit decimals
+      √ mints exactly 10,000 whole units to the designated issuer
+      √ emits the standard mint Transfer from the zero address
+      √ whitelists the issuer and leaves other addresses, including zero, ineligible
+      √ grants the issuer the administrator and compliance roles
+      √ rejects a zero issuer
+      √ rejects a zero supply
+      √ exposes no mint or burn entry point, even to the administrator
+      √ assigns supply and roles to the issuer instead of a different deploying account
+      √ supports construction by a contract without granting that contract authority (40ms)
+    B — whitelist and role administration
+      √ approves investors B and C with publicly readable status
+      √ emits investor, status, and operator on approval and revocation
+      √ rejects unauthorised whitelist update approved=true
+      √ rejects a zero investor when approved=true
+      √ rejects unauthorised whitelist update approved=false (47ms)
+      √ rejects a zero investor when approved=false
+      √ treats repeated status updates as no-ops without duplicate events (47ms)
+      √ revokes a funded investor without confiscation, burning, or Transfer events (301ms)
+      √ delegates compliance and records the actual delegate as operator
+      √ prevents unauthorised accounts from granting themselves compliance authority
+      √ prevents compliance-only delegates from granting roles
+      √ removes compliance authority immediately when the role is revoked
+      √ requires compliance authority even for an administrator whose compliance role was revoked
+    C — direct transfers and revocation
+      √ transfers 100 units to B and emits the standard Transfer event
+      √ rejects an unapproved recipient and preserves balances and supply (41ms)
+      √ allows B to transfer 20 units to approved C
+      √ rejects a revoked sender even when the recipient is approved
+      √ rejects transfers into a revoked holder with a positive balance
+      √ rejects transfers when both holder and recipient are ineligible
+      √ restores sending and receiving after reapproval
+      √ applies the same eligibility requirements to the issuer
+    D — approvals and delegated transfers
+      √ creates and replaces allowances with standard Approval events
+      √ allows an unwhitelisted spender to transfer between approved holders
+      √ rolls back balances and allowance for an ineligible delegated recipient
+      √ checks the actual holder and rolls back allowance when that holder is revoked (47ms)
+      √ preserves the standard insufficient-allowance error and unchanged state
+      √ preserves approvals and approval revocation for ineligible wallets
+      √ preserves unlimited allowances across successful transfers
+      √ rolls back allowance spending when the delegated holder has insufficient balance
+    E — edge cases, contract holders, and instance isolation
+      √ rejects a direct transfer exceeding the balance
+      √ permits a zero-value transfer between eligible accounts and emits Transfer
+      √ enforces both eligibility checks even for zero-value transfers
+      √ allows zero-value delegated transfers but still checks holder eligibility
+      √ preserves standard zero-recipient errors for direct and delegated transfers
+      √ preserves standard errors for a zero spender or a zero delegated owner
+      √ supports self-transfers without altering balance or supply
+      √ allows an approved smart-contract holder to receive and forward inventory
+      √ isolates roles, whitelist, allowances, balances, and supply across assets (75ms)
+      √ conserves supply across deterministic transfers, revocation, and failures (54ms)
+    Local demonstration
+      √ demonstrates CPT issuance, unapproved D rejection, and final balances 9,900 / 80 / 20
+
+  AUD-012 Sepolia deployment build profile
+    √ deploy:sepolia builds with a profile that enables the optimizer for every compiler
+
+  AUD-014 every Hardhat build path
+    √ every npm script that compiles through hardhat run, test or compile uses an optimised profile
+
+  AUD-011 frontend lockfile portability
+    √ records every optional dependency, so npm ci works on every platform
+
+  Phase 3 audit-1 regressions
+    AUD-005 invariant 1 through a revocation
+      √ a revoked holder keeps its balance but cannot send, receive or buy until re-approved (70ms)
+    AUD-006 issuer admin role cannot be removed
+      √ the issuer cannot renounce DEFAULT_ADMIN_ROLE
+      √ a delegated administrator cannot revoke the issuer's DEFAULT_ADMIN_ROLE but can drop its own
+      √ compliance stays revocable, and the issuer can always restore it and recover locked inventory (41ms)
+    AUD-007 forced ETH
+      √ selfdestruct really forces ETH past the missing receive function (62ms)
+      √ the issuer can recover forced ETH after withdrawing proceeds, leaving the sale empty
+      √ sweeping before withdrawal takes only the excess and leaves owed proceeds claimable
+      √ only the issuer can sweep, and only when there is excess
+    AUD-008 admin cannot be an issuer
+      √ authorizeIssuer(admin) reverts and the admin stays unauthorised
+
+  Phase 5 deploy script (Task 5.2, D11, D18)
+    √ deploys the main factory with Wallet A as admin and leaves it empty (D11)
+    √ records the address, chain ID, deployment block and runtime code hash of the chain it deployed to
+    √ writes addresses.json for the frontend and deployments/<network>.json with all three ABIs (D18)
+
+  Phase 5 Task 5.1 replay (D11, D13, D17)
+    √ covers all twelve Task 5.1 steps, in order
+    √ ends with C holding 80 CPT, D holding 20 CPT, and the 0.1 ETH proceeds withdrawn by B
+    √ scenario 7 is a mined transfer from C to D with a status-0 receipt and no balance change (D13)
+    √ creates DLP as a separate asset: C holds 10 DLP, D holds none, supplies unchanged (D17)
+    √ runs on its own factory and leaves the main factory empty (D11)
+
+  Phase 5 replay guards
+    √ refuses to start, sending nothing, when a wallet cannot pay for its part (44ms)
+    √ refuses to run with fewer than four distinct wallets (D12)
+
+
+  142 passing (5s)
+
+
+142 passing (142 mocha)
+
+╔═════════════════════════════════════════════════════════════════════════════════╗
+║                              Gas Usage Statistics                               ║
+╚═════════════════════════════════════════════════════════════════════════════════╝
+╔═════════════════════════════════════════════════════════════════════════════════╗
+║ contracts/AssetFactory.sol:AssetFactory                                         ║
+╟──────────────────────────┬─────────┬─────────┬─────────┬─────────┬──────────────╢
+║ Function name            │ Min     │ Average │ Median  │ Max     │ #calls       ║
+╟──────────────────────────┼─────────┼─────────┼─────────┼─────────┼──────────────╢
+║ admin                    │ 21345   │ 21345   │ 21345   │ 21345   │ 2            ║
+║ authorisedIssuers        │ 23983   │ 23994   │ 23995   │ 23995   │ 10           ║
+║ authorizeIssuer          │ 45424   │ 45424   │ 45424   │ 45424   │ 19           ║
+║ createAsset              │ 1925522 │ 1975418 │ 1990493 │ 2013385 │ 17           ║
+║ getAsset                 │ 48352   │ 51702   │ 52902   │ 52914   │ 17           ║
+║ getAssetCount            │ 23366   │ 23366   │ 23366   │ 23366   │ 9            ║
+║ revokeIssuer             │ 23387   │ 23387   │ 23387   │ 23387   │ 2            ║
+║ tokenToSale              │ 23952   │ 23952   │ 23952   │ 23952   │ 1            ║
+╟──────────────────────────┼─────────┼─────────┼─────────┼─────────┼──────────────╢
+║ Deployment               │ Min     │ Average │ Median  │ Max     │ #deployments ║
+╟──────────────────────────┼─────────┼─────────┼─────────┼─────────┼──────────────╢
+║                          │ 2973114 │ 2973114 │ 2973114 │ 2973114 │ 16           ║
+╟──────────────────────────┼─────────┼─────────┴─────────┴─────────┴──────────────╢
+║ Bytecode size            │ 13545   │                                            ║
+╚══════════════════════════╧═════════╧════════════════════════════════════════════╝
+╔═════════════════════════════════════════════════════════════════════════════════╗
+║ contracts/AssetSale.sol:AssetSale                                               ║
+╟──────────────────────────┬─────────┬─────────┬─────────┬─────────┬──────────────╢
+║ Function name            │ Min     │ Average │ Median  │ Max     │ #calls       ║
+╟──────────────────────────┼─────────┼─────────┼─────────┼─────────┼──────────────╢
+║ allocate                 │ 65072   │ 65083   │ 65084   │ 65084   │ 11           ║
+║ assetToken               │ 21269   │ 21269   │ 21269   │ 21269   │ 2            ║
+║ availableTokens          │ 26808   │ 26808   │ 26808   │ 26808   │ 18           ║
+║ buyTokens                │ 55057   │ 83354   │ 89257   │ 89269   │ 19           ║
+║ closeSale                │ 44374   │ 44374   │ 44374   │ 44374   │ 5            ║
+║ issuer                   │ 21291   │ 21291   │ 21291   │ 21291   │ 2            ║
+║ pricePerToken            │ 21347   │ 21347   │ 21347   │ 21347   │ 4            ║
+║ recoverUnsoldTokens      │ 43174   │ 43174   │ 43174   │ 43174   │ 3            ║
+║ saleClosed               │ 23417   │ 23417   │ 23417   │ 23417   │ 2            ║
+║ sweepExcessETH           │ 31548   │ 31548   │ 31548   │ 31548   │ 3            ║
+║ unclaimedProceeds        │ 23379   │ 23379   │ 23379   │ 23379   │ 22           ║
+║ withdrawProceeds         │ 29586   │ 29586   │ 29586   │ 29586   │ 9            ║
+╟──────────────────────────┼─────────┼─────────┼─────────┼─────────┼──────────────╢
+║ Deployment               │ Min     │ Average │ Median  │ Max     │ #deployments ║
+╟──────────────────────────┼─────────┼─────────┼─────────┼─────────┼──────────────╢
+║                          │ 731506  │ 731506  │ 731506  │ 731506  │ 1            ║
+╟──────────────────────────┼─────────┼─────────┴─────────┴─────────┴──────────────╢
+║ Bytecode size            │ 3132    │                                            ║
+╚══════════════════════════╧═════════╧════════════════════════════════════════════╝
+╔═════════════════════════════════════════════════════════════════════════════════╗
+║ contracts/AssetToken.sol:AssetToken                                             ║
+╟──────────────────────────┬─────────┬─────────┬─────────┬─────────┬──────────────╢
+║ Function name            │ Min     │ Average │ Median  │ Max     │ #calls       ║
+╟──────────────────────────┼─────────┼─────────┼─────────┼─────────┼──────────────╢
+║ allowance                │ 24621   │ 24631   │ 24633   │ 24633   │ 16           ║
+║ approve                  │ 24447   │ 44865   │ 46359   │ 46731   │ 29           ║
+║ balanceOf                │ 24024   │ 24033   │ 24036   │ 24036   │ 164          ║
+║ COMPLIANCE_ROLE          │ 21304   │ 21304   │ 21304   │ 21304   │ 18           ║
+║ decimals                 │ 21328   │ 21328   │ 21328   │ 21328   │ 1            ║
+║ DEFAULT_ADMIN_ROLE       │ 21301   │ 21301   │ 21301   │ 21301   │ 17           ║
+║ forcedTransfer           │ 37845   │ 50372   │ 55745   │ 60545   │ 11           ║
+║ getRoleAdmin             │ 24062   │ 24062   │ 24062   │ 24062   │ 1            ║
+║ grantRole                │ 51129   │ 51365   │ 51513   │ 51513   │ 13           ║
+║ hasRole                  │ 24322   │ 24514   │ 24514   │ 24706   │ 24           ║
+║ issuer                   │ 21413   │ 21413   │ 21413   │ 21413   │ 2            ║
+║ isWhitelisted            │ 23842   │ 24069   │ 24082   │ 24082   │ 69           ║
+║ name                     │ 24305   │ 24305   │ 24305   │ 24305   │ 3            ║
+║ pause                    │ 47069   │ 47069   │ 47069   │ 47069   │ 11           ║
+║ paused                   │ 23401   │ 23401   │ 23401   │ 23401   │ 5            ║
+║ renounceRole             │ 24829   │ 24829   │ 24829   │ 24829   │ 2            ║
+║ revokeRole               │ 29321   │ 29574   │ 29658   │ 29658   │ 4            ║
+║ setWhitelisted           │ 26703   │ 41319   │ 48787   │ 48799   │ 88           ║
+║ symbol                   │ 24282   │ 24282   │ 24282   │ 24282   │ 9            ║
+║ totalSupply              │ 23467   │ 23467   │ 23467   │ 23467   │ 63           ║
+║ transfer                 │ 31556   │ 51903   │ 58250   │ 58256   │ 22           ║
+║ transferFrom             │ 38732   │ 52953   │ 54076   │ 64244   │ 6            ║
+║ unpause                  │ 25080   │ 25080   │ 25080   │ 25080   │ 5            ║
+║ whitelist                │ 24022   │ 24033   │ 24034   │ 24034   │ 10           ║
+╟──────────────────────────┼─────────┼─────────┼─────────┼─────────┼──────────────╢
+║ Deployment               │ Min     │ Average │ Median  │ Max     │ #deployments ║
+╟──────────────────────────┼─────────┼─────────┼─────────┼─────────┼──────────────╢
+║                          │ 1143519 │ 1143700 │ 1143723 │ 1143735 │ 9            ║
+╟──────────────────────────┼─────────┼─────────┴─────────┴─────────┴──────────────╢
+║ Bytecode size            │ 4124    │                                            ║
+╚══════════════════════════╧═════════╧════════════════════════════════════════════╝
+╔═════════════════════════════════════════════════════════════════════════════════╗
+║ contracts/test/AssetSaleIssuerHarness.sol:AssetSaleIssuerHarness                ║
+╟──────────────────────────┬─────────┬─────────┬─────────┬─────────┬──────────────╢
+║ Function name            │ Min     │ Average │ Median  │ Max     │ #calls       ║
+╟──────────────────────────┼─────────┼─────────┼─────────┼─────────┼──────────────╢
+║ execute                  │ 42949   │ 51936   │ 51767   │ 69231   │ 6            ║
+║ proceedsSeenDuringPayout │ 23392   │ 23392   │ 23392   │ 23392   │ 1            ║
+║ reentryAttempted         │ 23456   │ 23456   │ 23456   │ 23456   │ 1            ║
+║ reentrySucceeded         │ 23389   │ 23389   │ 23389   │ 23389   │ 1            ║
+║ setRejectPayments        │ 26541   │ 26547   │ 26547   │ 26553   │ 2            ║
+║ setSale                  │ 43905   │ 43905   │ 43905   │ 43905   │ 1            ║
+╟──────────────────────────┼─────────┼─────────┼─────────┼─────────┼──────────────╢
+║ Deployment               │ Min     │ Average │ Median  │ Max     │ #deployments ║
+╟──────────────────────────┼─────────┼─────────┼─────────┼─────────┼──────────────╢
+║                          │ 319833  │ 319833  │ 319833  │ 319833  │ 1            ║
+╟──────────────────────────┼─────────┼─────────┴─────────┴─────────┴──────────────╢
+║ Bytecode size            │ 1232    │                                            ║
+╚══════════════════════════╧═════════╧════════════════════════════════════════════╝
+╔═════════════════════════════════════════════════════════════════════════════════╗
+║ contracts/test/AssetTokenHarness.sol:AssetTokenDeploymentHarness                ║
+╟──────────────────────────┬─────────┬─────────┬─────────┬─────────┬──────────────╢
+║ Function name            │ Min     │ Average │ Median  │ Max     │ #calls       ║
+╟──────────────────────────┼─────────┼─────────┼─────────┼─────────┼──────────────╢
+║ token                    │ 21245   │ 21245   │ 21245   │ 21245   │ 1            ║
+╟──────────────────────────┼─────────┼─────────┼─────────┼─────────┼──────────────╢
+║ Deployment               │ Min     │ Average │ Median  │ Max     │ #deployments ║
+╟──────────────────────────┼─────────┼─────────┼─────────┼─────────┼──────────────╢
+║                          │ 1215632 │ 1215632 │ 1215632 │ 1215632 │ 1            ║
+╟──────────────────────────┼─────────┼─────────┴─────────┴─────────┴──────────────╢
+║ Bytecode size            │ 162     │                                            ║
+╚══════════════════════════╧═════════╧════════════════════════════════════════════╝
+╔═════════════════════════════════════════════════════════════════════════════════╗
+║ contracts/test/AssetTokenHarness.sol:AssetTokenHolderHarness                    ║
+╟──────────────────────────┬─────────┬─────────┬─────────┬─────────┬──────────────╢
+║ Function name            │ Min     │ Average │ Median  │ Max     │ #calls       ║
+╟──────────────────────────┼─────────┼─────────┼─────────┼─────────┼──────────────╢
+║ forward                  │ 61953   │ 61953   │ 61953   │ 61953   │ 1            ║
+╟──────────────────────────┼─────────┼─────────┼─────────┼─────────┼──────────────╢
+║ Deployment               │ Min     │ Average │ Median  │ Max     │ #deployments ║
+╟──────────────────────────┼─────────┼─────────┼─────────┼─────────┼──────────────╢
+║                          │ 131347  │ 131347  │ 131347  │ 131347  │ 1            ║
+╟──────────────────────────┼─────────┼─────────┴─────────┴─────────┴──────────────╢
+║ Bytecode size            │ 361     │                                            ║
+╚══════════════════════════╧═════════╧════════════════════════════════════════════╝
+╔═════════════════════════════════════════════════════════════════════════════════╗
+║ contracts/test/ForceSendHarness.sol:ForceSendHarness                            ║
+╟──────────────────────────┬─────────┬─────────┬─────────┬─────────┬──────────────╢
+║ Deployment               │ Min     │ Average │ Median  │ Max     │ #deployments ║
+╟──────────────────────────┼─────────┼─────────┼─────────┼─────────┼──────────────╢
+║                          │ 62564   │ 62564   │ 62564   │ 62564   │ 1            ║
+╟──────────────────────────┼─────────┼─────────┴─────────┴─────────┴──────────────╢
+║ Bytecode size            │ 0       │                                            ║
+╚══════════════════════════╧═════════╧════════════════════════════════════════════╝
+
+

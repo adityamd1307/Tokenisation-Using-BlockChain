@@ -38,11 +38,19 @@ export default defineConfig({
       url: "http://127.0.0.1:8545",
       chainId: 31337,
     },
+    // Phase 5 D12: Wallets A-D, from environment variables or `npx hardhat keystore set <NAME>`.
+    // A deploys and is the platform admin; B is the issuer; C and D are investors. Never commit keys.
     sepolia: {
       type: "http",
       chainType: "l1",
+      chainId: 11155111,
       url: configVariable("TESTNET_RPC_URL"),
-      accounts: [configVariable("PRIVATE_KEY")],
+      accounts: [
+        configVariable("SEPOLIA_KEY_A"),
+        configVariable("SEPOLIA_KEY_B"),
+        configVariable("SEPOLIA_KEY_C"),
+        configVariable("SEPOLIA_KEY_D"),
+      ],
     },
   },
 });

@@ -8,6 +8,8 @@ cache/
 
 # Local anvil deployments (testnet broadcasts stay committed as evidence)
 broadcast/*/31337/
+# Phase 5 D18: the local deployment record changes on every node restart; deployments/sepolia.json is kept
+deployments/localhost.json
 
 # Frontend
 node_modules/

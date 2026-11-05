@@ -1,0 +1,22 @@
+$ npx hardhat test --gas-stats
+
+An unexpected error occurred:
+
+Error: EBUSY: resource busy or locked, open 'C:\Users\laksh\OneDrive - Nanyang Technological University\NTU\Y4S1\SC4053\Project\types\ethers-contracts\test\AssetTokenHarness.sol\AssetTokenHolderHarness.ts'
+    at Object.writeFileSync (node:fs:2414:20)
+    at <anonymous> (C:\Users\laksh\OneDrive - Nanyang Technological University\NTU\Y4S1\SC4053\Project\node_modules\typechain\src\typechain\io.ts:27:8)
+    at Array.forEach (<anonymous>)
+    at processOutput (C:\Users\laksh\OneDrive - Nanyang Technological University\NTU\Y4S1\SC4053\Project\node_modules\typechain\src\typechain\io.ts:17:13)
+    at runTypeChain (C:\Users\laksh\OneDrive - Nanyang Technological University\NTU\Y4S1\SC4053\Project\node_modules\typechain\src\typechain\runTypeChain.ts:57:36)
+    at async generateTypes (C:\Users\laksh\OneDrive - Nanyang Technological University\NTU\Y4S1\SC4053\Project\node_modules\@nomicfoundation\hardhat-typechain\src\internal\generate-types.ts:50:18)
+    at async processArtifactsAfterSuccessfulBuild (C:\Users\laksh\OneDrive - Nanyang Technological University\NTU\Y4S1\SC4053\Project\node_modules\@nomicfoundation\hardhat-typechain\src\internal\hook-handlers\solidity.ts:14:7)
+    at async HookManagerImplementation.runSequentialHandlers (C:\Users\laksh\OneDrive - Nanyang Technological University\NTU\Y4S1\SC4053\Project\node_modules\hardhat\src\internal\core\hook-manager.ts:246:19)
+    at async SolidityBuildSystemImplementation.#build (C:\Users\laksh\OneDrive - Nanyang Technological University\NTU\Y4S1\SC4053\Project\node_modules\hardhat\src\internal\builtin-plugins\solidity\build-system\build-system.ts:452:13)
+    at async <anonymous> (C:\Users\laksh\OneDrive - Nanyang Technological University\NTU\Y4S1\SC4053\Project\node_modules\hardhat\src\internal\builtin-plugins\solidity\build-system\build-system.ts:291:9) {
+  errno: -4082,
+  code: 'EBUSY',
+  syscall: 'open',
+  path: 'C:\\Users\\laksh\\OneDrive - Nanyang Technological University\\NTU\\Y4S1\\SC4053\\Project\\types\\ethers-contracts\\test\\AssetTokenHarness.sol\\AssetTokenHolderHarness.ts'
+}
+
+If you think this is a bug in Hardhat, please report it here: https://hardhat.org/report-bug
