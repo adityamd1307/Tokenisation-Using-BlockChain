@@ -1,0 +1,9 @@
+﻿# Phase 5 mutation check (5 November 2026), against ai-baseline-phase5 (3be10c0). Each mutant was applied, the named suite run, then reverted with git checkout.
+# Contract-side suite: npx hardhat test test/Phase5.scripts.test.ts (10 tests). Frontend: npm test --prefix frontend -- networks (4 tests).
+M1 scenario 7 sent without the fixed gas limit (D13): killed (1 failing: the replay suite's before hook; the cause was not inspected)
+M2 deployments/<network>.json written without ABIs (D18): killed (1 failing)
+M3a INVALID: a malformed mutant (replay reusing a deployMainFactory factory) that broke the code rather than the property. Not counted.
+M4 step 11 calls closeSale instead of withdrawProceeds: killed (1 failing: the replay suite's before hook)
+M5 VITE_RPC_URL override ignored (D16): killed (1 of 4 frontend network tests fails)
+M6 Sepolia default read RPC replaced by localhost (D16): killed (1 of 4 frontend network tests fails)
+Result: 5 of 5 valid mutants killed.
