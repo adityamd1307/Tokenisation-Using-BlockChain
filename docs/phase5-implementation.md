@@ -60,7 +60,7 @@ Observations, not changed and not verified on Sepolia:
 - **Read-after-write on a load-balanced RPC.** The replay checks state right after each receipt. If `TESTNET_RPC_URL` balances requests across nodes that lag each other, a check could read stale state and stop the replay. The replay stops at the first failed check, and a re-run starts a fresh factory, which costs the gas again.
 - **PublicNode's `eth_getLogs` limits are unknown.** The history view already splits block ranges when a provider rejects a large range. Whether PublicNode needs this was not checked.
 - **Error wording.** If the Sepolia configuration were wrong, some frontend errors would still talk about a "local chain reset". This is cosmetic.
-- **This session's transcript was not archived** by the Stop hook during the session (no `raw/` file appeared). It needs archiving or exporting by hand before the AI-log row's link is valid.
+- *Superseded (corrected 6 November 2026): "This session's transcript was not archived by the Stop hook during the session (no `raw/` file appeared)." That was wrong. The hook archived it as `raw/20261105T035633Z_2b56524a-efd4-4fd0-b884-297a6b7efde9.jsonl`, first written at 03:56Z on 5 November. The last check had been before that time, and the claim was written without checking again.*
 
 ## Task 5.3 coverage
 
