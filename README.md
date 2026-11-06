@@ -88,7 +88,7 @@ AI tools (Claude Code, Codex, claude.ai) generated the contracts, tests and fron
 |---|---|
 | [`docs/issues/INDEX.md`](docs/issues/INDEX.md) | AUD-001 to AUD-015. AUD-001 to AUD-003 are tracking issues; the rest are defects. Each defect has before/after evidence and an analysis of why the AI made the mistake. Defects from AUD-005 onward, except AUD-009 and AUD-010 (Phase 4, uncommitted at the time), also have a separate failing-test commit and fix commit |
 | [`docs/ai-logs/INDEX.md`](docs/ai-logs/INDEX.md) | Every AI session: tool, model, context given and outcome. Transcripts are in `docs/ai-logs/raw/` (emails and Hardhat dev keys redacted, decisions D9 and D10) |
-| Tags `ai-baseline-phase2`, `-phase3`, `-phase4`, `-d5`, `-phase5` | Each first complete AI generation, never edited afterwards. The pre-AI spec is tagged `spec-v0` in the local repository but has not been pushed |
+| Tags `ai-baseline-phase2`, `-phase3`, `-phase4`, `-d5`, `-phase5` | Each first complete AI generation, never edited afterwards. The pre-AI spec is tagged `spec-v0` (pushed on 6 November 2026) |
 | [`docs/evidence/`](docs/evidence/) | Evidence runs and per-issue logs |
 | [`docs/report/REPORT-MAP.md`](docs/report/REPORT-MAP.md) | Which evidence backs each section of the AI Audit Report |
 
