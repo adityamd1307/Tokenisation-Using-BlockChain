@@ -37,17 +37,17 @@ export class Blockchain {
     return new Contract(asset.sale, abis.sale, runner);
   }
 
-  async ready() {
+  async ready(provider: JsonRpcProvider | BrowserProvider = this.provider) {
     if (!this.config.AssetFactory)
       throw new Error(
         "Contracts are not configured. Start the local blockchain and run npm run deploy:local, then restart the frontend.",
       );
-    const chain = await this.provider.getNetwork();
+    const chain = await provider.getNetwork();
     if (chain.chainId !== BigInt(this.config.chainId))
       throw new Error(
-        "The public RPC is on the wrong network. Check VITE_RPC_URL and redeploy.",
+        "The RPC is on the wrong network. Check the wallet network and VITE_RPC_URL.",
       );
-    const code = await this.provider.getCode(this.config.AssetFactory);
+    const code = await provider.getCode(this.config.AssetFactory);
     if (code === "0x")
       throw new Error(
         "Factory deployment not found. The local chain may have reset. Redeploy contracts and restart the frontend.",
@@ -60,7 +60,7 @@ export class Blockchain {
         "Factory bytecode differs from this deployment. Regenerate frontend configuration.",
       );
     if (this.config.deployBlockHash) {
-      const block = await this.provider.getBlock(this.config.deployBlock);
+      const block = await provider.getBlock(this.config.deployBlock);
       if (block?.hash !== this.config.deployBlockHash)
         throw new Error(
           "Deployment belongs to an earlier blockchain session. Redeploy and restart the frontend.",
@@ -175,7 +175,19 @@ export class Blockchain {
       accounts[0].toLowerCase() !== expectedAccount.toLowerCase()
     )
       throw new Error("Wallet account changed. Review the form and try again.");
-    return new BrowserProvider(wallet, "any").getSigner(expectedAccount);
+    // AUD-016: two local chains can share an ID and deterministic addresses.
+    // Validate the signing RPC against the same deployment fingerprint as reads.
+    const provider = new BrowserProvider(wallet, "any");
+    await this.ready(provider);
+    const [currentChain, currentAccounts] = await Promise.all([
+      wallet.request({ method: "eth_chainId" }),
+      wallet.request({ method: "eth_accounts" }),
+    ]);
+    if (BigInt(currentChain) !== BigInt(this.config.chainId))
+      throw new Error("Wrong network. Review the wallet network and try again.");
+    if (currentAccounts[0]?.toLowerCase() !== expectedAccount.toLowerCase())
+      throw new Error("Wallet account changed. Review the form and try again.");
+    return provider.getSigner(expectedAccount);
   }
   async authorizeIssuer(
     wallet: WalletProvider,

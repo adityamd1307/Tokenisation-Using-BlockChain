@@ -1,0 +1,31 @@
+Traceback (most recent call last):
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/pathlib/_local.py", line 722, in mkdir
+    os.mkdir(self, mode)
+    ~~~~~~~~^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/adityamd/.solc-select/artifacts'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/private/tmp/sc4053-slither/bin/slither", line 5, in <module>
+    from slither.__main__ import main
+  File "/private/tmp/sc4053-slither/lib/python3.13/site-packages/slither/__init__.py", line 5, in <module>
+    from .slither import Slither
+  File "/private/tmp/sc4053-slither/lib/python3.13/site-packages/slither/slither.py", line 3, in <module>
+    from crytic_compile import CryticCompile, InvalidCompilation
+  File "/private/tmp/sc4053-slither/lib/python3.13/site-packages/crytic_compile/__init__.py", line 15, in <module>
+    from .compilation_unit import CompilationUnit
+  File "/private/tmp/sc4053-slither/lib/python3.13/site-packages/crytic_compile/compilation_unit.py", line 14, in <module>
+    from crytic_compile.compiler.compiler import CompilerVersion
+  File "/private/tmp/sc4053-slither/lib/python3.13/site-packages/crytic_compile/compiler/compiler.py", line 5, in <module>
+    from solc_select.solc_select import install_artifacts, installed_versions
+  File "/private/tmp/sc4053-slither/lib/python3.13/site-packages/solc_select/solc_select.py", line 38, in <module>
+    Path.mkdir(ARTIFACTS_DIR, parents=True, exist_ok=True)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/pathlib/_local.py", line 726, in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/pathlib/_local.py", line 722, in mkdir
+    os.mkdir(self, mode)
+    ~~~~~~~~^^^^^^^^^^^^
+PermissionError: [Errno 1] Operation not permitted: '/Users/adityamd/.solc-select'

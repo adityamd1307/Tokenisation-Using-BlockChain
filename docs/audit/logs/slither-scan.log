@@ -1,0 +1,168 @@
+
+Detector: arbitrary-send-erc20
+AssetSale.allocate(uint256) (contracts/AssetSale.sol#72-76) uses arbitrary from in transferFrom: assetToken.safeTransferFrom(issuer,address(this),amount) (contracts/AssetSale.sol#74)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#arbitrary-from-in-transferfrom
+
+Detector: unchecked-transfer
+AssetTokenHolderHarness.forward(IERC20,address,uint256) (contracts/test/AssetTokenHarness.sol#18-20) ignores return value by token.transfer(recipient,amount) (contracts/test/AssetTokenHarness.sol#19)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#unchecked-transfer
+
+Detector: incorrect-equality
+AssetSale.recoverUnsoldTokens() (contracts/AssetSale.sol#122-128) uses a dangerous strict equality:
+	- amount == 0 (contracts/AssetSale.sol#125)
+AssetSale.sweepExcessETH() (contracts/AssetSale.sol#107-113) uses a dangerous strict equality:
+	- excess == 0 (contracts/AssetSale.sol#109)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#dangerous-strict-equalities
+
+Detector: locked-ether
+Contract locking ether found:
+	Contract AssetSaleIssuerHarness (contracts/test/AssetSaleIssuerHarness.sol#8-42) has payable functions:
+	 - AssetSaleIssuerHarness.receive() (contracts/test/AssetSaleIssuerHarness.sol#32-41)
+	But does not have a function to withdraw the ether
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#contracts-that-lock-ether
+
+Detector: missing-zero-check
+AssetSaleIssuerHarness.execute(address,bytes).target (contracts/test/AssetSaleIssuerHarness.sol#23) lacks a zero-check on :
+		- (ok,reason) = target.call(data) (contracts/test/AssetSaleIssuerHarness.sol#24)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#missing-zero-address-validation
+
+Detector: reentrancy-benign
+Reentrancy in AssetSaleIssuerHarness.receive() (contracts/test/AssetSaleIssuerHarness.sol#32-41):
+	External calls:
+	- sale.withdrawProceeds() (contracts/test/AssetSaleIssuerHarness.sol#37-39)
+	State variables written after the call(s):
+	- reentrySucceeded = true (contracts/test/AssetSaleIssuerHarness.sol#38)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#reentrancy-vulnerabilities-3
+
+Detector: reentrancy-events
+Reentrancy in AssetSale.sweepExcessETH() (contracts/AssetSale.sol#107-113):
+	External calls:
+	- (ok,None) = issuer.call{value: excess}() (contracts/AssetSale.sol#110)
+	Event emitted after the call(s):
+	- ExcessETHSwept(excess) (contracts/AssetSale.sol#112)
+Reentrancy in AssetSale.withdrawProceeds() (contracts/AssetSale.sol#94-101):
+	External calls:
+	- (ok,None) = issuer.call{value: amount}() (contracts/AssetSale.sol#98)
+	Event emitted after the call(s):
+	- ProceedsWithdrawn(amount) (contracts/AssetSale.sol#100)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#reentrancy-vulnerabilities-4
+
+Detector: assembly
+SafeERC20._safeTransfer(IERC20,address,uint256,bool) (node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol#176-200) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol#179-199)
+SafeERC20._safeTransferFrom(IERC20,address,address,uint256,bool) (node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol#212-244) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol#221-243)
+SafeERC20._safeApprove(IERC20,address,uint256,bool) (node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol#255-279) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol#258-278)
+AssetSaleIssuerHarness.execute(address,bytes) (contracts/test/AssetSaleIssuerHarness.sol#23-30) uses assembly
+	- INLINE ASM (contracts/test/AssetSaleIssuerHarness.sol#26-28)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#assembly-usage
+
+Detector: pragma
+5 different versions of Solidity are used:
+	- Version constraint ^0.8.20 is used by:
+		-^0.8.20 (node_modules/@openzeppelin/contracts/access/AccessControl.sol#4)
+		-^0.8.20 (node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol#4)
+		-^0.8.20 (node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol#4)
+		-^0.8.20 (node_modules/@openzeppelin/contracts/utils/Context.sol#4)
+		-^0.8.20 (node_modules/@openzeppelin/contracts/utils/Pausable.sol#4)
+		-^0.8.20 (node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol#4)
+	- Version constraint >=0.8.4 is used by:
+		->=0.8.4 (node_modules/@openzeppelin/contracts/access/IAccessControl.sol#4)
+		->=0.8.4 (node_modules/@openzeppelin/contracts/interfaces/draft-IERC6093.sol#4)
+	- Version constraint >=0.6.2 is used by:
+		->=0.6.2 (node_modules/@openzeppelin/contracts/interfaces/IERC1363.sol#4)
+		->=0.6.2 (node_modules/@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol#4)
+	- Version constraint >=0.4.16 is used by:
+		->=0.4.16 (node_modules/@openzeppelin/contracts/interfaces/IERC165.sol#4)
+		->=0.4.16 (node_modules/@openzeppelin/contracts/interfaces/IERC20.sol#4)
+		->=0.4.16 (node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol#4)
+		->=0.4.16 (node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol#4)
+	- Version constraint ^0.8.24 is used by:
+		-^0.8.24 (contracts/AssetFactory.sol#2)
+		-^0.8.24 (contracts/AssetSale.sol#2)
+		-^0.8.24 (contracts/AssetToken.sol#2)
+		-^0.8.24 (contracts/test/AssetSaleIssuerHarness.sol#2)
+		-^0.8.24 (contracts/test/AssetTokenHarness.sol#2)
+		-^0.8.24 (contracts/test/ForceSendHarness.sol#2)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#different-pragma-directives-are-used
+
+Detector: solc-version
+Version constraint ^0.8.20 contains known severe issues (https://solidity.readthedocs.io/en/latest/bugs.html)
+	- VerbatimInvalidDeduplication
+	- FullInlinerNonExpressionSplitArgumentEvaluationOrder
+	- MissingSideEffectsOnSelectorAccess.
+It is used by:
+	- ^0.8.20 (node_modules/@openzeppelin/contracts/access/AccessControl.sol#4)
+	- ^0.8.20 (node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol#4)
+	- ^0.8.20 (node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol#4)
+	- ^0.8.20 (node_modules/@openzeppelin/contracts/utils/Context.sol#4)
+	- ^0.8.20 (node_modules/@openzeppelin/contracts/utils/Pausable.sol#4)
+	- ^0.8.20 (node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol#4)
+Version constraint >=0.8.4 contains known severe issues (https://solidity.readthedocs.io/en/latest/bugs.html)
+	- FullInlinerNonExpressionSplitArgumentEvaluationOrder
+	- MissingSideEffectsOnSelectorAccess
+	- AbiReencodingHeadOverflowWithStaticArrayCleanup
+	- DirtyBytesArrayToStorage
+	- DataLocationChangeInInternalOverride
+	- NestedCalldataArrayAbiReencodingSizeValidation
+	- SignedImmutables.
+It is used by:
+	- >=0.8.4 (node_modules/@openzeppelin/contracts/access/IAccessControl.sol#4)
+	- >=0.8.4 (node_modules/@openzeppelin/contracts/interfaces/draft-IERC6093.sol#4)
+Version constraint >=0.6.2 contains known severe issues (https://solidity.readthedocs.io/en/latest/bugs.html)
+	- MissingSideEffectsOnSelectorAccess
+	- AbiReencodingHeadOverflowWithStaticArrayCleanup
+	- DirtyBytesArrayToStorage
+	- NestedCalldataArrayAbiReencodingSizeValidation
+	- ABIDecodeTwoDimensionalArrayMemory
+	- KeccakCaching
+	- EmptyByteArrayCopy
+	- DynamicArrayCleanup
+	- MissingEscapingInFormatting
+	- ArraySliceDynamicallyEncodedBaseType
+	- ImplicitConstructorCallvalueCheck
+	- TupleAssignmentMultiStackSlotComponents
+	- MemoryArrayCreationOverflow.
+It is used by:
+	- >=0.6.2 (node_modules/@openzeppelin/contracts/interfaces/IERC1363.sol#4)
+	- >=0.6.2 (node_modules/@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol#4)
+Version constraint >=0.4.16 contains known severe issues (https://solidity.readthedocs.io/en/latest/bugs.html)
+	- DirtyBytesArrayToStorage
+	- ABIDecodeTwoDimensionalArrayMemory
+	- KeccakCaching
+	- EmptyByteArrayCopy
+	- DynamicArrayCleanup
+	- ImplicitConstructorCallvalueCheck
+	- TupleAssignmentMultiStackSlotComponents
+	- MemoryArrayCreationOverflow
+	- privateCanBeOverridden
+	- SignedArrayStorageCopy
+	- ABIEncoderV2StorageArrayWithMultiSlotElement
+	- DynamicConstructorArgumentsClippedABIV2
+	- UninitializedFunctionPointerInConstructor_0.4.x
+	- IncorrectEventSignatureInLibraries_0.4.x
+	- ExpExponentCleanup
+	- NestedArrayFunctionCallDecoder
+	- ZeroFunctionSelector.
+It is used by:
+	- >=0.4.16 (node_modules/@openzeppelin/contracts/interfaces/IERC165.sol#4)
+	- >=0.4.16 (node_modules/@openzeppelin/contracts/interfaces/IERC20.sol#4)
+	- >=0.4.16 (node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol#4)
+	- >=0.4.16 (node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol#4)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#incorrect-versions-of-solidity
+
+Detector: low-level-calls
+Low level call in AssetSale.withdrawProceeds() (contracts/AssetSale.sol#94-101):
+	- (ok,None) = issuer.call{value: amount}() (contracts/AssetSale.sol#98)
+Low level call in AssetSale.sweepExcessETH() (contracts/AssetSale.sol#107-113):
+	- (ok,None) = issuer.call{value: excess}() (contracts/AssetSale.sol#110)
+Low level call in AssetSaleIssuerHarness.execute(address,bytes) (contracts/test/AssetSaleIssuerHarness.sol#23-30):
+	- (ok,reason) = target.call(data) (contracts/test/AssetSaleIssuerHarness.sol#24)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#low-level-calls
+
+Detector: unindexed-event-address
+Event Pausable.Paused(address) (node_modules/@openzeppelin/contracts/utils/Pausable.sol#23) has address parameters but no indexed parameters
+Event Pausable.Unpaused(address) (node_modules/@openzeppelin/contracts/utils/Pausable.sol#28) has address parameters but no indexed parameters
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#unindexed-event-address-parameters
+. analyzed (21 contracts with 102 detectors), 23 result(s) found

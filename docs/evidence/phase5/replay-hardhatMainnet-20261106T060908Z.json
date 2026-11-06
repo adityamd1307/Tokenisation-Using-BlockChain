@@ -1,0 +1,422 @@
+{
+  "generatedAt": "2026-11-06T06:09:08.795Z",
+  "wallets": {
+    "A": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+    "B": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+    "C": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+    "D": "0x90F79bf6EB2c4f870365E785982E1f101E93b906"
+  },
+  "network": "hardhatMainnet",
+  "chainId": 31337,
+  "factory": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+  "cpt": {
+    "token": "0xa16E02E87b7454126E5E10d957A927A7F5B5d2be",
+    "sale": "0xB7A5bd0345EF1Cc5E66bf61BdeC17D2461fBd968"
+  },
+  "dlp": {
+    "token": "0xeEBe00Ac0756308ac4AaBfD76c05c4F3088B8883",
+    "sale": "0x10C6E9530F1C1AF873a391030a1D9E8ed0630D26"
+  },
+  "scenario7": {
+    "simulatedError": "RecipientNotWhitelisted",
+    "hash": "0x10d01acf31a8a5b45258aa843e2576a4dad9ed38b46cd2509fb12a68a868e799"
+  },
+  "txs": [
+    {
+      "step": 0,
+      "label": "deploy replay AssetFactory",
+      "wallet": "A",
+      "hash": "0x3349710c435e12271474e255c16f6246432cb00e7fba305408499490129f1e27",
+      "status": 1,
+      "blockNumber": 1,
+      "gasUsed": "2973114",
+      "fee": "3292491480468750",
+      "valueWei": "0"
+    },
+    {
+      "step": 1,
+      "label": "factory.authorizeIssuer(B)",
+      "wallet": "A",
+      "hash": "0x3e6862ceafd44ac9db89cee45769a3caebaee5a8063596a0a5bed26b08cc1035",
+      "status": 1,
+      "blockNumber": 2,
+      "gasUsed": "45424",
+      "fee": "44638748770944",
+      "valueWei": "0"
+    },
+    {
+      "step": 2,
+      "label": "factory.createAsset(CPT)",
+      "wallet": "B",
+      "hash": "0xa163d6ccfb5f458b66974bbaa0a8fb9f7fc967315109628ae2b80940bb90cc27",
+      "status": 1,
+      "blockNumber": 3,
+      "gasUsed": "1990493",
+      "fee": "1711942900013792",
+      "valueWei": "0"
+    },
+    {
+      "step": 3,
+      "label": "CPT.setWhitelisted(sale, true)",
+      "wallet": "B",
+      "hash": "0x42ee223dbd108e1dd5a7a8e072b81caf1de21840cbd949a9cae0a651030e16be",
+      "status": 1,
+      "blockNumber": 4,
+      "gasUsed": "48799",
+      "fee": "37071886419429",
+      "valueWei": "0"
+    },
+    {
+      "step": 3,
+      "label": "CPT.approve(sale, 5000)",
+      "wallet": "B",
+      "hash": "0xd46f78827d1f8ab11bb642c9f1ca7b2712026a724fd7bc50adb5cf2cdb48df65",
+      "status": 1,
+      "blockNumber": 5,
+      "gasUsed": "46371",
+      "fee": "30831111852957",
+      "valueWei": "0"
+    },
+    {
+      "step": 3,
+      "label": "sale.allocate(5000)",
+      "wallet": "B",
+      "hash": "0x280c4afcba0f667ec36db92bd11606dcde8174de85000da8da615e4d72251afb",
+      "status": 1,
+      "blockNumber": 6,
+      "gasUsed": "65084",
+      "fee": "37872232184740",
+      "valueWei": "0"
+    },
+    {
+      "step": 4,
+      "label": "CPT.setWhitelisted(C, true)",
+      "wallet": "B",
+      "hash": "0xf3ae3cf73b9e6e7b17044d35fa29716cc89985f64b155b5ca3123e8809234936",
+      "status": 1,
+      "blockNumber": 7,
+      "gasUsed": "48787",
+      "fee": "24848112829053",
+      "valueWei": "0"
+    },
+    {
+      "step": 5,
+      "label": "sale.buyTokens(100) paying 0.1 ETH",
+      "wallet": "C",
+      "hash": "0xa34dfa9e3e724a502b9b56271092ceace9f656942935966b8bc26affac7cc14c",
+      "status": 1,
+      "blockNumber": 8,
+      "gasUsed": "89257",
+      "fee": "39786938172191",
+      "valueWei": "100000000000000000"
+    },
+    {
+      "step": 7,
+      "label": "CPT.transfer(D, 20) with fixed gas limit (expected to revert)",
+      "wallet": "C",
+      "hash": "0x10d01acf31a8a5b45258aa843e2576a4dad9ed38b46cd2509fb12a68a868e799",
+      "status": 0,
+      "blockNumber": 9,
+      "gasUsed": "28848",
+      "fee": "11256582173232",
+      "valueWei": "0"
+    },
+    {
+      "step": 8,
+      "label": "CPT.setWhitelisted(D, true)",
+      "wallet": "B",
+      "hash": "0x72ffd3a7d3672f84dfddfde1245e71618e764f94041dd13ab504da12a0bfb574",
+      "status": 1,
+      "blockNumber": 10,
+      "gasUsed": "48799",
+      "fee": "16663624470888",
+      "valueWei": "0"
+    },
+    {
+      "step": 9,
+      "label": "CPT.transfer(D, 20)",
+      "wallet": "C",
+      "hash": "0x2494a7b1b042106c235c48e5a03b966c928de3b6ef5f7ad5af6a8d916e4055e0",
+      "status": 1,
+      "blockNumber": 11,
+      "gasUsed": "58256",
+      "fee": "17410376800080",
+      "valueWei": "0"
+    },
+    {
+      "step": 11,
+      "label": "sale.withdrawProceeds()",
+      "wallet": "B",
+      "hash": "0x3fa33f2461c3ee4cb51ef84197b73ae3b8f363487b4729d3867bc20fa5458a5b",
+      "status": 1,
+      "blockNumber": 12,
+      "gasUsed": "29586",
+      "fee": "7738954222164",
+      "valueWei": "0"
+    },
+    {
+      "step": 12,
+      "label": "factory.createAsset(DLP)",
+      "wallet": "B",
+      "hash": "0x21767dba84a375d4bcb22e87b7d5c59e97ba01ff600ecc8e69205c18a3a4df38",
+      "status": 1,
+      "blockNumber": 13,
+      "gasUsed": "2013385",
+      "fee": "460884485843485",
+      "valueWei": "0"
+    },
+    {
+      "step": 12,
+      "label": "DLP.setWhitelisted(sale, true)",
+      "wallet": "B",
+      "hash": "0x1a9328a192e9cf60190b0c56773aa662aeadde05b58063fbc4434a02216cda27",
+      "status": 1,
+      "blockNumber": 14,
+      "gasUsed": "48799",
+      "fee": "9867979135969",
+      "valueWei": "0"
+    },
+    {
+      "step": 12,
+      "label": "DLP.setWhitelisted(C, true)",
+      "wallet": "B",
+      "hash": "0xd7d7b8575f318692e87d3d4bd4881b78619254e5dfc031b22c3a0b9a1b912996",
+      "status": 1,
+      "blockNumber": 15,
+      "gasUsed": "48787",
+      "fee": "8634364436228",
+      "valueWei": "0"
+    },
+    {
+      "step": 12,
+      "label": "DLP.approve(sale, 1000)",
+      "wallet": "B",
+      "hash": "0xbb9feb5932d1aa8ea938911dc8620bd1d66971c2d95d2cf58ca068b0a817dca8",
+      "status": 1,
+      "blockNumber": 16,
+      "gasUsed": "46371",
+      "fee": "7182599690136",
+      "valueWei": "0"
+    },
+    {
+      "step": 12,
+      "label": "DLP sale.allocate(1000)",
+      "wallet": "B",
+      "hash": "0xe648a904c651a79e8819a3f0e040e16fca16429750f06779e5e38d26ce88d1bb",
+      "status": 1,
+      "blockNumber": 17,
+      "gasUsed": "65084",
+      "fee": "8822941158912",
+      "valueWei": "0"
+    },
+    {
+      "step": 12,
+      "label": "DLP sale.buyTokens(10) paying 0.02 ETH",
+      "wallet": "C",
+      "hash": "0x244414e12d352ced2e17987464db42da2a4bfb1301a82f9908b2f2e2866d7180",
+      "status": 1,
+      "blockNumber": 18,
+      "gasUsed": "89257",
+      "fee": "10590685261338",
+      "valueWei": "20000000000000000"
+    }
+  ],
+  "checks": [
+    {
+      "step": 1,
+      "description": "factory.authorisedIssuers(B)",
+      "value": "true"
+    },
+    {
+      "step": 2,
+      "description": "CPT symbol",
+      "value": "CPT"
+    },
+    {
+      "step": 2,
+      "description": "CPT balance of B",
+      "value": "10000"
+    },
+    {
+      "step": 3,
+      "description": "CPT sale inventory",
+      "value": "5000"
+    },
+    {
+      "step": 4,
+      "description": "CPT.whitelist(C)",
+      "value": "true"
+    },
+    {
+      "step": 4,
+      "description": "CPT.whitelist(D)",
+      "value": "false"
+    },
+    {
+      "step": 5,
+      "description": "cost of 100 CPT",
+      "value": "0.1"
+    },
+    {
+      "step": 6,
+      "description": "CPT balance of C",
+      "value": "100"
+    },
+    {
+      "step": 7,
+      "description": "simulated revert reason",
+      "value": "RecipientNotWhitelisted"
+    },
+    {
+      "step": 7,
+      "description": "scenario 7 receipt status",
+      "value": "0"
+    },
+    {
+      "step": 7,
+      "description": "CPT balance of C after the failed transfer",
+      "value": "100"
+    },
+    {
+      "step": 7,
+      "description": "CPT balance of D after the failed transfer",
+      "value": "0"
+    },
+    {
+      "step": 8,
+      "description": "CPT.whitelist(D)",
+      "value": "true"
+    },
+    {
+      "step": 10,
+      "description": "CPT balance of C",
+      "value": "80"
+    },
+    {
+      "step": 10,
+      "description": "CPT balance of D",
+      "value": "20"
+    },
+    {
+      "step": 10,
+      "description": "Purchased(C) events",
+      "value": "1"
+    },
+    {
+      "step": 10,
+      "description": "Purchased(C) quantity",
+      "value": "100"
+    },
+    {
+      "step": 10,
+      "description": "Transfer(C -> D) events",
+      "value": "1"
+    },
+    {
+      "step": 10,
+      "description": "Transfer(C -> D) value",
+      "value": "20"
+    },
+    {
+      "step": 11,
+      "description": "CPT unclaimed proceeds before withdrawal",
+      "value": "100000000000000000"
+    },
+    {
+      "step": 11,
+      "description": "B's ETH gain net of the withdrawal fee",
+      "value": "100000000000000000"
+    },
+    {
+      "step": 11,
+      "description": "CPT unclaimed proceeds after withdrawal",
+      "value": "0"
+    },
+    {
+      "step": 11,
+      "description": "CPT sale ETH balance after withdrawal",
+      "value": "0"
+    },
+    {
+      "step": 12,
+      "description": "DLP symbol",
+      "value": "DLP"
+    },
+    {
+      "step": 12,
+      "description": "registered assets",
+      "value": "2"
+    },
+    {
+      "step": 12,
+      "description": "cost of 10 DLP",
+      "value": "0.02"
+    },
+    {
+      "step": 12,
+      "description": "CPT balance of C",
+      "value": "80"
+    },
+    {
+      "step": 12,
+      "description": "DLP balance of C",
+      "value": "10"
+    },
+    {
+      "step": 12,
+      "description": "CPT balance of D",
+      "value": "20"
+    },
+    {
+      "step": 12,
+      "description": "DLP balance of D",
+      "value": "0"
+    },
+    {
+      "step": 12,
+      "description": "DLP balance of B",
+      "value": "4000"
+    },
+    {
+      "step": 12,
+      "description": "CPT total supply",
+      "value": "10000"
+    },
+    {
+      "step": 12,
+      "description": "DLP total supply",
+      "value": "5000"
+    },
+    {
+      "step": 12,
+      "description": "DLP whitelist is separate: D not approved for DLP",
+      "value": "false"
+    }
+  ],
+  "totals": {
+    "A": {
+      "gasUsed": "3018538",
+      "fee": "3337130229239694",
+      "valueWei": "0",
+      "txCount": 2
+    },
+    "B": {
+      "gasUsed": "4500345",
+      "fee": "2362361192257753",
+      "valueWei": "0",
+      "txCount": 12
+    },
+    "C": {
+      "gasUsed": "265618",
+      "fee": "79044582406841",
+      "valueWei": "120000000000000000",
+      "txCount": 4
+    },
+    "D": {
+      "gasUsed": "0",
+      "fee": "0",
+      "valueWei": "0",
+      "txCount": 0
+    }
+  }
+}

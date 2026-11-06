@@ -1,0 +1,44 @@
+[
+  {
+    "command": "npm run compile -- --force",
+    "exitCode": 0,
+    "seconds": 1.58,
+    "log": "logs/baseline-rerun-compile.log"
+  },
+  {
+    "command": "npm test",
+    "exitCode": 0,
+    "seconds": 2.08,
+    "log": "logs/baseline-rerun-contracts.log"
+  },
+  {
+    "command": "npx tsc --noEmit",
+    "exitCode": 0,
+    "seconds": 0.72,
+    "log": "logs/baseline-rerun-root-typecheck.log"
+  },
+  {
+    "command": "npm test --prefix frontend",
+    "exitCode": 0,
+    "seconds": 3.67,
+    "log": "logs/baseline-rerun-frontend-tests.log"
+  },
+  {
+    "command": "npm run build --prefix frontend",
+    "exitCode": 0,
+    "seconds": 3.64,
+    "log": "logs/baseline-rerun-frontend-build.log"
+  },
+  {
+    "command": "npm run replay:ephemeral",
+    "exitCode": 0,
+    "seconds": 0.94,
+    "log": "logs/baseline-rerun-replay.log"
+  },
+  {
+    "command": "npx hardhat run scripts/setupDemo.ts --network hardhatMainnet",
+    "exitCode": 0,
+    "seconds": 1.05,
+    "log": "logs/baseline-rerun-setup-demo.log"
+  }
+]

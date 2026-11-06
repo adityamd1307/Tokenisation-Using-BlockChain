@@ -98,11 +98,14 @@ describe("Local frontend-service integration", () => {
     expect((await api.account(cpt, investor1)).balance).toBe(100n);
     expect((await api.asset("0")).inventory).toBe(4900n);
     expect((await api.asset("0")).proceeds).toBe(parseEther("0.1"));
+    // Phase 6 exact two-buyer scenario; exercise the production service for both.
+    await confirm(api.buy(wallet(investor2), investor2, cpt, "50"));
+    expect((await api.asset("0")).proceeds).toBe(parseEther("0.15"));
     await confirm(
       api.transfer(wallet(investor1), investor1, cpt, investor2, "20"),
     );
     expect((await api.account(cpt, investor1)).balance).toBe(80n);
-    expect((await api.account(cpt, investor2)).balance).toBe(20n);
+    expect((await api.account(cpt, investor2)).balance).toBe(70n);
     await expect(
       api.buy(wallet(unapproved), unapproved, cpt, "1"),
     ).rejects.toThrow("not approved");
@@ -113,7 +116,7 @@ describe("Local frontend-service integration", () => {
     await expect(
       api.token(cpt, signers[2]).transfer(unapproved, 1n),
     ).rejects.toThrow();
-    expect((await api.asset("0")).inventory).toBe(4900n);
+    expect((await api.asset("0")).inventory).toBe(4850n);
     expect((await api.account(cpt, investor1)).balance).toBe(80n);
     await confirm(
       api.manageSale(wallet(issuer), issuer, cpt, "withdrawProceeds"),
@@ -129,7 +132,7 @@ describe("Local frontend-service integration", () => {
       api.manageSale(wallet(issuer), issuer, cpt, "recoverUnsoldTokens"),
     );
     expect((await api.asset("0")).inventory).toBe(0n);
-    expect((await api.account(cpt, issuer)).balance).toBe(9900n);
+    expect((await api.account(cpt, issuer)).balance).toBe(9850n);
     await confirm(
       api.createAsset(wallet(issuer), issuer, {
         name: "Digital Licensing Token",
@@ -195,7 +198,7 @@ describe("Local frontend-service integration", () => {
     ).rejects.toThrow();
     expect((await api.account(cpt, investor1)).balance).toBe(80n);
     console.log(
-      "Verified local lifecycle: CPT 80 / 20 investor balances; 0.1 ETH withdrawn; 4,900 unsold recovered; DLT holding 50 force-transferred after revocation; paused CPT blocks transfers; independent eligibility; no duplicate purchase or forced-transfer event.",
+      "Verified local lifecycle: CPT 80 / 70 investor balances; 0.15 ETH withdrawn; 4,850 unsold recovered; issuer 9,850 CPT; DLT holding 50 force-transferred after revocation; paused CPT blocks transfers; independent eligibility; no duplicate purchase or forced-transfer event.",
     );
   });
 });

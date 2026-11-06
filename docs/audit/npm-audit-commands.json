@@ -1,0 +1,10 @@
+[
+  {
+    "command": "npm audit --json",
+    "exitCode": 1
+  },
+  {
+    "command": "npm audit --prefix frontend --json",
+    "exitCode": 0
+  }
+]
