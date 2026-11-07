@@ -133,6 +133,27 @@ No new defect in the dApp was found, so no new AUD issue was opened. Observation
 - Codex's environment and session narrative.
 - Production use.
 
+## 8a. After verification: merging origin/main (7 November 2026)
+
+Before the push, `origin/main` had gained adityamd's auction branch through PRs #3 and #4 (d9ff2f5, b228460). It is based on 0b1249e, so it does not contain Phase 6. It adds subscription offerings, ERC-3643-lite compliance, an identity registry and MockUSD, and changes `contracts/AssetFactory.sol`: 165 files in all. It also brings its own AUD-016 to AUD-018 and its own `docs/AI_Audit_Report.md`. With the user's approval, this session merged it into main (c263253) and resolved 7 conflicts; the merge commit message records how each was resolved.
+
+| Check on the merged tree | Result |
+|---|---|
+| `npm test` | 240 passing (origin/main's 229 plus Phase 6's 11) |
+| `npm test --prefix frontend` | 144 passed in 12 files (140 plus Phase 6's 4, including the AUD-030 regressions) |
+| `npx tsc --noEmit`, frontend build | pass |
+| `npm run test:integration` on a fresh node | 3 suites (lifecycle, compliance, subscriptions), 3 passed |
+| Phase 6 audit demo / Phase 5 replay | 31 checks pass / 12 steps and 34 checks pass |
+| Runtime sizes, default and production | AssetFactory 13598 (+53 from origin/main's change), AssetToken 4124, AssetSale 3132; 10978 bytes below EIP-170 |
+| `ready()` in `blockchain.ts` | byte-identical to c7cb0d1 |
+
+These results show that the two lines of work build and pass their own tests together. **They are not a review of the subscription or compliance feature**, which this session did not audit. Things to know about it:
+- It modifies the production AssetFactory.
+- Like Phase 6, its issues were recorded "without commits", with no `test(AUD-NNN)`/`fix(AUD-NNN)` commits.
+- Its commits ("initial commit", "feature-2") have no CLAUDE.md prefix.
+- It commits a file named `project (1).pdf` at the repository root. If that is the course brief, the team should check whether it may sit in a public repository.
+- Both lines of work wrote an eight-section `AI_Audit_Report.md`. They are now `docs/AI_Audit_Report.md` (Phase 6) and `docs/AI_Audit_Report-subscription.md`. The team must consolidate them into one report.
+
 ## 9. For adityamd
 
 - **Phase 6 has been merged.** Your AUD-016 is **AUD-030 on main**. Raw logs and the source manifest keep the old number.

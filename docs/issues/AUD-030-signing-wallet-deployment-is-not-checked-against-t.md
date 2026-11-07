@@ -1,6 +1,8 @@
 # AUD-030 / SEC-013: Signing wallet deployment is not checked against the public RPC
 
-Numbering: commit c7cb0d1 (origin/phase-6) files this issue as AUD-016. It was renumbered AUD-030 on main on 7 November 2026, because AUD-016 and AUD-017 are used on `frontend-redesign` and AUD-018 to AUD-029 are left for the independent review pass. The raw logs under `docs/audit/logs/`, `docs/audit/source-manifest.json` and `docs/ai-logs/phase6-session.md` keep the original number. See `docs/issues/INDEX.md`.
+Numbering: commit c7cb0d1 (origin/phase-6) files this issue as AUD-016. It was renumbered AUD-030 on main on 7 November 2026, because AUD-016 and AUD-017 are used on `frontend-redesign` and AUD-018 to AUD-029 are left for the independent review pass. The raw logs under `docs/audit/logs/`, `docs/audit/source-manifest.json` and `docs/ai-logs/phase6-session.md` keep the original number. Later the same day, origin/main published its own AUD-016 to AUD-018 (subscription and compliance work). AUD-030 is distinct from all of them. See `docs/issues/INDEX.md`.
+
+After that merge (c263253), origin/main had added a narrower wallet-side check of its own, for regulated deployments only. Both checks are kept: Phase 6's `ready(provider)` validation and recheck run for every signer, after origin/main's requirement that a regulated deployment carry a `runtimeCodeHash`. On the merged tree, `signingDeployment.security.test.ts` passes within 144 frontend tests.
 
 Status: fixed (c7cb0d1); severity: medium; category: frontend transaction correctness. Found by Codex during Phase 6 source review and failing regression. Baseline: `0b1249e`. No commits requested or made.
 
