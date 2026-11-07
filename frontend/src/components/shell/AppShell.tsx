@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { CircleAlert, TriangleAlert } from "lucide-react";
 import { useWallet } from "../../context/WalletContext";
+import { useData } from "../../context/DataContext";
 import { targetNetwork } from "../../config/networks";
 import { Sidebar } from "./Sidebar";
 import { TopBar } from "./TopBar";
@@ -47,8 +48,20 @@ export function NetworkBanner() {
 
 export function AppShell() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { pathname } = useLocation();
-  useEffect(() => setMenuOpen(false), [pathname]);
+  const location = useLocation();
+  const { refreshRegistry } = useData();
+  useEffect(() => {
+    setMenuOpen(false);
+    refreshRegistry();
+    // refreshRegistry is a fresh closure each render; run on navigation only
+    // (location.key changes on every navigation, even to the same path).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.key]);
+  useEffect(() => {
+    const onFocus = () => refreshRegistry();
+    window.addEventListener("focus", onFocus);
+    return () => window.removeEventListener("focus", onFocus);
+  }, [refreshRegistry]);
   useEffect(() => {
     if (!menuOpen) return;
     const close = (event: KeyboardEvent) => {

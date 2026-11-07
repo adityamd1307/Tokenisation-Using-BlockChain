@@ -1,0 +1,60 @@
+﻿node.exe : [WebServer] (node:18664) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+At line:1 char:1
++ & "C:\Users\laksh\AppData\Local\Microsoft\WinGet\Packages\OpenJS.Node ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([WebServer] (no... env being set.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:12340) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 12 tests using 1 worker
+
+(node:7092) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 e2e\01-flows.spec.ts:26:1 › 1. connect wallet shows address, role and network (2.7s)
+  ok  2 e2e\01-flows.spec.ts:34:1 › 2. issuer verifies an investor (2.2s)
+  ok  3 e2e\01-flows.spec.ts:44:1 › 3. investor subscribes (DvP: ETH paid and units delivered in one transaction) (910ms)
+  ok  4 e2e\01-flows.spec.ts:57:1 › 4. investor transfers to another verified investor (715ms)
+  ok  5 e2e\01-flows.spec.ts:66:1 › 5. transfer to an unverified address is blocked with the reason (269ms)
+  ok  6 e2e\01-flows.spec.ts:78:1 › 6. issuer revokes (freezes) an investor's eligibility (801ms)
+  ok  7 e2e\01-flows.spec.ts:88:1 › 7. a revoked (frozen) holder cannot transfer (1.9s)
+  ok  8 e2e\01-flows.spec.ts:100:1 › 7b. issuer force-transfers the revoked holding to a verified investor (817ms)
+  x   9 e2e\01-flows.spec.ts:110:1 › 8. pause blocks transfers and subscriptions, unpause restores them (20.7s)
+  -  10 e2e\01-flows.spec.ts:129:1 › 9. activity log labels every operation from real logs
+  -  11 e2e\01-flows.spec.ts:136:1 › 10. issuer funds more inventory with approve, then deposit
+  -  12 e2e\01-flows.spec.ts:147:1 › no console errors or warnings
+
+
+  1) e2e\01-flows.spec.ts:110:1 › 8. pause blocks transfers and subscriptions, unpause restores them 
+
+    Error: expect(locator).toHaveAccessibleDescription(expected) failed
+
+    Locator:  getByRole('button', { name: 'Transfer' })
+    Expected: "This asset is paused by its issuer. No tokens can move until it is unpaused."
+    Received: ""
+    Timeout:  20000ms
+
+    Call log:
+      - Expect "toHaveAccessibleDescription" getByRole('button', { name: 'Transfer' }) with timeout 20000ms
+      - waiting for getByRole('button', { name: 'Transfer' })
+        43 × locator resolved to <button type="submit" class="btn btn--primary">Transfer</button>
+           - unexpected value ""
+
+
+      117 |   await investor.getByLabel("Recipient address").fill(accounts.unapproved);
+      118 |   await investor.getByLabel("Units to send").fill("1");
+    > 119 |   await expect(investor.getByRole("button", { name: "Transfer" })).toHaveAccessibleDescription(PAUSED);
+          |                                                                    ^
+      120 |   await nav(investor, "/funds/0/subscribe");
+      121 |   await investor.getByLabel("Units to subscribe").fill("1");
+      122 |   await expect(investor.getByRole("button", { name: "Subscribe" })).toHaveAccessibleDescription(PAUSED);
+        at C:\Users\laksh\OneDrive - Nanyang Technological University\NTU\Y4S1\SC4053\Project\frontend\e2e\01-flows.spec.ts:119:68
+
+    Error Context: test-results\01-flows-8-pause-blocks-tr-e4c5a-tions-unpause-restores-them\error-context.md
+
+  1 failed
+    e2e\01-flows.spec.ts:110:1 › 8. pause blocks transfers and subscriptions, unpause restores them 
+  3 did not run
+  8 passed (40.8s)

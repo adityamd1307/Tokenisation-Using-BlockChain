@@ -26,3 +26,4 @@ types/ethers-contracts/
 # Evidence kit source (unzipped; files already copied to repo root)
 sc4053-evidence-kit/
 sc4053-evidence-kit.zip
+frontend/.e2e-chain-snapshot.json

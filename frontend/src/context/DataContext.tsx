@@ -8,6 +8,8 @@ type Read<T> = ReturnType<typeof useAsync<T>>;
 interface Data {
   revision: number;
   refresh: () => void;
+  /** Re-reads only the public fund registry (prices, inventory, paused, closed). */
+  refreshRegistry: () => void;
   /** The fund registry, read once and shared by the shell and every page. */
   assets: Read<Asset[]>;
   /** The connected wallet's per-fund roles, read once and shared. */
@@ -17,10 +19,13 @@ const DataContext = createContext<Data | null>(null);
 
 export function DataProvider({ children }: { children: ReactNode }) {
   const [revision, setRevision] = useState(0);
+  // Other users' actions (e.g. an issuer pausing) change fund state; the public
+  // registry is re-read on every navigation so pre-flight checks are not stale.
+  const [tick, setTick] = useState(0);
   const wallet = useWallet();
   // Only public registry data is retained during refresh. Account reads always invalidate.
   const assets = useAsync(
-    `registry:${revision}`,
+    `registry:${revision}:${tick}`,
     () => blockchain.assets(),
     true,
     true,
@@ -42,6 +47,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
           setRevision((r) => r + 1);
           wallet.refresh();
         },
+        refreshRegistry: () => setTick((t) => t + 1),
         assets,
         access,
       }}

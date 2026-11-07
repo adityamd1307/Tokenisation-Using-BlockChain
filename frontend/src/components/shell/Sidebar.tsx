@@ -31,7 +31,7 @@ function Group({ label, items }: { label: string; items: Item[] }) {
     <div className="nav-group" role="group" aria-label={label}>
       <span className="nav-group__label">{label}</span>
       {items.map(({ to, label: text, icon: Icon, end }) => (
-        <NavLink key={to} to={to} end={end} className="nav-link">
+        <NavLink key={text} to={to} end={end} className="nav-link">
           <Icon aria-hidden />
           {text}
         </NavLink>
