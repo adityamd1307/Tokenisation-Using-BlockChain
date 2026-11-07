@@ -1,0 +1,12 @@
+
+> rwa-tokenisation@1.0.0 deploy:local
+> hardhat run scripts/deploy.ts --network localhost
+
+
+Network: localhost (chain 31337)
+Admin (Wallet A): 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+AssetFactory deployed to: 0x0165878A594ca255338adfa4d48449f69242Eb8F
+Deployment tx: 0xc884fd2e17bd672d7812c3cab82b805fca6b1bd5613dc2cd58dc2472459a3d10 (block 48)
+Wrote frontend/src/config/addresses.json
+Wrote deployments/localhost.json
+Synced all three frontend ABIs from compiled artifacts.

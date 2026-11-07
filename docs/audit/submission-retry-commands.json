@@ -1,0 +1,22 @@
+[
+  {
+    "command": "npm run test:integration",
+    "exitCode": 0,
+    "log": "logs/submission-retry-integration.log"
+  },
+  {
+    "command": "npm run deploy:local",
+    "exitCode": 0,
+    "log": "logs/submission-retry-deploy.log"
+  },
+  {
+    "command": "npm run demo:local",
+    "exitCode": 0,
+    "log": "logs/submission-retry-seed.log"
+  },
+  {
+    "command": "npm run build --prefix frontend",
+    "exitCode": 0,
+    "log": "logs/submission-retry-build.log"
+  }
+]

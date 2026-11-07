@@ -1,0 +1,197 @@
+{
+  "AssetToken": {
+    "runtimeBytes": 4124,
+    "functions": [
+      {
+        "signature": "COMPLIANCE_ROLE()",
+        "mutability": "view"
+      },
+      {
+        "signature": "DEFAULT_ADMIN_ROLE()",
+        "mutability": "view"
+      },
+      {
+        "signature": "allowance(address,address)",
+        "mutability": "view"
+      },
+      {
+        "signature": "approve(address,uint256)",
+        "mutability": "nonpayable"
+      },
+      {
+        "signature": "balanceOf(address)",
+        "mutability": "view"
+      },
+      {
+        "signature": "decimals()",
+        "mutability": "pure"
+      },
+      {
+        "signature": "forcedTransfer(address,address,uint256)",
+        "mutability": "nonpayable"
+      },
+      {
+        "signature": "getRoleAdmin(bytes32)",
+        "mutability": "view"
+      },
+      {
+        "signature": "grantRole(bytes32,address)",
+        "mutability": "nonpayable"
+      },
+      {
+        "signature": "hasRole(bytes32,address)",
+        "mutability": "view"
+      },
+      {
+        "signature": "isWhitelisted(address)",
+        "mutability": "view"
+      },
+      {
+        "signature": "issuer()",
+        "mutability": "view"
+      },
+      {
+        "signature": "name()",
+        "mutability": "view"
+      },
+      {
+        "signature": "pause()",
+        "mutability": "nonpayable"
+      },
+      {
+        "signature": "paused()",
+        "mutability": "view"
+      },
+      {
+        "signature": "renounceRole(bytes32,address)",
+        "mutability": "nonpayable"
+      },
+      {
+        "signature": "revokeRole(bytes32,address)",
+        "mutability": "nonpayable"
+      },
+      {
+        "signature": "setWhitelisted(address,bool)",
+        "mutability": "nonpayable"
+      },
+      {
+        "signature": "supportsInterface(bytes4)",
+        "mutability": "view"
+      },
+      {
+        "signature": "symbol()",
+        "mutability": "view"
+      },
+      {
+        "signature": "totalSupply()",
+        "mutability": "view"
+      },
+      {
+        "signature": "transfer(address,uint256)",
+        "mutability": "nonpayable"
+      },
+      {
+        "signature": "transferFrom(address,address,uint256)",
+        "mutability": "nonpayable"
+      },
+      {
+        "signature": "unpause()",
+        "mutability": "nonpayable"
+      },
+      {
+        "signature": "whitelist(address)",
+        "mutability": "view"
+      }
+    ]
+  },
+  "AssetFactory": {
+    "runtimeBytes": 13545,
+    "functions": [
+      {
+        "signature": "admin()",
+        "mutability": "view"
+      },
+      {
+        "signature": "authorisedIssuers(address)",
+        "mutability": "view"
+      },
+      {
+        "signature": "authorizeIssuer(address)",
+        "mutability": "nonpayable"
+      },
+      {
+        "signature": "createAsset(string,string,string,uint8,uint256,uint256)",
+        "mutability": "nonpayable"
+      },
+      {
+        "signature": "getAsset(uint256)",
+        "mutability": "view"
+      },
+      {
+        "signature": "getAssetCount()",
+        "mutability": "view"
+      },
+      {
+        "signature": "revokeIssuer(address)",
+        "mutability": "nonpayable"
+      },
+      {
+        "signature": "tokenToSale(address)",
+        "mutability": "view"
+      }
+    ]
+  },
+  "AssetSale": {
+    "runtimeBytes": 3132,
+    "functions": [
+      {
+        "signature": "allocate(uint256)",
+        "mutability": "nonpayable"
+      },
+      {
+        "signature": "assetToken()",
+        "mutability": "view"
+      },
+      {
+        "signature": "availableTokens()",
+        "mutability": "view"
+      },
+      {
+        "signature": "buyTokens(uint256)",
+        "mutability": "payable"
+      },
+      {
+        "signature": "closeSale()",
+        "mutability": "nonpayable"
+      },
+      {
+        "signature": "issuer()",
+        "mutability": "view"
+      },
+      {
+        "signature": "pricePerToken()",
+        "mutability": "view"
+      },
+      {
+        "signature": "recoverUnsoldTokens()",
+        "mutability": "nonpayable"
+      },
+      {
+        "signature": "saleClosed()",
+        "mutability": "view"
+      },
+      {
+        "signature": "sweepExcessETH()",
+        "mutability": "nonpayable"
+      },
+      {
+        "signature": "unclaimedProceeds()",
+        "mutability": "view"
+      },
+      {
+        "signature": "withdrawProceeds()",
+        "mutability": "nonpayable"
+      }
+    ]
+  }
+}

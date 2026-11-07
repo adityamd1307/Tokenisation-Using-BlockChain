@@ -1,0 +1,27 @@
+[
+  {
+    "command": "npm test",
+    "exitCode": 0,
+    "log": "logs/submission-contracts.log"
+  },
+  {
+    "command": "npx tsc --noEmit",
+    "exitCode": 0,
+    "log": "logs/submission-typecheck.log"
+  },
+  {
+    "command": "npm test --prefix frontend",
+    "exitCode": 0,
+    "log": "logs/submission-frontend-tests.log"
+  },
+  {
+    "command": "npm run build --prefix frontend",
+    "exitCode": 0,
+    "log": "logs/submission-frontend-build.log"
+  },
+  {
+    "command": "npm run test:integration",
+    "exitCode": 1,
+    "log": "logs/submission-integration.log"
+  }
+]

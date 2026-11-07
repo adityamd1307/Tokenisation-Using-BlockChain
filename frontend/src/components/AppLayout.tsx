@@ -33,7 +33,7 @@ export function AppLayout() {
           <WalletSummary />
           <div className="environment">
             <span className="dot" />
-            LOCAL DEVELOPMENT<span>PHASE 04</span>
+            {targetNetwork.name}<span>ACADEMIC DEMO</span>
           </div>
         </div>
       </aside>

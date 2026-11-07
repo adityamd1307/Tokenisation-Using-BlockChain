@@ -2,7 +2,7 @@
 
 An academic dApp for NTU SC4053. Authorised issuers tokenise fictional real-world and digital assets as ERC-20 tokens and sell them at a fixed price to whitelisted investors. All ownership records and compliance rules live on Ethereum. The repository is also graded on how the AI-written code was audited, so every change carries an evidence trail (see [Audit trail](#audit-trail)).
 
-**Status (5 November 2026):** contracts, frontend and local tests are complete. The Phase 5 Sepolia deployment and replay scripts are built and verified locally ([Phase 5](docs/phase5-implementation.md)). Two things remain: a genuine MetaMask browser check, which is the D14 local rehearsal ([AUD-002](docs/issues/AUD-002-frontend-dashboards-and-wallet-integration-are-uni.md)), and running the deployment on Sepolia ([AUD-003](docs/issues/AUD-003-deployment-and-verification-tooling-are-incomplete.md)).
+**Status (6 November 2026):** Phase 6 local audit, remediation, tests and reports are complete. The audit fixed a signing-provider deployment-validation gap; 153 contract/script tests, 122 frontend tests and the real-chain service integration pass. **Full submission acceptance is still pending:** real MetaMask/browser rehearsal, required Sepolia deployment evidence, and team review of the course brief and report identity/contribution fields. See the [final audit summary](docs/audit/final-audit-summary.md).
 
 ## What it does
 
@@ -50,15 +50,15 @@ Open **http://127.0.0.1:5173**. You can browse without a wallet. To sign transac
 
 Use Hardhat local accounts 0–4 for the admin, the issuer, investor 1, investor 2 and an unapproved investor. Only import these development accounts into a separate development wallet or profile. Hardhat prints their publicly known keys in your terminal; never use them for real funds or commit them. The application never asks for, stores or reads wallet private keys or seed phrases.
 
-Every deployment writes `frontend/src/config/addresses.json` and syncs the three compiled ABIs. After restarting or resetting the chain, deploy again and restart Vite. The app checks the deployment's block hash and runtime bytecode hash, not just its address. `npm run deploy:ephemeral` deploys to a throwaway in-process chain instead.
+Every deployment writes `frontend/src/config/addresses.json` and syncs the three compiled ABIs. After restarting or resetting the chain, deploy again and restart Vite. The app checks the deployment's block hash and runtime bytecode hash through both the public RPC and signing wallet RPC. `npm run deploy:ephemeral` deploys to a throwaway in-process chain instead.
 
 The UI has no pause or forced-transfer controls (spec-v1 §7 does not require them). The issuer calls them directly on the token contract. Forced transfers do appear in the transaction history.
 
 ## Tests
 
 ```bash
-npm test                              # 142 contract and script tests
-npm test --prefix frontend            # 118 frontend behaviour tests
+npm test                              # 153 contract and script tests
+npm test --prefix frontend            # 122 frontend behaviour tests
 npm run build --prefix frontend       # TypeScript + production Vite build
 npx tsc --noEmit                      # root scripts and contract tests
 npm run test:integration              # needs `npm run node` running; deploys its own fixture
@@ -66,7 +66,7 @@ npm run replay:ephemeral              # the 12 Task 5.1 steps in-process, Hardha
 bash scripts/evidence.sh <label>      # build, test, gas, coverage (slither if installed) into docs/evidence/runs/
 ```
 
-The integration suite runs the production frontend services against real local contracts. It signs through an EIP-1193 adapter over Hardhat's unlocked accounts, so it does not test MetaMask. It covers the full lifecycle, including a forced transfer and a pause. The counts above are from 5 November 2026. Contract line coverage is 98.79%.
+The integration suite runs the production frontend services against real local contracts. It signs through an EIP-1193 adapter over Hardhat's unlocked accounts, so it does not test MetaMask. It covers the full lifecycle, including a forced transfer and a pause. The counts above are from 6 November 2026. Each production contract has 100% measured line/statement coverage; including test helpers, line coverage is 99.25%. These measurements are not a proof of security.
 
 ## Sepolia deployment (Phase 5)
 
@@ -86,7 +86,7 @@ AI tools (Claude Code, Codex, claude.ai) generated the contracts, tests and fron
 
 | Where | What |
 |---|---|
-| [`docs/issues/INDEX.md`](docs/issues/INDEX.md) | AUD-001 to AUD-015. AUD-001 to AUD-003 are tracking issues; the rest are defects. Each defect has before/after evidence and an analysis of why the AI made the mistake. Defects from AUD-005 onward, except AUD-009 and AUD-010 (Phase 4, uncommitted at the time), also have a separate failing-test commit and fix commit |
+| [`docs/issues/INDEX.md`](docs/issues/INDEX.md) | AUD-001 to AUD-016. AUD-001 to AUD-003 are tracking issues; the rest record security, correctness or reproducibility issues. Each defect has before/after evidence and an analysis of why the AI made the mistake. Defects from AUD-005 onward, except AUD-009 and AUD-010 (Phase 4, uncommitted at the time), also have a separate failing-test commit and fix commit |
 | [`docs/ai-logs/INDEX.md`](docs/ai-logs/INDEX.md) | Every AI session: tool, model, context given and outcome. Transcripts are in `docs/ai-logs/raw/` (emails and Hardhat dev keys redacted, decisions D9 and D10) |
 | Tags `ai-baseline-phase2`, `-phase3`, `-phase4`, `-d5`, `-phase5` | Each first complete AI generation, never edited afterwards. The pre-AI spec is tagged `spec-v0` (pushed on 6 November 2026) |
 | [`docs/evidence/`](docs/evidence/) | Evidence runs and per-issue logs |
@@ -95,3 +95,25 @@ AI tools (Claude Code, Codex, claude.ai) generated the contracts, tests and fron
 Commit prefixes show who wrote what: `ai:`, `human:`, `test(AUD-NNN):`, `fix(AUD-NNN):`, `docs:`, `evidence:`, `chore:`. Implementation notes: [Phase 2](docs/phase2-implementation.md), [Phase 3](docs/phase3-implementation.md), [Phase 4](docs/phase4-implementation.md), [D5](docs/d5-implementation.md), [Phase 5](docs/phase5-implementation.md).
 
 Academic demonstration only. Assets and token prices are simulated. Tokens do not represent legally enforceable ownership or investment claims.
+
+## Phase 6 audit and submission package
+
+```bash
+# Exact Phase 6 CPT/DLT scenario; local ephemeral chain only
+npx hardhat run scripts/auditDemo.ts --network hardhatMainnet
+# Additional targeted attack tests
+npx hardhat test mocha test/security/Phase6.security.test.ts
+```
+
+The exact demo records 31 checks and 18 mined transactions (three expected reverts). Final CPT balances: issuer 9,850; Investor A 80; Investor B 70; sale 0; supply 10,000. Proceeds withdrawn: 0.15 ETH. Its evidence is [final-demo.json](docs/audit/final-demo.json); these are local transactions, not Sepolia records.
+
+- [AI Audit Report — all eight required sections](docs/AI_Audit_Report.md)
+- [Final Technical Report](docs/Final_Technical_Report.md)
+- [Final Demonstration Guide and pending manual checklist](docs/Final_Demo_Guide.md)
+- [Deployment Guide](docs/Deployment_Guide.md)
+- [Baseline](docs/audit/baseline-results.md), [threat model](docs/audit/threat-model.md), [manual review](docs/audit/manual-review.md)
+- [Findings](docs/audit/security-findings.md), [Slither triage](docs/audit/slither-summary.md), [dependency review](docs/audit/dependency-review.md)
+- [Test results](docs/audit/test-results.md), [coverage/gas](docs/audit/coverage-summary.md), [remediation log](docs/audit/remediation-log.md)
+- [Changed-file manifest](docs/audit/changed-files.md), [submission readiness](docs/audit/final-audit-summary.md)
+
+Slither executed with 29 findings, all classified; no new production-contract exploit was confirmed. Root npm audit flags development-tool dependencies; frontend and root production-only scans report zero. Compiler 0.8.24 has newer advisories with residual applicability uncertainty. Issuer/delegated admin recovery powers are trusted by design; the software is not approved for real assets or production funds. Full MetaMask and testnet acceptance remain outstanding. No public transactions or Git commits were made during this audit.

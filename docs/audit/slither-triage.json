@@ -1,0 +1,263 @@
+[
+  {
+    "id": "SL-001",
+    "check": "arbitrary-send-erc20",
+    "toolSeverity": "High",
+    "classification": "False positive",
+    "reason": "allocate is onlyIssuer; from is the immutable issuer, destination is this sale, and issuer allowance is required. An unrelated caller cannot choose a victim.",
+    "slitherId": "67a34b649541d2c75b83a633b93bd3ea552aa86e09be583328bfe663bbc6974e",
+    "description": "AssetSale.allocate(uint256) (contracts/AssetSale.sol#72-76) uses arbitrary from in transferFrom: assetToken.safeTransferFrom(issuer,address(this),amount) (contracts/AssetSale.sol#74)\n"
+  },
+  {
+    "id": "SL-002",
+    "check": "unchecked-transfer",
+    "toolSeverity": "High",
+    "classification": "Informational finding",
+    "reason": "Test-only adversarial/holder harness, never constructed by the factory or deployment scripts. The intentionally permissive or receiving behavior enables negative tests; it is not a supported production contract.",
+    "slitherId": "b2499e4f0d1431c54cca19e4cdd293729ac2ff0aaa3922647255dd3fd1b1e023",
+    "description": "AssetTokenHolderHarness.forward(IERC20,address,uint256) (contracts/test/AssetTokenHarness.sol#18-20) ignores return value by token.transfer(recipient,amount) (contracts/test/AssetTokenHarness.sol#19)\n"
+  },
+  {
+    "id": "SL-003",
+    "check": "incorrect-equality",
+    "toolSeverity": "Medium",
+    "classification": "False positive",
+    "reason": "Rejecting exactly zero inventory/excess is intentional. Any positive amount remains recoverable; donated tokens or forced ETH cannot make a positive balance fail this condition.",
+    "slitherId": "5d3d341541b1e689bd8fb9a51c604121db9ccc6e7628462f9d30b432ca091230",
+    "description": "AssetSale.sweepExcessETH() (contracts/AssetSale.sol#107-113) uses a dangerous strict equality:\n\t- excess == 0 (contracts/AssetSale.sol#109)\n"
+  },
+  {
+    "id": "SL-004",
+    "check": "incorrect-equality",
+    "toolSeverity": "Medium",
+    "classification": "False positive",
+    "reason": "Rejecting exactly zero inventory/excess is intentional. Any positive amount remains recoverable; donated tokens or forced ETH cannot make a positive balance fail this condition.",
+    "slitherId": "7528d8f3cc9dcf4581b9af8d143ace512ab36c3af0a0572eb66adc7b70788c53",
+    "description": "AssetSale.recoverUnsoldTokens() (contracts/AssetSale.sol#122-128) uses a dangerous strict equality:\n\t- amount == 0 (contracts/AssetSale.sol#125)\n"
+  },
+  {
+    "id": "SL-005",
+    "check": "locked-ether",
+    "toolSeverity": "Medium",
+    "classification": "Informational finding",
+    "reason": "Test-only adversarial/holder harness, never constructed by the factory or deployment scripts. The intentionally permissive or receiving behavior enables negative tests; it is not a supported production contract.",
+    "slitherId": "1815ec57f08a6b1600fc872afa4ea5ce272dad2507aa0b731fa462da8126abff",
+    "description": "Contract locking ether found:\n\tContract SaleCallbackHarness (contracts/test/SaleCallbackHarness.sol#6-32) has payable functions:\n\t - SaleCallbackHarness.receive() (contracts/test/SaleCallbackHarness.sol#24-31)\n\tBut does not have a function to withdraw the ether\n"
+  },
+  {
+    "id": "SL-006",
+    "check": "locked-ether",
+    "toolSeverity": "Medium",
+    "classification": "Informational finding",
+    "reason": "Test-only adversarial/holder harness, never constructed by the factory or deployment scripts. The intentionally permissive or receiving behavior enables negative tests; it is not a supported production contract.",
+    "slitherId": "2246478e73cd85adf897074573b5dc8e4df4534e883aadd77e57c41bd12e5e4b",
+    "description": "Contract locking ether found:\n\tContract AssetSaleIssuerHarness (contracts/test/AssetSaleIssuerHarness.sol#8-42) has payable functions:\n\t - AssetSaleIssuerHarness.receive() (contracts/test/AssetSaleIssuerHarness.sol#32-41)\n\tBut does not have a function to withdraw the ether\n"
+  },
+  {
+    "id": "SL-007",
+    "check": "missing-zero-check",
+    "toolSeverity": "Low",
+    "classification": "Informational finding",
+    "reason": "Test-only adversarial/holder harness, never constructed by the factory or deployment scripts. The intentionally permissive or receiving behavior enables negative tests; it is not a supported production contract.",
+    "slitherId": "83c5c5bfeb5ba3b7e91c244891fcb454a936e20cade47dfc5c22bf22ba069324",
+    "description": "AssetSaleIssuerHarness.execute(address,bytes).target (contracts/test/AssetSaleIssuerHarness.sol#23) lacks a zero-check on :\n\t\t- (ok,reason) = target.call(data) (contracts/test/AssetSaleIssuerHarness.sol#24)\n"
+  },
+  {
+    "id": "SL-008",
+    "check": "missing-zero-check",
+    "toolSeverity": "Low",
+    "classification": "Informational finding",
+    "reason": "Test-only adversarial/holder harness, never constructed by the factory or deployment scripts. The intentionally permissive or receiving behavior enables negative tests; it is not a supported production contract.",
+    "slitherId": "d77dedde6228646fa180076e985c89375531e99a5674eb0649904843706dfa8c",
+    "description": "SaleCallbackHarness.execute(address,bytes).target (contracts/test/SaleCallbackHarness.sol#19) lacks a zero-check on :\n\t\t- (ok,reason) = target.call(data) (contracts/test/SaleCallbackHarness.sol#20)\n"
+  },
+  {
+    "id": "SL-009",
+    "check": "reentrancy-benign",
+    "toolSeverity": "Low",
+    "classification": "Informational finding",
+    "reason": "Test-only adversarial/holder harness, never constructed by the factory or deployment scripts. The intentionally permissive or receiving behavior enables negative tests; it is not a supported production contract.",
+    "slitherId": "670d0cb6d3659698473c88dbcda89689988382033c0715f5358d0b548db45b4e",
+    "description": "Reentrancy in SaleCallbackHarness.receive() (contracts/test/SaleCallbackHarness.sol#24-31):\n\tExternal calls:\n\t- sale.sweepExcessETH() (contracts/test/SaleCallbackHarness.sol#29)\n\tState variables written after the call(s):\n\t- nestedSweep = true (contracts/test/SaleCallbackHarness.sol#29)\n"
+  },
+  {
+    "id": "SL-010",
+    "check": "reentrancy-benign",
+    "toolSeverity": "Low",
+    "classification": "Informational finding",
+    "reason": "Test-only adversarial/holder harness, never constructed by the factory or deployment scripts. The intentionally permissive or receiving behavior enables negative tests; it is not a supported production contract.",
+    "slitherId": "7491ac9274f383d86a2e0ac100a452862e2025c7fe7a46981f81c763cd0d106e",
+    "description": "Reentrancy in SaleCallbackHarness.receive() (contracts/test/SaleCallbackHarness.sol#24-31):\n\tExternal calls:\n\t- sale.sweepExcessETH() (contracts/test/SaleCallbackHarness.sol#29)\n\t- sale.withdrawProceeds() (contracts/test/SaleCallbackHarness.sol#30)\n\tState variables written after the call(s):\n\t- nestedWithdrawal = true (contracts/test/SaleCallbackHarness.sol#30)\n"
+  },
+  {
+    "id": "SL-011",
+    "check": "reentrancy-benign",
+    "toolSeverity": "Low",
+    "classification": "Informational finding",
+    "reason": "Test-only adversarial/holder harness, never constructed by the factory or deployment scripts. The intentionally permissive or receiving behavior enables negative tests; it is not a supported production contract.",
+    "slitherId": "c06163e64ff14ef748e12a84d08e887a680d53ab87a705ee5d69251455eab43b",
+    "description": "Reentrancy in AssetSaleIssuerHarness.receive() (contracts/test/AssetSaleIssuerHarness.sol#32-41):\n\tExternal calls:\n\t- sale.withdrawProceeds() (contracts/test/AssetSaleIssuerHarness.sol#37-39)\n\tState variables written after the call(s):\n\t- reentrySucceeded = true (contracts/test/AssetSaleIssuerHarness.sol#38)\n"
+  },
+  {
+    "id": "SL-012",
+    "check": "reentrancy-events",
+    "toolSeverity": "Low",
+    "classification": "Informational finding",
+    "reason": "Callback events may precede the outer payout event. Accounting is cleared before withdrawal and the EVM debits ETH before sweep callbacks. Existing recursive/rejecting and Phase 6 cross-function tests show no double payout. Event order is not interpreted as an accounting proof.",
+    "slitherId": "3a04dee8d62af41968e6615a19cfe29014c5f1279e0bbeb72d0fa8cd6e6cdecf",
+    "description": "Reentrancy in AssetSale.sweepExcessETH() (contracts/AssetSale.sol#107-113):\n\tExternal calls:\n\t- (ok,None) = issuer.call{value: excess}() (contracts/AssetSale.sol#110)\n\tEvent emitted after the call(s):\n\t- ExcessETHSwept(excess) (contracts/AssetSale.sol#112)\n"
+  },
+  {
+    "id": "SL-013",
+    "check": "reentrancy-events",
+    "toolSeverity": "Low",
+    "classification": "Informational finding",
+    "reason": "Callback events may precede the outer payout event. Accounting is cleared before withdrawal and the EVM debits ETH before sweep callbacks. Existing recursive/rejecting and Phase 6 cross-function tests show no double payout. Event order is not interpreted as an accounting proof.",
+    "slitherId": "dca9cd9191fa285307d3b967f7be371455045449abc1c7f9d98ba6c1dfdcaf44",
+    "description": "Reentrancy in AssetSale.withdrawProceeds() (contracts/AssetSale.sol#94-101):\n\tExternal calls:\n\t- (ok,None) = issuer.call{value: amount}() (contracts/AssetSale.sol#98)\n\tEvent emitted after the call(s):\n\t- ProceedsWithdrawn(amount) (contracts/AssetSale.sol#100)\n"
+  },
+  {
+    "id": "SL-014",
+    "check": "assembly",
+    "toolSeverity": "Informational",
+    "classification": "Informational finding",
+    "reason": "OpenZeppelin SafeERC20 return-value handling or test-helper revert bubbling. Owned production contracts contain no inline assembly. Not an unchecked production external call.",
+    "slitherId": "171b718164f29158ac088e2b82ca85ccfd79cf986b0d37ffbe82b33fffd4b810",
+    "description": "SafeERC20._safeTransfer(IERC20,address,uint256,bool) (node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol#176-200) uses assembly\n\t- INLINE ASM (node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol#179-199)\n"
+  },
+  {
+    "id": "SL-015",
+    "check": "assembly",
+    "toolSeverity": "Informational",
+    "classification": "Informational finding",
+    "reason": "OpenZeppelin SafeERC20 return-value handling or test-helper revert bubbling. Owned production contracts contain no inline assembly. Not an unchecked production external call.",
+    "slitherId": "2d3db1e2a8c3a8c9287470e4a87890d892dfd75057a76417d6393e0f002f4c70",
+    "description": "SaleCallbackHarness.execute(address,bytes) (contracts/test/SaleCallbackHarness.sol#19-22) uses assembly\n\t- INLINE ASM (contracts/test/SaleCallbackHarness.sol#21)\n"
+  },
+  {
+    "id": "SL-016",
+    "check": "assembly",
+    "toolSeverity": "Informational",
+    "classification": "Informational finding",
+    "reason": "OpenZeppelin SafeERC20 return-value handling or test-helper revert bubbling. Owned production contracts contain no inline assembly. Not an unchecked production external call.",
+    "slitherId": "69b423846ed978d0b5b5b4ef2cf749ce3cc0d690145d8c338a5bc423705c367f",
+    "description": "SafeERC20._safeApprove(IERC20,address,uint256,bool) (node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol#255-279) uses assembly\n\t- INLINE ASM (node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol#258-278)\n"
+  },
+  {
+    "id": "SL-017",
+    "check": "assembly",
+    "toolSeverity": "Informational",
+    "classification": "Informational finding",
+    "reason": "OpenZeppelin SafeERC20 return-value handling or test-helper revert bubbling. Owned production contracts contain no inline assembly. Not an unchecked production external call.",
+    "slitherId": "e80e676319609904024bc7d6c9c303768dded29efd228990c918a11d543821f2",
+    "description": "SafeERC20._safeTransferFrom(IERC20,address,address,uint256,bool) (node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol#212-244) uses assembly\n\t- INLINE ASM (node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol#221-243)\n"
+  },
+  {
+    "id": "SL-018",
+    "check": "assembly",
+    "toolSeverity": "Informational",
+    "classification": "Informational finding",
+    "reason": "OpenZeppelin SafeERC20 return-value handling or test-helper revert bubbling. Owned production contracts contain no inline assembly. Not an unchecked production external call.",
+    "slitherId": "fdc8b5e5dbd09a22730915ff080526f50abbd9aa0937db1491763f8fc73cf528",
+    "description": "AssetSaleIssuerHarness.execute(address,bytes) (contracts/test/AssetSaleIssuerHarness.sol#23-30) uses assembly\n\t- INLINE ASM (contracts/test/AssetSaleIssuerHarness.sol#26-28)\n"
+  },
+  {
+    "id": "SL-019",
+    "check": "pragma",
+    "toolSeverity": "Informational",
+    "classification": "Informational finding",
+    "reason": "Ranges in dependency source are not the selected compiler. Both profiles pin 0.8.24. Additional current compiler advisories are separately reviewed in dependency-review.md; scanner version warnings alone do not establish exploitability.",
+    "slitherId": "4597f3d5e4d5e6196ddc101c412f8bb16da8cb0d56bf7d34661ab3d439d32c80",
+    "description": "5 different versions of Solidity are used:\n\t- Version constraint ^0.8.20 is used by:\n\t\t-^0.8.20 (node_modules/@openzeppelin/contracts/access/AccessControl.sol#4)\n\t\t-^0.8.20 (node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol#4)\n\t\t-^0.8.20 (node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol#4)\n\t\t-^0.8.20 (node_modules/@openzeppelin/contracts/utils/Context.sol#4)\n\t\t-^0.8.20 (node_modules/@openzeppelin/contracts/utils/Pausable.sol#4)\n\t\t-^0.8.20 (node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol#4)\n\t- Version constraint >=0.8.4 is used by:\n\t\t->=0.8.4 (node_modules/@openzeppelin/contracts/access/IAccessControl.sol#4)\n\t\t->=0.8.4 (node_modules/@openzeppelin/contracts/interfaces/draft-IERC6093.sol#4)\n\t- Version constraint >=0.6.2 is used by:\n\t\t->=0.6.2 (node_modules/@openzeppelin/contracts/interfaces/IERC1363.sol#4)\n\t\t->=0.6.2 (node_modules/@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol#4)\n\t- Version constraint >=0.4.16 is used by:\n\t\t->=0.4.16 (node_modules/@openzeppelin/contracts/interfaces/IERC165.sol#4)\n\t\t->=0.4.16 (node_modules/@openzeppelin/contracts/interfaces/IERC20.sol#4)\n\t\t->=0.4.16 (node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol#4)\n\t\t->=0.4.16 (node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol#4)\n\t- Version constraint ^0.8.24 is used by:\n\t\t-^0.8.24 (contracts/AssetFactory.sol#2)\n\t\t-^0.8.24 (contracts/AssetSale.sol#2)\n\t\t-^0.8.24 (contracts/AssetToken.sol#2)\n\t\t-^0.8.24 (contracts/test/AssetSaleIssuerHarness.sol#2)\n\t\t-^0.8.24 (contracts/test/AssetTokenHarness.sol#2)\n\t\t-^0.8.24 (contracts/test/ForceSendHarness.sol#2)\n\t\t-^0.8.24 (contracts/test/SaleCallbackHarness.sol#2)\n"
+  },
+  {
+    "id": "SL-020",
+    "check": "solc-version",
+    "toolSeverity": "Informational",
+    "classification": "Informational finding",
+    "reason": "Ranges in dependency source are not the selected compiler. Both profiles pin 0.8.24. Additional current compiler advisories are separately reviewed in dependency-review.md; scanner version warnings alone do not establish exploitability.",
+    "slitherId": "47c32fe9f1a6d12ef0c32c32a7856d9c217fc0e978a2807403107f5117f52b7c",
+    "description": "Version constraint >=0.4.16 contains known severe issues (https://solidity.readthedocs.io/en/latest/bugs.html)\n\t- DirtyBytesArrayToStorage\n\t- ABIDecodeTwoDimensionalArrayMemory\n\t- KeccakCaching\n\t- EmptyByteArrayCopy\n\t- DynamicArrayCleanup\n\t- ImplicitConstructorCallvalueCheck\n\t- TupleAssignmentMultiStackSlotComponents\n\t- MemoryArrayCreationOverflow\n\t- privateCanBeOverridden\n\t- SignedArrayStorageCopy\n\t- ABIEncoderV2StorageArrayWithMultiSlotElement\n\t- DynamicConstructorArgumentsClippedABIV2\n\t- UninitializedFunctionPointerInConstructor_0.4.x\n\t- IncorrectEventSignatureInLibraries_0.4.x\n\t- ExpExponentCleanup\n\t- NestedArrayFunctionCallDecoder\n\t- ZeroFunctionSelector.\nIt is used by:\n\t- >=0.4.16 (node_modules/@openzeppelin/contracts/interfaces/IERC165.sol#4)\n\t- >=0.4.16 (node_modules/@openzeppelin/contracts/interfaces/IERC20.sol#4)\n\t- >=0.4.16 (node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol#4)\n\t- >=0.4.16 (node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol#4)\n"
+  },
+  {
+    "id": "SL-021",
+    "check": "solc-version",
+    "toolSeverity": "Informational",
+    "classification": "Informational finding",
+    "reason": "Ranges in dependency source are not the selected compiler. Both profiles pin 0.8.24. Additional current compiler advisories are separately reviewed in dependency-review.md; scanner version warnings alone do not establish exploitability.",
+    "slitherId": "5dfecbc779f96536f61bf3b21063a158d0b151b4ea1527d40e676669f655c6d5",
+    "description": "Version constraint ^0.8.20 contains known severe issues (https://solidity.readthedocs.io/en/latest/bugs.html)\n\t- VerbatimInvalidDeduplication\n\t- FullInlinerNonExpressionSplitArgumentEvaluationOrder\n\t- MissingSideEffectsOnSelectorAccess.\nIt is used by:\n\t- ^0.8.20 (node_modules/@openzeppelin/contracts/access/AccessControl.sol#4)\n\t- ^0.8.20 (node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol#4)\n\t- ^0.8.20 (node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol#4)\n\t- ^0.8.20 (node_modules/@openzeppelin/contracts/utils/Context.sol#4)\n\t- ^0.8.20 (node_modules/@openzeppelin/contracts/utils/Pausable.sol#4)\n\t- ^0.8.20 (node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol#4)\n"
+  },
+  {
+    "id": "SL-022",
+    "check": "solc-version",
+    "toolSeverity": "Informational",
+    "classification": "Informational finding",
+    "reason": "Ranges in dependency source are not the selected compiler. Both profiles pin 0.8.24. Additional current compiler advisories are separately reviewed in dependency-review.md; scanner version warnings alone do not establish exploitability.",
+    "slitherId": "6e12583c56f3d5d3c46b59983eabed5127e98e2b27152b1cb71019cc8452c712",
+    "description": "Version constraint >=0.8.4 contains known severe issues (https://solidity.readthedocs.io/en/latest/bugs.html)\n\t- FullInlinerNonExpressionSplitArgumentEvaluationOrder\n\t- MissingSideEffectsOnSelectorAccess\n\t- AbiReencodingHeadOverflowWithStaticArrayCleanup\n\t- DirtyBytesArrayToStorage\n\t- DataLocationChangeInInternalOverride\n\t- NestedCalldataArrayAbiReencodingSizeValidation\n\t- SignedImmutables.\nIt is used by:\n\t- >=0.8.4 (node_modules/@openzeppelin/contracts/access/IAccessControl.sol#4)\n\t- >=0.8.4 (node_modules/@openzeppelin/contracts/interfaces/draft-IERC6093.sol#4)\n"
+  },
+  {
+    "id": "SL-023",
+    "check": "solc-version",
+    "toolSeverity": "Informational",
+    "classification": "Informational finding",
+    "reason": "Ranges in dependency source are not the selected compiler. Both profiles pin 0.8.24. Additional current compiler advisories are separately reviewed in dependency-review.md; scanner version warnings alone do not establish exploitability.",
+    "slitherId": "7f03185aacd037ebbf1681286eac42fc34acc45279b764b2a0e4ec1ad9daebef",
+    "description": "Version constraint >=0.6.2 contains known severe issues (https://solidity.readthedocs.io/en/latest/bugs.html)\n\t- MissingSideEffectsOnSelectorAccess\n\t- AbiReencodingHeadOverflowWithStaticArrayCleanup\n\t- DirtyBytesArrayToStorage\n\t- NestedCalldataArrayAbiReencodingSizeValidation\n\t- ABIDecodeTwoDimensionalArrayMemory\n\t- KeccakCaching\n\t- EmptyByteArrayCopy\n\t- DynamicArrayCleanup\n\t- MissingEscapingInFormatting\n\t- ArraySliceDynamicallyEncodedBaseType\n\t- ImplicitConstructorCallvalueCheck\n\t- TupleAssignmentMultiStackSlotComponents\n\t- MemoryArrayCreationOverflow.\nIt is used by:\n\t- >=0.6.2 (node_modules/@openzeppelin/contracts/interfaces/IERC1363.sol#4)\n\t- >=0.6.2 (node_modules/@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol#4)\n"
+  },
+  {
+    "id": "SL-024",
+    "check": "low-level-calls",
+    "toolSeverity": "Informational",
+    "classification": "Informational finding",
+    "reason": "Production calls pay the immutable issuer and check success; test helpers deliberately forward calls and bubble reverts. No user-controlled delegatecall exists.",
+    "slitherId": "3d00c377492f8067f0fc075a519a2fc72816e6b5276ed6e93188d8efa8e61d07",
+    "description": "Low level call in SaleCallbackHarness.execute(address,bytes) (contracts/test/SaleCallbackHarness.sol#19-22):\n\t- (ok,reason) = target.call(data) (contracts/test/SaleCallbackHarness.sol#20)\n"
+  },
+  {
+    "id": "SL-025",
+    "check": "low-level-calls",
+    "toolSeverity": "Informational",
+    "classification": "Informational finding",
+    "reason": "Production calls pay the immutable issuer and check success; test helpers deliberately forward calls and bubble reverts. No user-controlled delegatecall exists.",
+    "slitherId": "57ba788a349531f8add134a17f0bcb75d9cfafa8a04458b9872000c622553a94",
+    "description": "Low level call in AssetSaleIssuerHarness.execute(address,bytes) (contracts/test/AssetSaleIssuerHarness.sol#23-30):\n\t- (ok,reason) = target.call(data) (contracts/test/AssetSaleIssuerHarness.sol#24)\n"
+  },
+  {
+    "id": "SL-026",
+    "check": "low-level-calls",
+    "toolSeverity": "Informational",
+    "classification": "Informational finding",
+    "reason": "Production calls pay the immutable issuer and check success; test helpers deliberately forward calls and bubble reverts. No user-controlled delegatecall exists.",
+    "slitherId": "8ccfef9580db83a2517396b2b46481e7613a5b571c4a971cefc5b6076384ece6",
+    "description": "Low level call in AssetSale.withdrawProceeds() (contracts/AssetSale.sol#94-101):\n\t- (ok,None) = issuer.call{value: amount}() (contracts/AssetSale.sol#98)\n"
+  },
+  {
+    "id": "SL-027",
+    "check": "low-level-calls",
+    "toolSeverity": "Informational",
+    "classification": "Informational finding",
+    "reason": "Production calls pay the immutable issuer and check success; test helpers deliberately forward calls and bubble reverts. No user-controlled delegatecall exists.",
+    "slitherId": "b5669b12a1e4326cd2a72a445aace6d83b5fcd58798421edfba11d0c214482d1",
+    "description": "Low level call in AssetSale.sweepExcessETH() (contracts/AssetSale.sol#107-113):\n\t- (ok,None) = issuer.call{value: excess}() (contracts/AssetSale.sol#110)\n"
+  },
+  {
+    "id": "SL-028",
+    "check": "unindexed-event-address",
+    "toolSeverity": "Informational",
+    "classification": "Informational finding",
+    "reason": "Inherited OpenZeppelin pause events are valid; lack of indexed address affects filtering convenience, not permissions or settlement.",
+    "slitherId": "6dd5d4bf5e1073fd5b40c46fbbf7c6768b2a1fbb54a2ae3d02fb47ebd806b5db",
+    "description": "Event Pausable.Unpaused(address) (node_modules/@openzeppelin/contracts/utils/Pausable.sol#28) has address parameters but no indexed parameters\n"
+  },
+  {
+    "id": "SL-029",
+    "check": "unindexed-event-address",
+    "toolSeverity": "Informational",
+    "classification": "Informational finding",
+    "reason": "Inherited OpenZeppelin pause events are valid; lack of indexed address affects filtering convenience, not permissions or settlement.",
+    "slitherId": "d70dae3b34011ef87d55e1cfcd7ba32c10cf2659a8bc79ecc9dde48e0ef2d5bd",
+    "description": "Event Pausable.Paused(address) (node_modules/@openzeppelin/contracts/utils/Pausable.sol#23) has address parameters but no indexed parameters\n"
+  }
+]

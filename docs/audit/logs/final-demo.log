@@ -1,0 +1,20 @@
+
+An unexpected error occurred:
+
+AssertionError [ERR_ASSERTION]: Unapproved purchase: simulated reason
++ actual - expected
+
++ ''
+- 'InvestorNotWhitelisted'
+
+    at check (/Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/scripts/auditDemo.ts:13:10)
+    at rejected (/Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/scripts/auditDemo.ts:29:3)
+    at async <anonymous> (/Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/scripts/auditDemo.ts:55:1) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '',
+  expected: 'InvestorNotWhitelisted',
+  operator: 'deepStrictEqual'
+}
+
+If you think this is a bug in Hardhat, please report it here: https://hardhat.org/report-bug

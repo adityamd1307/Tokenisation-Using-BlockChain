@@ -1,0 +1,17 @@
+[
+  {
+    "command": "npx tsc --noEmit",
+    "exitCode": 0,
+    "log": "logs/final-retry-typecheck.log"
+  },
+  {
+    "command": "npx hardhat test mocha test/security/Phase6.security.test.ts",
+    "exitCode": 0,
+    "log": "logs/final-retry-security-tests.log"
+  },
+  {
+    "command": "npx hardhat run scripts/auditDemo.ts --network hardhatMainnet",
+    "exitCode": 0,
+    "log": "logs/final-retry-demo.log"
+  }
+]
