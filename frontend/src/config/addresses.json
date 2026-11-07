@@ -2,9 +2,14 @@
   "note": "Populated by scripts/deploy.ts after deployment. Do not edit by hand.",
   "network": "localhost",
   "chainId": 31337,
-  "AssetFactory": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+  "AssetFactory": "0x610178dA211FEF7D417bC0e6FeD39F05609AD788",
   "admin": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-  "deployBlock": 1,
-  "deployBlockHash": "0xa125c2ef6aa6e14ba479aec0166d8ea2587209ff86abfcbd40c88504bc1e7bab",
-  "runtimeCodeHash": "0xd7dc55949bf55916497fc396bacaf8e0f99e6b26794176d018c1be37ceebdf6b"
+  "deployBlock": 78,
+  "deployBlockHash": "0x8d364f5722189f8b90ed2a4520e42a8e4722676288f159ddb4671694a37d487b",
+  "runtimeCodeHash": "0x39ad608ca4bb530d616da842b5343e70e9bbe92afe94860ee3a58ff69819150c",
+  "SubscriptionFactory": "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0",
+  "MockUSD": "0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e",
+  "subscriptionFactoryCodeHash": "0x18692d275ea2d94a1d7bbc1a65c929bb46cee4aae7e7f1183229b064b1919a22",
+  "mockUSDCodeHash": "0x73a05a326706de1dcd74be4070dfe94da9f69a98148e8110fbb96f4f974d4274",
+  "subscriptionDeployBlock": 80
 }

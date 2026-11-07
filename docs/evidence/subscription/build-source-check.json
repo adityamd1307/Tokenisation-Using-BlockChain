@@ -1,0 +1,92 @@
+{
+  "sources": [
+    {
+      "file": "contracts/test/ForceSendHarness.sol",
+      "matchesSource": true
+    },
+    {
+      "file": "contracts/AssetSale.sol",
+      "matchesSource": true
+    },
+    {
+      "file": "contracts/AssetToken.sol",
+      "matchesSource": true
+    },
+    {
+      "file": "contracts/test/AssetSaleIssuerHarness.sol",
+      "matchesSource": true
+    },
+    {
+      "file": "contracts/AssetToken.sol",
+      "matchesSource": true
+    },
+    {
+      "file": "contracts/test/SubscriptionAdversary.sol",
+      "matchesSource": true
+    },
+    {
+      "file": "contracts/AssetSale.sol",
+      "matchesSource": true
+    },
+    {
+      "file": "contracts/AssetToken.sol",
+      "matchesSource": true
+    },
+    {
+      "file": "contracts/AssetFactory.sol",
+      "matchesSource": true
+    },
+    {
+      "file": "contracts/AssetSale.sol",
+      "matchesSource": true
+    },
+    {
+      "file": "contracts/AssetToken.sol",
+      "matchesSource": true
+    },
+    {
+      "file": "contracts/AssetFactory.sol",
+      "matchesSource": true
+    },
+    {
+      "file": "contracts/AssetSale.sol",
+      "matchesSource": true
+    },
+    {
+      "file": "contracts/AssetToken.sol",
+      "matchesSource": true
+    },
+    {
+      "file": "contracts/SubscriptionFactory.sol",
+      "matchesSource": true
+    },
+    {
+      "file": "contracts/SubscriptionOffering.sol",
+      "matchesSource": true
+    },
+    {
+      "file": "contracts/AssetToken.sol",
+      "matchesSource": true
+    },
+    {
+      "file": "contracts/SubscriptionOffering.sol",
+      "matchesSource": true
+    },
+    {
+      "file": "contracts/AssetToken.sol",
+      "matchesSource": true
+    },
+    {
+      "file": "contracts/AssetToken.sol",
+      "matchesSource": true
+    },
+    {
+      "file": "contracts/test/AssetTokenHarness.sol",
+      "matchesSource": true
+    },
+    {
+      "file": "contracts/MockUSD.sol",
+      "matchesSource": true
+    }
+  ]
+}

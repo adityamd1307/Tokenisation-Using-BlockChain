@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 const root = fileURLToPath(new URL("../", import.meta.url));
 const destination = path.join(root, "frontend/src/config/abi");
 fs.mkdirSync(destination, { recursive: true });
-for (const name of ["AssetFactory", "AssetToken", "AssetSale"]) {
+for (const name of ["AssetFactory", "AssetToken", "AssetSale", "MockUSD", "SubscriptionFactory", "SubscriptionOffering"]) {
   const artifact = JSON.parse(
     fs.readFileSync(
       path.join(root, `artifacts/contracts/${name}.sol/${name}.json`),
@@ -17,4 +17,4 @@ for (const name of ["AssetFactory", "AssetToken", "AssetSale"]) {
     JSON.stringify(artifact.abi, null, 2) + "\n",
   );
 }
-console.log("Synced all three frontend ABIs from compiled artifacts.");
+console.log("Synced all six frontend ABIs from compiled artifacts.");

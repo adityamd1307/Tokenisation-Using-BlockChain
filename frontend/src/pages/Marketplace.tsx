@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAssets, useData } from "../context/DataContext";
 import { AssetCard } from "../components/AssetCard";
+import { SubscriptionOfferings } from "../components/SubscriptionOfferings";
 import {
   EmptyState,
   ErrorMessage,
@@ -60,6 +61,7 @@ export default function Marketplace() {
           <small>Fixed supply. On-chain eligibility. Direct settlement.</small>
         </div>
       </div>
+      <SubscriptionOfferings compact />
       <section>
         <div className="section-heading">
           <div>

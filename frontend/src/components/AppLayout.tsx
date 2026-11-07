@@ -22,6 +22,9 @@ export function AppLayout() {
           <NavLink to="/issuer">
             <span aria-hidden>▤</span>Issuer dashboard
           </NavLink>
+          <NavLink to="/subscriptions">
+            <span aria-hidden>◷</span>Subscriptions
+          </NavLink>
           <NavLink to="/portfolio">
             <span aria-hidden>◈</span>My portfolio
           </NavLink>
@@ -33,7 +36,8 @@ export function AppLayout() {
           <WalletSummary />
           <div className="environment">
             <span className="dot" />
-            LOCAL DEVELOPMENT<span>PHASE 04</span>
+            {targetNetwork.name}
+            <span>ACADEMIC DEMO</span>
           </div>
         </div>
       </aside>

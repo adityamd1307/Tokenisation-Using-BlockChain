@@ -1275,3 +1275,42 @@ td code {
     transition: none !important;
   }
 }
+
+/* Subscription issuance extends the existing finance workspace. */
+.subscription-section { margin: 32px 0; }
+.subscription-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+.subscription-card { margin: 0; border-top: 3px solid #28766e; }
+.subscription-card h3 { font-size: 21px; margin: 12px 0; }
+.subscription-card h3 a { color: inherit; text-decoration: none; }
+.offering-status { display: inline-flex; border-radius: 20px; padding: 6px 12px; background: #edf0f5; color: #526076; font-size: 12px; font-weight: 650; white-space: nowrap; }
+.offering-status.state-1, .offering-status.state-3 { background: #e3f3ed; color: #216f51; }
+.offering-status.state-2 { background: #fff2d8; color: #80571a; }
+.offering-status.state-4 { background: #fae9e8; color: #983e36; }
+.subscription-progress { margin: 25px 0 18px; }
+.progress-heading, .funding-legend { display: flex; justify-content: space-between; gap: 14px; font-size: 13px; }
+.progress-heading strong { color: #216b62; font-variant-numeric: tabular-nums; }
+.funding-track { position: relative; height: 12px; margin: 16px 0 12px; border-radius: 6px; background: #e8edf1; }
+.funding-fill { height: 100%; border-radius: 6px; background: linear-gradient(90deg, #325d73, #42a18c); }
+.funding-marker { position: absolute; height: 24px; top: -6px; border-left: 2px solid #2d4051; transform: translateX(-2px); }
+.funding-marker.soft { border-left-style: dashed; border-color: #8a6b30; }
+.funding-legend { color: #627080; font-size: 12px; }
+.subscription-stats { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 18px; padding: 20px 0; margin: 0; }
+.subscription-stats dt { font-size: 12px; color: #627080; margin-bottom: 8px; }
+.subscription-stats dd { margin: 0; font-size: 19px; font-weight: 650; overflow-wrap: anywhere; }
+.offering-dates { border-top: 1px solid #e7ebef; padding-top: 18px; display: flex; gap: 24px; flex-wrap: wrap; font-size: 12px; color: #627080; }
+.offering-dates strong { display: block; color: #25394b; margin-top: 4px; }
+.offering-hero { border-top: 4px solid #28766e; }
+.offering-hero h2 { font-size: 35px; }
+.offering-hero h2 small { font-size: 15px; color: #627080; font-weight: 400; }
+.subscription-form-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 18px; margin: 22px 0; }
+.subscription-create input { width: 100%; }
+.action-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 18px 0; }
+.allocation-card { display: flex; flex-wrap: wrap; gap: 25px; padding: 24px; background: #f2f7f5; border: 1px solid #dce8e2; border-radius: 10px; }
+.allocation-card > div > span { display: block; color: #627080; font-size: 12px; margin-bottom: 8px; }
+.allocation-card > div > strong { font-size: 24px; color: #216b62; }
+.allocation-card .action-row { width: 100%; margin: 0; }
+.subscription-create .notice { margin: 18px 0; }
+.subscription-create .text-link { margin-left: 18px; }
+.validation-message { color: #a24035; font-size: 13px; }
+@media (max-width: 1100px) { .subscription-grid { grid-template-columns: 1fr; } .subscription-stats { grid-template-columns: repeat(2,minmax(0,1fr)); } .subscription-form-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media (max-width: 600px) { .subscription-form-grid { grid-template-columns: 1fr; } .subscription-stats dd { font-size: 16px; } .progress-heading,.funding-legend { flex-wrap: wrap; } .subscription-card .card-bottom { align-items: flex-start; gap: 15px; } .allocation-card { padding: 16px; } .action-row .button { width: 100%; } .subscription-create .text-link { display: block; margin: 18px 0; } }

@@ -1,0 +1,285 @@
+{
+  "network": "hardhatMainnet",
+  "units": "mUSD base units (6 decimals); CPT whole units",
+  "success": {
+    "address": "0xd8058efe0198ae9dD7D563e1b4938Dcbc86A1F81",
+    "demand": "4000000000",
+    "guaranteedFunding": "1996000000",
+    "accepted": "2000000000",
+    "refundsPaid": "2000000000",
+    "proceedsWithdrawn": "2000000000",
+    "paymentBalance": "0",
+    "tokenBalance": "0",
+    "allocations": [
+      {
+        "investor": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+        "commitment": "1800000000",
+        "allocation": "450",
+        "accepted": "900000000",
+        "refund": "900000000",
+        "finalMUSD": "9100000000"
+      },
+      {
+        "investor": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+        "commitment": "1400000000",
+        "allocation": "350",
+        "accepted": "700000000",
+        "refund": "700000000",
+        "finalMUSD": "9300000000"
+      },
+      {
+        "investor": "0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65",
+        "commitment": "800000000",
+        "allocation": "200",
+        "accepted": "400000000",
+        "refund": "400000000",
+        "finalMUSD": "9600000000"
+      }
+    ]
+  },
+  "failure": {
+    "address": "0x6D544390Eb535d61e196c87d6B9c80dCD8628Acd",
+    "demand": "700000000",
+    "refundsPaid": "700000000",
+    "accepted": "0",
+    "allocated": "0",
+    "paymentBalance": "0",
+    "tokenBalance": "0",
+    "issuerCPT": "9000"
+  },
+  "checks": [
+    "Unapproved commitment rejected",
+    "Post-deadline commitment rejected",
+    "Premature proceeds rejected",
+    "Double claim rejected",
+    "Double refund rejected",
+    "Unauthorised proceeds rejected",
+    "Failed offering proceeds rejected",
+    "Actual allocation and payment balances match the specification",
+    "Total supply remains 10,000 CPT",
+    "Refund/proceeds conservation",
+    "Failure restores the complete 700 mUSD commitment"
+  ],
+  "transactions": [
+    {
+      "action": "Authorise issuer",
+      "hash": "0xfc6068dfd2605b19fa21ba3026c0880821a1aa8509c5e60048c8a4edb7fc9c00",
+      "gas": "45424"
+    },
+    {
+      "action": "Create CPT",
+      "hash": "0x91c3908877993ac9014eed40b1c0c315b5c6352bc12105509591039a8e24fec8",
+      "gas": "1945867"
+    },
+    {
+      "action": "Mint demo mUSD",
+      "hash": "0x67cf6b8dfeb7e630b38a70332d32fa80618a3875099fc84f8eac650f9257ae0e",
+      "gas": "70655"
+    },
+    {
+      "action": "Mint demo mUSD",
+      "hash": "0x12556daeb3a9ef74f80ed6d00cd39f2ef725c8d3f5d9ac5e9baf29a0d8bd262c",
+      "gas": "53567"
+    },
+    {
+      "action": "Mint demo mUSD",
+      "hash": "0xe23e99210520a4120007ef21cdf7fa9e3e0b1de6823f490e75d0a02f20b5d476",
+      "gas": "53567"
+    },
+    {
+      "action": "Mint demo mUSD",
+      "hash": "0x31db8c08b896548176128e820403b43388eb23f4f21dc0dc163a45c0d61a682a",
+      "gas": "53567"
+    },
+    {
+      "action": "Whitelist investor",
+      "hash": "0xc31e5dffa9ae7fc3d1e6313841f244a0fc383e66ce9227976ff12918f1a58c26",
+      "gas": "48787"
+    },
+    {
+      "action": "Whitelist investor",
+      "hash": "0x82f655afd3ef6bb44a24529d2a7d2bc2820e7d324a11570bfe5d4a65cefcf656",
+      "gas": "48799"
+    },
+    {
+      "action": "Whitelist investor",
+      "hash": "0x24c7d0984d3f4a9df53db667e0c18004857c4a40d9c72fc783871d190496400a",
+      "gas": "48799"
+    },
+    {
+      "action": "Create offering",
+      "hash": "0x4eae5c278cb3dfde43201efe1dbdddfebee9310a49ed3788afc9801ea206c8c6",
+      "gas": "1862680"
+    },
+    {
+      "action": "Whitelist escrow",
+      "hash": "0x65110ca50c85e5f316643baff659a57e284b07cbdd24f2fc683953bddace13e9",
+      "gas": "48799"
+    },
+    {
+      "action": "Approve inventory",
+      "hash": "0x897d1d98df98999592e0dd8d225ee919f28c4f0f66edd19e7b570542fe2b1794",
+      "gas": "46371"
+    },
+    {
+      "action": "Deposit inventory",
+      "hash": "0x9dd82263be58d996afd69955be55176d810a9685fff971fccae092c2b2ca53f1",
+      "gas": "89997"
+    },
+    {
+      "action": "Approve mUSD",
+      "hash": "0x51b6391964ddb04d479f52a890b6c43822d76337344cc36c5537fd8e004de230",
+      "gas": "46343"
+    },
+    {
+      "action": "Approve mUSD",
+      "hash": "0xf9de52bb3f05c7cce6aa4f4028c90b88c7fa9b704ed8c11cf5c750b78bff8a28",
+      "gas": "46343"
+    },
+    {
+      "action": "Approve mUSD",
+      "hash": "0xbc83af9bd98c530b508f5bc1bc70251e1c94b9f48de5b0fdba58397fe739bfbe",
+      "gas": "46343"
+    },
+    {
+      "action": "Approve mUSD",
+      "hash": "0xd0aa1fb64b9aea75a3555d3017f51f98da7b5d3fc8bb6d6395d28a18fdbf2ebf",
+      "gas": "46343"
+    },
+    {
+      "action": "Commit mUSD",
+      "hash": "0xcb962e79d0b9deb82ce70a413c05ce9a8bca5995bec8feb1fbaa5cf9a910dd30",
+      "gas": "156097"
+    },
+    {
+      "action": "Commit mUSD",
+      "hash": "0x2ace7234646f483e31fffb10852f82c8ca34d52afc730dbd728fc5d04c3447d2",
+      "gas": "104797"
+    },
+    {
+      "action": "Commit mUSD",
+      "hash": "0x88a11c76a9824936ccc80255d9813e31757f1eb3e298b1ee89be636364f20621",
+      "gas": "104797"
+    },
+    {
+      "action": "Finalise successful offering",
+      "hash": "0x8f94bb7ce43d3ece5f9a7a7c264912ba78e6f1ed4cb46ee39164c7459357e0ea",
+      "gas": "119086"
+    },
+    {
+      "action": "Settle allocation",
+      "hash": "0xa6cb1c21fe551afe5804df7000dd8040dce9893db840e817259a3a2278ac6f65",
+      "gas": "241511"
+    },
+    {
+      "action": "Withdraw refund",
+      "hash": "0x83c80e3382e62522fc9971892555eaaec75c0e1a8905565187d02248b0ac93d8",
+      "gas": "79666"
+    },
+    {
+      "action": "Claim allocation",
+      "hash": "0x7e36c8266d17c9a39ada9e7258bd88a442ef621eceb6d2a11782fed70dbf36bd",
+      "gas": "96863"
+    },
+    {
+      "action": "Settle allocation",
+      "hash": "0xe70e5fa2612f5f2123b41dd66584285472dc3c58c26b45fe062dc2816312768d",
+      "gas": "173111"
+    },
+    {
+      "action": "Withdraw refund",
+      "hash": "0xfa7a33e9b3599492b5ad0b1c6537476aa328ef14786531312e57b840bf89d2ee",
+      "gas": "62566"
+    },
+    {
+      "action": "Claim allocation",
+      "hash": "0xa89d49ab6bd1f3d2d3d8552e4a69184ff0f014702572060355352022ae108f1f",
+      "gas": "79763"
+    },
+    {
+      "action": "Settle allocation",
+      "hash": "0xd3e63fe168286edd7e1aef3e013ab4124667da663969d88796d8c08afaeb081f",
+      "gas": "173111"
+    },
+    {
+      "action": "Withdraw refund",
+      "hash": "0xe8122355a4b945176d64115221266d2f76c9150a35bdd8bf12915bed435183c3",
+      "gas": "62566"
+    },
+    {
+      "action": "Claim allocation",
+      "hash": "0x758f22b6bddcf370e3a4314d9cc3ce72daea5b34ccd46d9ba82bb75f05a369ed",
+      "gas": "74963"
+    },
+    {
+      "action": "Withdraw accepted proceeds",
+      "hash": "0x5219e54d44c46672aa7ce56fd37e8fc1a84d798881cd949e3105efbe3361841d",
+      "gas": "89168"
+    },
+    {
+      "action": "Create offering",
+      "hash": "0xaf028f4475e4f5ee5ae086f71b8ea1cd769e99400deea292b14a35636581c7fa",
+      "gas": "1845580"
+    },
+    {
+      "action": "Whitelist escrow",
+      "hash": "0x5e8d9d11c4d67dd2ab48f60d92e783ee5aca637398bf1d64eee0d171fe2e34b8",
+      "gas": "48799"
+    },
+    {
+      "action": "Approve inventory",
+      "hash": "0xa79f6df5df8817b6b802d87729b1d6bb7b670dcac6a1a3b1861a19116c6c5f5e",
+      "gas": "46371"
+    },
+    {
+      "action": "Deposit inventory",
+      "hash": "0xcfbaf1fd066f9004a9144f78f5f7ace52f2f10ac2caec425f90fc90732d77899",
+      "gas": "89997"
+    },
+    {
+      "action": "Approve mUSD",
+      "hash": "0x0eff3065d7f74a00515ecc022a2eba2ea6fbc8af5bea1a519a828126013cd86f",
+      "gas": "46343"
+    },
+    {
+      "action": "Approve mUSD",
+      "hash": "0x71f872cc0e20836613105e2fb486165d79499df28d2f4d59f9b8ed634296386a",
+      "gas": "46343"
+    },
+    {
+      "action": "Approve mUSD",
+      "hash": "0x168f96e64c96dbc796463f037cab3ad50c1f5507e7d52a21c90d85b40e5b8fa7",
+      "gas": "46343"
+    },
+    {
+      "action": "Approve mUSD",
+      "hash": "0x3488fde73e3ebfd08c5f24ff1938c2a77ebd4178dc7136586ea99cfb49f8f331",
+      "gas": "46343"
+    },
+    {
+      "action": "Commit 700 to second offering",
+      "hash": "0x36c31717540ca5963f00e030e667876011ff8b4df00871cd715119e076df7a63",
+      "gas": "156097"
+    },
+    {
+      "action": "Finalise failed offering",
+      "hash": "0x366bbd357e6db9d6a6815e97137da4d81bd3d443399f3ffb293f2f1963ad50a2",
+      "gas": "73684"
+    },
+    {
+      "action": "Settle failed subscription",
+      "hash": "0x85f39bbfed2e09dcb30b34e09adae58c452fb589a0f790b61114a62ef87ca2c3",
+      "gas": "161330"
+    },
+    {
+      "action": "Withdraw full refund",
+      "hash": "0xe35fdcb796a3605b1095099e74fc8691507ff10d5041dac6695d1a82d77987c8",
+      "gas": "74866"
+    },
+    {
+      "action": "Recover failed inventory",
+      "hash": "0xa5d3449d3d12300aed97cf62d8a58278186804a354b7d7955ff60386f6d8fa63",
+      "gas": "46170"
+    }
+  ]
+}
