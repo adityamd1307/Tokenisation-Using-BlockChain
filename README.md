@@ -2,7 +2,12 @@
 
 An academic dApp for NTU SC4053. Authorised issuers tokenise fictional real-world and digital assets as ERC-20 tokens and sell them at a fixed price to whitelisted investors. All ownership records and compliance rules live on Ethereum. The repository is also graded on how the AI-written code was audited, so every change carries an evidence trail (see [Audit trail](#audit-trail)).
 
-**Status (6 November 2026):** Phase 6 local audit, remediation, tests and reports are complete. The audit fixed a signing-provider deployment-validation gap; 153 contract/script tests, 122 frontend tests and the real-chain service integration pass. **Full submission acceptance is still pending:** real MetaMask/browser rehearsal, required Sepolia deployment evidence, and team review of the course brief and report identity/contribution fields. See the [final audit summary](docs/audit/final-audit-summary.md).
+**Status (7 November 2026):** Phase 6 (audit, signing-provider fix [AUD-030](docs/issues/AUD-030-signing-wallet-deployment-is-not-checked-against-t.md), tests and reports) is merged into main. adityamd built it with Codex as commit c7cb0d1. A separate Claude Code session verified it before the merge. That was an AI review of another AI tool's work, not a human review. It re-ran 153 contract and 122 frontend tests, a fresh-node integration run, the replay and the audit demo, with matching results ([verification](docs/phase6-verification.md)). AUD-002 was accepted on 7 November for the Phase 4 code (0b1249e), on Chordia Laksh's report of a manual MetaMask rehearsal; screenshots are still to be added. **Still pending:**
+- a MetaMask check of the Phase 6 signing change;
+- the Sepolia deployment ([AUD-003](docs/issues/AUD-003-deployment-and-verification-tooling-are-incomplete.md)), since nothing has run on Sepolia;
+- team review of the course brief and of the report's identity and contribution fields.
+
+See also the [final audit summary](docs/audit/final-audit-summary.md).
 
 ## What it does
 
