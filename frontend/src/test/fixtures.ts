@@ -22,6 +22,7 @@ export const asset: Asset = {
   price: parseEther("0.001"),
   inventory: 5000n,
   closed: false,
+  paused: false,
   proceeds: 0n,
   saleEth: 0n,
 };

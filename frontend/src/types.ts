@@ -30,6 +30,8 @@ export interface Asset {
   price: bigint;
   inventory: bigint;
   closed: boolean;
+  /** AssetToken.paused() — spec-v1 §5 D5. */
+  paused: boolean;
   proceeds: bigint;
   saleEth: bigint;
 }

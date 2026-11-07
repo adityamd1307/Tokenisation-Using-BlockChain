@@ -1,6 +1,9 @@
 import { Interface, isError } from "ethers";
 import { abis } from "../config/contracts";
 const interfaces = Object.values(abis).map((abi) => new Interface(abi));
+// spec-v1 §5 D5: every token movement except forcedTransfer reverts while paused.
+export const PAUSED =
+  "This asset is paused by its issuer. No tokens can move until it is unpaused.";
 const messages: Record<string, string> = {
   NotAdmin: "Only the platform administrator can manage issuers.",
   NotIssuer: "Only this asset’s issuer can manage its offering.",
@@ -25,6 +28,9 @@ const messages: Record<string, string> = {
   NoUnsoldTokens: "There are no unsold tokens to recover.",
   NoExcessETH: "There is no excess ETH to recover.",
   AssetNotFound: "This asset does not exist in the registry.",
+  // AUD-016: OpenZeppelin Pausable errors (spec-v1 §5 D5).
+  EnforcedPause: PAUSED,
+  ExpectedPause: "This asset is not paused.",
 };
 export function rejected(error: any) {
   return (

@@ -17,6 +17,7 @@ import {
   quantity,
   type CreateAssetInput,
 } from "../utils/validation";
+import { PAUSED } from "../utils/errors";
 
 export class Blockchain {
   constructor(
@@ -95,14 +96,17 @@ export class Blockchain {
       issuer: a.issuerAddress,
     };
     const sale = new Contract(base.sale, abis.sale, this.provider);
-    const [price, inventory, closed, proceeds, saleEth] = await Promise.all([
-      sale.pricePerToken(),
-      sale.availableTokens(),
-      sale.saleClosed(),
-      sale.unclaimedProceeds(),
-      this.provider.getBalance(base.sale),
-    ]);
-    return { ...base, price, inventory, closed, proceeds, saleEth };
+    const token = new Contract(base.token, abis.token, this.provider);
+    const [price, inventory, closed, proceeds, saleEth, paused] =
+      await Promise.all([
+        sale.pricePerToken(),
+        sale.availableTokens(),
+        sale.saleClosed(),
+        sale.unclaimedProceeds(),
+        this.provider.getBalance(base.sale),
+        token.paused(),
+      ]);
+    return { ...base, price, inventory, closed, proceeds, saleEth, paused };
   }
   async assets(): Promise<Asset[]> {
     await this.ready();
@@ -252,6 +256,7 @@ export class Blockchain {
       this.account(asset, account),
     ]);
     if (fresh.closed) throw new Error("This offering is permanently closed.");
+    if (fresh.paused) throw new Error(PAUSED);
     if (!state.saleEligible || !state.eligible)
       throw new Error(
         "Whitelist both the issuer and sale contract before depositing.",
@@ -276,6 +281,7 @@ export class Blockchain {
       this.account(asset, account),
     ]);
     if (fresh.closed) throw new Error("This offering is permanently closed.");
+    if (fresh.paused) throw new Error(PAUSED);
     if (!state.eligible)
       throw new Error("Your wallet is not approved for this asset.");
     if (!state.saleEligible)
@@ -301,10 +307,12 @@ export class Blockchain {
   ) {
     const to = address(recipient),
       amount = quantity(value);
-    const [state, approved] = await Promise.all([
+    const [state, approved, fresh] = await Promise.all([
       this.account(asset, account),
       this.eligibility(asset, to),
+      this.asset(asset.id),
     ]);
+    if (fresh.paused) throw new Error(PAUSED);
     if (!state.eligible)
       throw new Error("Your wallet is not approved to send this asset.");
     if (!approved)
@@ -329,6 +337,12 @@ export class Blockchain {
   ) {
     if (asset.issuer.toLowerCase() !== account.toLowerCase())
       throw new Error("Only this asset’s issuer can manage its offering.");
+    // D5 invariant 5: recovery moves tokens, so it reverts while paused.
+    if (
+      operation === "recoverUnsoldTokens" &&
+      (await this.asset(asset.id)).paused
+    )
+      throw new Error(PAUSED);
     return this.sale(asset, await this.signer(wallet, account))[operation]();
   }
 }
