@@ -1,0 +1,9 @@
+﻿
+ RUN  v4.1.12 C:/Users/laksh/OneDrive - Nanyang Technological University/NTU/Y4S1/SC4053/Project/frontend
+
+
+ Test Files  17 passed (17)
+      Tests  243 passed (243)
+   Start at  20:03:17
+   Duration  23.20s (transform 8.54s, setup 20.65s, import 30.96s, tests 43.94s, environment 37.54s)
+

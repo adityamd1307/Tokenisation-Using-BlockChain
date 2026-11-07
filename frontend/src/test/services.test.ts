@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { JsonRpcProvider, parseEther } from "ethers";
-import { Blockchain } from "../services/blockchain";
+import { Blockchain, COMPLIANCE_ROLE } from "../services/blockchain";
 import { confirmTransaction } from "../services/transactions";
 import {
   asset,
@@ -37,8 +37,14 @@ beforeEach(() => {
       "recoverUnsoldTokens",
       "sweepExcessETH",
       "setWhitelisted",
+      "pause",
+      "unpause",
+      "forcedTransfer",
+      "grantRole",
+      "revokeRole",
     ].map((name) => [name, vi.fn().mockResolvedValue(mockTransaction())]),
   );
+  methods.balanceOf = vi.fn().mockResolvedValue(40n);
   vi.spyOn(api, "factory").mockReturnValue(methods as any);
   vi.spyOn(api, "token").mockReturnValue(methods as any);
   vi.spyOn(api, "sale").mockReturnValue(methods as any);
@@ -188,6 +194,101 @@ describe("Actual ABI write methods and preflight checks", () => {
     await expect(
       api.manageSale(wallet, INVESTOR, asset, operation),
     ).rejects.toThrow("Only this asset");
+  });
+});
+// spec-v1 §5 "D5 functions" and Phase 2 role delegation.
+describe("Token controls", () => {
+  const admin = { ...accountState, tokenAdmin: true };
+  it.each([
+    [true, "pause"],
+    [false, "unpause"],
+  ] as const)(
+    "setPaused(%s) calls %s for a token admin",
+    async (paused, fn) => {
+      vi.mocked(api.account).mockResolvedValue(admin);
+      vi.mocked(api.asset).mockResolvedValue({ ...asset, paused: !paused });
+      await api.setPaused(wallet, ISSUER, asset, paused);
+      expect(methods[fn]).toHaveBeenCalledOnce();
+    },
+  );
+  it("refuses to pause without DEFAULT_ADMIN_ROLE", async () => {
+    await expect(api.setPaused(wallet, INVESTOR, asset, true)).rejects.toThrow(
+      "token admin",
+    );
+    expect(methods.pause).not.toHaveBeenCalled();
+  });
+  it("refuses to pause an already paused asset", async () => {
+    vi.mocked(api.account).mockResolvedValue(admin);
+    vi.mocked(api.asset).mockResolvedValue({ ...asset, paused: true });
+    await expect(api.setPaused(wallet, ISSUER, asset, true)).rejects.toThrow(
+      "already paused",
+    );
+    expect(methods.pause).not.toHaveBeenCalled();
+  });
+  it("forces a transfer from a revoked holder to a verified recipient", async () => {
+    vi.mocked(api.account).mockResolvedValue(admin);
+    vi.mocked(api.eligibility).mockImplementation(
+      async (_asset, who) => who === RECIPIENT,
+    );
+    await api.forcedTransfer(wallet, ISSUER, asset, INVESTOR, RECIPIENT, "40");
+    expect(methods.forcedTransfer).toHaveBeenCalledWith(
+      INVESTOR,
+      RECIPIENT,
+      40n,
+    );
+  });
+  it.each([
+    [
+      "the caller is not a token admin",
+      accountState,
+      [RECIPIENT],
+      "40",
+      "token admin",
+    ],
+    [
+      "the source is still verified",
+      admin,
+      [INVESTOR, RECIPIENT],
+      "40",
+      "still verified",
+    ],
+    ["the recipient is not verified", admin, [], "40", "recipient is not"],
+    [
+      "the amount exceeds the balance",
+      admin,
+      [RECIPIENT],
+      "41",
+      "holds only 40",
+    ],
+  ])(
+    "blocks a forced transfer when %s",
+    async (_n, state, verified, amount, message) => {
+      vi.mocked(api.account).mockResolvedValue(state);
+      vi.mocked(api.eligibility).mockImplementation(async (_asset, who) =>
+        verified.includes(who),
+      );
+      await expect(
+        api.forcedTransfer(wallet, ISSUER, asset, INVESTOR, RECIPIENT, amount),
+      ).rejects.toThrow(message);
+      expect(methods.forcedTransfer).not.toHaveBeenCalled();
+    },
+  );
+  it.each([
+    [true, "grantRole"],
+    [false, "revokeRole"],
+  ] as const)(
+    "setComplianceRole(%s) calls %s with COMPLIANCE_ROLE",
+    async (grant, fn) => {
+      vi.mocked(api.account).mockResolvedValue(admin);
+      await api.setComplianceRole(wallet, ISSUER, asset, RECIPIENT, grant);
+      expect(methods[fn]).toHaveBeenCalledWith(COMPLIANCE_ROLE, RECIPIENT);
+    },
+  );
+  it("refuses role changes without DEFAULT_ADMIN_ROLE", async () => {
+    await expect(
+      api.setComplianceRole(wallet, INVESTOR, asset, RECIPIENT, true),
+    ).rejects.toThrow("token admin");
+    expect(methods.grantRole).not.toHaveBeenCalled();
   });
 });
 describe("Receipt handling", () => {

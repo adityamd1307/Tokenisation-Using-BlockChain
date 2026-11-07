@@ -1,16 +1,9 @@
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from "@testing-library/react";
+// Ported from main (PRs #3 and #4) to the redesigned UI on frontend-redesign.
+// Assertions are unchanged except: renderApp mounting, "Connect wallet",
+// "Label: Confirmed" status text, and mocking the per-fund access read.
+import { act, fireEvent, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { MemoryRouter } from "react-router-dom";
-import { AppRoutes } from "../App";
-import { WalletProviderContext } from "../context/WalletContext";
-import { DataProvider } from "../context/DataContext";
-import { TransactionProvider } from "../context/TransactionContext";
+import { renderApp } from "./render";
 import { blockchain } from "../services/blockchain";
 import { compliance } from "../services/compliance";
 import {
@@ -51,25 +44,15 @@ const policy = {
 };
 let wallet: MockWallet;
 async function connect() {
-  fireEvent.click(screen.getByRole("button", { name: /Connect Wallet/ }));
+  fireEvent.click(screen.getAllByRole("button", { name: /Connect wallet/ })[0]);
   await waitFor(() =>
     expect(
-      screen.queryByRole("button", { name: /Connect Wallet/ }),
-    ).not.toBeInTheDocument(),
+      screen.getByRole("button", { name: "Disconnect wallet" }),
+    ).toBeInTheDocument(),
   );
 }
 function mount() {
-  render(
-    <WalletProviderContext>
-      <DataProvider>
-        <TransactionProvider>
-          <MemoryRouter initialEntries={["/compliance"]}>
-            <AppRoutes />
-          </MemoryRouter>
-        </TransactionProvider>
-      </DataProvider>
-    </WalletProviderContext>,
-  );
+  renderApp("/compliance");
 }
 beforeEach(() => {
   wallet = new MockWallet();
@@ -83,6 +66,7 @@ beforeEach(() => {
   vi.spyOn(blockchain, "assets").mockResolvedValue([regulated]);
   vi.spyOn(compliance, "state").mockResolvedValue(policy);
   vi.spyOn(compliance, "identity").mockResolvedValue(identity);
+  vi.spyOn(blockchain, "access").mockResolvedValue([]);
 });
 describe("Compliance workspace", () => {
   it("shows real metadata and connected identity without administrator controls", async () => {
@@ -113,15 +97,13 @@ describe("Compliance workspace", () => {
     expect(compliance.identity).not.toHaveBeenCalled();
   });
   it("uses authoritative preflight, explains holding failure, and invalidates edited results", async () => {
-    const check = vi
-      .spyOn(compliance, "check")
-      .mockResolvedValue({
-        reason: 5,
-        identity,
-        senderIdentity: identity,
-        recipientPolicy: 0,
-        policyTransfer: 5,
-      });
+    const check = vi.spyOn(compliance, "check").mockResolvedValue({
+      reason: 5,
+      identity,
+      senderIdentity: identity,
+      recipientPolicy: 0,
+      policyTransfer: 5,
+    });
     mount();
     await connect();
     await screen.findByLabelText("Transfer amount");
@@ -189,9 +171,7 @@ describe("Compliance workspace", () => {
         true,
       ),
     );
-    expect(
-      await screen.findByText(/Confirmed successfully/i),
-    ).toBeInTheDocument();
+    expect(await screen.findByText(/: Confirmed/)).toBeInTheDocument();
     expect(
       screen.queryByRole("button", { name: "Register identity" }),
     ).not.toBeInTheDocument();

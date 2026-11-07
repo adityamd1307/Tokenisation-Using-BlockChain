@@ -19,6 +19,8 @@ interface Transactions {
     send: () => Promise<TransactionResponse>,
   ) => Promise<TransactionReceipt | undefined>;
   checkConfirmation: () => Promise<void>;
+  /** Clears a finished (confirmed, failed or rejected) status. */
+  dismiss: () => void;
 }
 const Context = createContext<Transactions | null>(null);
 export function TransactionProvider({ children }: { children: ReactNode }) {
@@ -53,6 +55,11 @@ export function TransactionProvider({ children }: { children: ReactNode }) {
       const receipt = await confirmTransaction(tx, (phase, hash) =>
         update({ phase, hash }),
       );
+      update({
+        phase: "confirmed",
+        hash: receipt.hash,
+        block: receipt.blockNumber,
+      });
       refresh();
       return session.current === start ? receipt : undefined;
     } catch (error) {
@@ -100,6 +107,7 @@ export function TransactionProvider({ children }: { children: ReactNode }) {
           state: {
             ...state,
             phase: receipt.status === 1 ? "confirmed" : "failed",
+            block: receipt.blockNumber,
             error:
               receipt.status === 1
                 ? undefined
@@ -127,6 +135,11 @@ export function TransactionProvider({ children }: { children: ReactNode }) {
         ),
         run,
         checkConfirmation,
+        dismiss: () => {
+          // AUD-010: an unverified receipt stays visible and keeps submission blocked.
+          if (["confirmed", "failed", "rejected"].includes(state.phase))
+            setEntry({ session: wallet.session, state: { phase: "idle" } });
+        },
       }}
     >
       {children}

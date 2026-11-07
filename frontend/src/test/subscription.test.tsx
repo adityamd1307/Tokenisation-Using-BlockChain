@@ -1,17 +1,10 @@
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from "@testing-library/react";
+// Ported from main (PRs #3 and #4) to the redesigned UI on frontend-redesign.
+// Assertions are unchanged except: renderApp mounting, "Connect wallet",
+// "Label: Confirmed" status text, and mocking the per-fund access read.
+import { act, fireEvent, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { MemoryRouter } from "react-router-dom";
-import { Interface, MaxUint256 } from "ethers";
-import { AppRoutes } from "../App";
-import { WalletProviderContext } from "../context/WalletContext";
-import { DataProvider } from "../context/DataContext";
-import { TransactionProvider } from "../context/TransactionContext";
+import { MaxUint256 } from "ethers";
+import { renderApp } from "./render";
 import { blockchain } from "../services/blockchain";
 import {
   subscriptions,
@@ -35,7 +28,6 @@ import {
   mockTransaction,
 } from "./fixtures";
 import * as history from "../services/history";
-import { abis } from "../config/contracts";
 let provider: MockWallet, o: Offering, a: SubscriptionAccount;
 const U = (x: number) => BigInt(x) * 1_000_000n;
 beforeEach(() => {
@@ -102,22 +94,21 @@ beforeEach(() => {
     compliance: true,
   });
   vi.spyOn(history, "assetHistory").mockResolvedValue([]);
+  vi.spyOn(blockchain, "access").mockResolvedValue([
+    {
+      assetId: "0",
+      eligible: true,
+      compliance: true,
+      tokenAdmin: true,
+      saleIssuer: true,
+    },
+  ]);
 });
 function mount(path = `/offerings/${SALE}`) {
-  render(
-    <WalletProviderContext>
-      <DataProvider>
-        <TransactionProvider>
-          <MemoryRouter initialEntries={[path]}>
-            <AppRoutes />
-          </MemoryRouter>
-        </TransactionProvider>
-      </DataProvider>
-    </WalletProviderContext>,
-  );
+  renderApp(path);
 }
 async function connect() {
-  fireEvent.click(screen.getByRole("button", { name: /Connect Wallet/ }));
+  fireEvent.click(screen.getAllByRole("button", { name: /Connect wallet/ })[0]);
   await screen.findByRole("heading", { name: "Your subscription" });
 }
 describe("Subscription precision", () => {
@@ -173,7 +164,7 @@ describe("Subscription interface", () => {
       screen.getByRole("button", { name: "Commit stablecoins" }),
     ).toBeDisabled();
     fireEvent.click(screen.getByRole("button", { name: "Approve mUSD" }));
-    await screen.findByText(/Approve mUSD · Confirmed/);
+    await screen.findByText(/Approve mUSD: Confirmed/);
     await waitFor(() =>
       expect(
         screen.getByRole("button", { name: "Commit stablecoins" }),
@@ -183,7 +174,7 @@ describe("Subscription interface", () => {
       "1800",
     );
     fireEvent.click(screen.getByRole("button", { name: "Commit stablecoins" }));
-    await screen.findByText(/Commit mUSD · Confirmed/);
+    await screen.findByText(/Commit mUSD: Confirmed/);
     expect(subscriptions.action).toHaveBeenCalledWith(
       provider,
       INVESTOR,
@@ -204,7 +195,7 @@ describe("Subscription interface", () => {
     expect(
       screen.getByRole("button", { name: "Commit stablecoins" }),
     ).toBeDisabled();
-    expect(screen.getByText(/not fully funded/)).toBeInTheDocument();
+    expect(screen.getAllByText(/not fully funded/).length).toBeGreaterThan(0);
   });
   it("keeps refunds enabled when revoked eligibility blocks token claims", async () => {
     o.state = 3;
@@ -228,7 +219,7 @@ describe("Subscription interface", () => {
       screen.getByRole("button", { name: "Withdraw refund" }),
     ).toBeEnabled();
     fireEvent.click(screen.getByRole("button", { name: "Withdraw refund" }));
-    await screen.findByText(/Withdraw mUSD refund · Confirmed/);
+    await screen.findByText(/Withdraw mUSD refund: Confirmed/);
   });
   it("requires settlement before payouts and reflects already claimed entitlements", async () => {
     o.state = 3;
@@ -310,11 +301,11 @@ describe("Subscription interface", () => {
     fireEvent.click(
       screen.getByRole("button", { name: "Approve offering eligibility" }),
     );
-    await screen.findByText(/Approve offering eligibility · Confirmed/);
+    await screen.findByText(/Approve offering eligibility: Confirmed/);
     fireEvent.click(
       await screen.findByRole("button", { name: "Approve token spending" }),
     );
-    await screen.findByText(/Approve offering inventory · Confirmed/);
+    await screen.findByText(/Approve offering inventory: Confirmed/);
     await waitFor(() =>
       expect(
         screen.getByRole("button", { name: "Deposit inventory" }),
@@ -324,7 +315,7 @@ describe("Subscription interface", () => {
       "1000",
     );
     fireEvent.click(screen.getByRole("button", { name: "Deposit inventory" }));
-    await screen.findByText(/Deposit offering inventory · Confirmed/);
+    await screen.findByText(/Deposit offering inventory: Confirmed/);
   });
   it("displays wallet rejection without reporting confirmation", async () => {
     vi.mocked(subscriptions.action).mockRejectedValue({ code: 4001 });
@@ -334,10 +325,8 @@ describe("Subscription interface", () => {
       target: { value: "1800" },
     });
     fireEvent.click(screen.getByRole("button", { name: "Approve mUSD" }));
-    await screen.findByText(/Rejected by user/);
-    expect(
-      screen.queryByText(/Confirmed successfully/),
-    ).not.toBeInTheDocument();
+    await screen.findByText(/: Rejected in wallet/);
+    expect(screen.queryByText(/: Confirmed/)).not.toBeInTheDocument();
   });
   it("creates offerings from the existing issuer workspace with exact input values", async () => {
     provider.accounts = [ISSUER];
@@ -346,15 +335,17 @@ describe("Subscription interface", () => {
       issuer: true,
     });
     vi.spyOn(subscriptions, "create").mockResolvedValue(mockTransaction());
-    mount("/issuer");
-    fireEvent.click(screen.getByRole("button", { name: /Connect Wallet/ }));
+    mount("/issuer/0/offering");
+    fireEvent.click(
+      screen.getAllByRole("button", { name: /Connect wallet/ })[0],
+    );
     await screen.findByRole("heading", {
       name: "Create a subscription offering",
     });
     fireEvent.click(
       screen.getByRole("button", { name: "Create subscription offering" }),
     );
-    await screen.findByText(/Create subscription offering · Confirmed/);
+    await screen.findByText(/Create subscription offering: Confirmed/);
     expect(subscriptions.create).toHaveBeenCalledWith(
       provider,
       ISSUER,

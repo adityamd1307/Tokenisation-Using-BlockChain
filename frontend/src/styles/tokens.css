@@ -1,0 +1,109 @@
+/*
+ * Design tokens. Components use only these variables; no raw colours, sizes or
+ * shadows appear elsewhere. Contrast pairs are checked by src/test/tokens.test.ts.
+ */
+:root {
+  /* Colour: warm neutral base, one accent, semantic status colours only. */
+  --color-bg: #f5f3ee;
+  --color-surface: #ffffff;
+  --color-surface-muted: #faf9f6;
+  --color-ink: #16181d;
+  --color-ink-2: #474c56;
+  --color-ink-3: #686d76;
+  --color-line: #e3e0d8;
+  --color-line-strong: #cbc7bc;
+
+  --color-accent: #1c3453;
+  --color-accent-hover: #12243b;
+  --color-accent-subtle: #e9edf3;
+  --color-on-accent: #ffffff;
+
+  --color-ok: #2c6549;
+  --color-ok-bg: #e9f1ec;
+  --color-warn: #845407;
+  --color-warn-bg: #faf2e1;
+  --color-err: #9e372f;
+  --color-err-bg: #f8eae8;
+
+  --color-focus: #1c3453;
+  --color-scrim: rgba(22, 24, 29, 0.32);
+
+  /* Type: IBM Plex, a tight 12/13/14/16/20/28 scale. */
+  --font-sans:
+    "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono:
+    "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+
+  --text-xs: 12px;
+  --text-sm: 13px;
+  --text-md: 14px;
+  --text-lg: 16px;
+  --text-xl: 20px;
+  --text-2xl: 28px;
+  --leading-xs: 16px;
+  --leading-sm: 18px;
+  --leading-md: 20px;
+  --leading-lg: 24px;
+  --leading-xl: 28px;
+  --leading-2xl: 36px;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --tracking-label: 0.04em;
+
+  /* Space: 4px base grid. */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+
+  /* Shape and depth: small radii, hairlines, one overlay shadow. */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --hairline: 1px solid var(--color-line);
+  --hairline-strong: 1px solid var(--color-line-strong);
+  --shadow-overlay: 0 8px 24px rgba(22, 24, 29, 0.12);
+
+  /* Layout */
+  --sidebar-width: 240px;
+  --topbar-height: 52px;
+  --content-max: 1200px;
+  --control-height: 32px;
+  --control-height-sm: 28px;
+  --row-height: 40px;
+  --pill-height: 24px;
+  --icon-sm: 12px;
+  --icon-md: 16px;
+  --dot-sm: 6px;
+  --dot: 8px;
+  --space-half: 2px; /* optical alignment only */
+  --hairline-width: 1px;
+  --rule-width: 2px;
+  --label-size: var(--text-xs);
+
+  /* Fixed widths for layout regions */
+  --min-viewport: 320px;
+  --aside-width: 340px;
+  --dialog-width: 480px;
+  --toast-width: 380px;
+  --drawer-width: 280px;
+  --facts-label: 180px;
+  --figure-min: 152px;
+  --field-min: 160px;
+  --field-grow: 240px;
+  --skeleton-width: 160px;
+
+  /* Motion: colour/opacity only, short. */
+  --motion-fast: 120ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-fast: 0ms linear;
+  }
+}

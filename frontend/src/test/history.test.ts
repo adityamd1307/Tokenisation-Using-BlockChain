@@ -2,7 +2,15 @@ import { describe, expect, it, vi } from "vitest";
 import { JsonRpcProvider } from "ethers";
 import { Blockchain } from "../services/blockchain";
 import { assetHistory } from "../services/history";
-import { asset, FACTORY, HASH, INVESTOR, RECIPIENT, SALE } from "./fixtures";
+import {
+  asset,
+  FACTORY,
+  HASH,
+  INVESTOR,
+  ISSUER,
+  RECIPIENT,
+  SALE,
+} from "./fixtures";
 function fixture() {
   const provider = new JsonRpcProvider();
   vi.spyOn(provider, "getBlockNumber").mockResolvedValue(4100);
@@ -131,6 +139,50 @@ describe("On-chain event history", () => {
         to: RECIPIENT,
       });
     }
+  });
+  // AUD-020 (raised as AUD-017 on frontend-redesign): D5 pause/unpause and AccessControl role changes are token operations too.
+  // Phase 4 §8.4 requires each row's transaction type; AUD-013's rule requires every
+  // event consumer to label new operations.
+  it("labels pause, unpause and role changes instead of dropping them", async () => {
+    const { api, token, sale } = fixture();
+    sale.queryFilter.mockResolvedValue([]);
+    const role = `0x${"00".repeat(32)}`;
+    const event = (eventName: string, args: object, index: number) => ({
+      eventName,
+      args,
+      transactionHash: `0x${String(index).repeat(64)}`,
+      index,
+      blockNumber: 100,
+    });
+    token.queryFilter.mockImplementation(async (_filter, from) =>
+      from === 100
+        ? [
+            event("Paused", { account: ISSUER }, 1),
+            event("Unpaused", { account: ISSUER }, 2),
+            event(
+              "RoleGranted",
+              { role, account: RECIPIENT, sender: ISSUER },
+              3,
+            ),
+            event(
+              "RoleRevoked",
+              { role, account: RECIPIENT, sender: ISSUER },
+              4,
+            ),
+          ]
+        : [],
+    );
+    const rows = await assetHistory(api, asset);
+    const byType = (type: string) => rows.filter((r) => r.type === type);
+    expect(byType("Paused")).toHaveLength(1);
+    expect(byType("Paused")[0]).toMatchObject({ from: ISSUER });
+    expect(byType("Unpaused")).toHaveLength(1);
+    expect(byType("Role granted")).toHaveLength(1);
+    expect(byType("Role granted")[0]).toMatchObject({
+      from: ISSUER,
+      to: RECIPIENT,
+    });
+    expect(byType("Role revoked")).toHaveLength(1);
   });
   it("handles unavailable timestamps without hiding verified events", async () => {
     const { api, provider } = fixture();

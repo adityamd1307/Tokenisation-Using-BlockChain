@@ -6,7 +6,7 @@ Inventory for Report Section 5. AUD-001 to AUD-003 are tracking issues for unbui
 - On main, AUD-016 to AUD-018 are the subscription and compliance issues, published through PRs #3 and #4.
 - AUD-030 is the Phase 6 signing-RPC issue. Commit c7cb0d1 numbers it AUD-016, and its raw logs and `docs/audit/source-manifest.json` keep that number.
 - The unmerged `frontend-redesign` branch has its own local AUD-016 and AUD-017 (pause pre-flight; history labels). The independent review pass planned to start at AUD-018. Both now collide with published numbers and need new ones before they reach main.
-- AUD-019 to AUD-029 are free. `scripts/new-issue.sh` takes the highest number plus one, so on any tree that contains AUD-030 it hands out AUD-031; give issues 019 to 029 their numbers by hand.
+- The frontend-redesign issues are now AUD-019 and AUD-020. AUD-021 to AUD-029 are free. `scripts/new-issue.sh` takes the highest number plus one, so on any tree that contains AUD-030 it hands out AUD-031; give issues 019 to 029 their numbers by hand.
 
 | ID | Title | Severity | Category | Status |
 |---|---|---|---|---|
@@ -29,3 +29,5 @@ Inventory for Report Section 5. AUD-001 to AUD-003 are tracking issues for unbui
 | [AUD-017](AUD-017-subscription-transaction-mocks-break-the-productio.md) | Subscription transaction mocks break the production type check | low | frontend build | fixed; before/after logs, no commits |
 | [AUD-018](AUD-018-compliance-checker-retains-issuer-sender-during-wa.md) | Compliance checker retains issuer sender during wallet connection | low | frontend state | fixed; before/after logs, no commits |
 | [AUD-030](AUD-030-signing-wallet-deployment-is-not-checked-against-t.md) | Signing wallet deployment is not checked against the public RPC | medium | frontend transaction correctness | fixed (c7cb0d1; SEC-013; no separate test/fix commits, after-the-fact evidence runs) |
+| [AUD-019](AUD-019-frontend-ignores-the-d5-pause-no-pre-flight-check-.md) | Frontend ignores the D5 pause: no pre-flight check and a raw EnforcedPause error | low | frontend | fixed (fd74329; raised as AUD-016 on frontend-redesign) |
+| [AUD-020](AUD-020-activity-history-drops-pause-unpause-and-role-chan.md) | Activity history drops pause, unpause and role-change events | low | frontend | fixed (3f7e0c4; raised as AUD-017 on frontend-redesign) |

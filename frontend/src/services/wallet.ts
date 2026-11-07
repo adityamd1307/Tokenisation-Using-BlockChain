@@ -1,6 +1,6 @@
 import { toQuantity } from "ethers";
 import { targetNetwork } from "../config/networks";
-import type { WalletProvider } from "../types";
+import { rpcError, type WalletProvider } from "../types";
 export async function walletSnapshot(
   provider: WalletProvider,
   connect = false,
@@ -18,8 +18,9 @@ export async function switchNetwork(provider: WalletProvider) {
       method: "wallet_switchEthereumChain",
       params: [{ chainId }],
     });
-  } catch (error: any) {
-    if (error?.code !== 4902 && error?.info?.error?.code !== 4902) throw error;
+  } catch (caught) {
+    const error = rpcError(caught);
+    if (error.code !== 4902 && error.info?.error?.code !== 4902) throw caught;
     await provider.request({
       method: "wallet_addEthereumChain",
       params: [

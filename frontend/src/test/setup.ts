@@ -1,7 +1,10 @@
 import "@testing-library/jest-dom/vitest";
 import { afterEach, vi } from "vitest";
-import { cleanup } from "@testing-library/react";
+import { cleanup, configure } from "@testing-library/react";
 afterEach(cleanup);
+// The suite runs 13 jsdom files in parallel; on slower machines a full-app render can
+// exceed Testing Library's 1 s default wait, which made passing tests flaky.
+configure({ asyncUtilTimeout: 5000 });
 // AUD-015: unit tests run against a fixed local test deployment, never the committed
 // addresses.json, which points at whichever network was deployed last (Sepolia under D18).
 // These are the local values the suite was written against.

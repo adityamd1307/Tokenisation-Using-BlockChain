@@ -1,25 +1,38 @@
 // Phase 4 §8.4: bounded, real event queries. The ERC-20 transfer inside a purchase or a
 // forced transfer (D5, AUD-013) is deduplicated so each operation appears once, typed.
-import { Contract, type EventLog, type Log } from "ethers";
-import type { Activity, Asset } from "../types";
-import { Blockchain } from "./blockchain";
+import {
+  Contract,
+  ZeroHash,
+  type ContractEventName,
+  type EventLog,
+  type Log,
+} from "ethers";
+import { rpcError, type Activity, type Asset } from "../types";
+import { COMPLIANCE_ROLE, type Blockchain } from "./blockchain";
+
+export function roleName(role: string) {
+  if (role === ZeroHash) return "Token admin";
+  if (role === COMPLIANCE_ROLE) return "Compliance agent";
+  return `Role ${role.slice(0, 10)}…`;
+}
 
 export async function logs(
   contract: Contract,
-  filter: any,
+  filter: ContractEventName,
   from: number,
   to: number,
 ): Promise<(EventLog | Log)[]> {
   try {
     return await contract.queryFilter(filter, from, to);
-  } catch (error: any) {
+  } catch (caught) {
     // Split only range/size-limit failures. Transport failures must surface promptly.
-    const message = `${error?.message || ""} ${error?.info?.error?.message || ""}`;
+    const error = rpcError(caught);
+    const message = `${error.message || ""} ${error.info?.error?.message || ""}`;
     if (
       from >= to ||
       !/range|too many|limit|more than|response size/i.test(message)
     )
-      throw error;
+      throw caught;
     const middle = Math.floor((from + to) / 2);
     return [
       ...(await logs(contract, filter, from, middle)),
@@ -148,6 +161,26 @@ export async function assetHistory(
           break;
         case "SaleClosed":
           rows.push({ ...base, type: "Offering closed", from: asset.issuer });
+          break;
+        // AUD-020: D5 pause (OpenZeppelin Pausable) and AccessControl role changes.
+        case "Paused":
+          rows.push({ ...base, type: "Paused", from: a.account });
+          break;
+        case "Unpaused":
+          rows.push({ ...base, type: "Unpaused", from: a.account });
+          break;
+        case "RoleGranted":
+        case "RoleRevoked":
+          rows.push({
+            ...base,
+            type:
+              event.eventName === "RoleGranted"
+                ? "Role granted"
+                : "Role revoked",
+            detail: roleName(a.role),
+            from: a.sender,
+            to: a.account,
+          });
           break;
       }
     }

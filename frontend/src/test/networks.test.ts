@@ -12,13 +12,14 @@ describe("Target network configuration", () => {
       chainId: 11155111,
       name: "Sepolia testnet",
       rpcUrl: "https://ethereum-sepolia-rpc.publicnode.com",
+      explorer: "https://sepolia.etherscan.io",
     });
     expect(SEPOLIA_PUBLIC_RPC).not.toMatch(/key|token|[0-9a-f]{32}/i);
   });
   it("lets VITE_RPC_URL override the Sepolia default", () => {
-    expect(networkFor(SEPOLIA_CHAIN_ID, "https://rpc.example.test").rpcUrl).toBe(
-      "https://rpc.example.test",
-    );
+    expect(
+      networkFor(SEPOLIA_CHAIN_ID, "https://rpc.example.test").rpcUrl,
+    ).toBe("https://rpc.example.test");
   });
   it("keeps the local chain on 127.0.0.1:8545", () => {
     expect(networkFor(31337)).toEqual({
@@ -26,6 +27,10 @@ describe("Target network configuration", () => {
       name: "Local Ethereum",
       rpcUrl: "http://127.0.0.1:8545",
     });
+  });
+  it("links to an explorer only where one exists", () => {
+    expect(networkFor(31337).explorer).toBeUndefined();
+    expect(networkFor(1).explorer).toBeUndefined();
   });
   it("labels an unknown chain by its ID rather than guessing a name", () => {
     expect(networkFor(1).name).toBe("Ethereum · 1");
