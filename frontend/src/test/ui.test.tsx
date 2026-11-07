@@ -358,7 +358,7 @@ describe("Purchase feedback and data refresh", () => {
   it("calculates exact display payment and refreshes inventory after receipt", async () => {
     await purchase();
     change(/Quantity of tokens/, "100");
-    expect(screen.getByText("0.1 ETH")).toBeInTheDocument();
+    expect(screen.getByText("0.1000 ETH")).toBeInTheDocument();
     const before = vi.mocked(blockchain.asset).mock.calls.length;
     fireEvent.click(screen.getByRole("button", { name: /Purchase Tokens/ }));
     await screen.findByText(/Token purchase · Confirmed/);
@@ -530,7 +530,7 @@ describe("Portfolio and transfers", () => {
     await screen.findByRole("cell", { name: "Purchase" });
     expect(screen.getByText("#9")).toBeInTheDocument();
     expect(
-      within(screen.getByRole("table")).getByText("0.1 ETH"),
+      within(screen.getByRole("table")).getByText("0.1000 ETH"),
     ).toBeInTheDocument();
   });
 });

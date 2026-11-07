@@ -6,9 +6,17 @@ export const SEPOLIA_CHAIN_ID = 11155111;
 export const SEPOLIA_PUBLIC_RPC = "https://ethereum-sepolia-rpc.publicnode.com";
 const LOCAL_RPC = "http://127.0.0.1:8545";
 
-const known: Record<number, { name: string; rpcUrl: string }> = {
+const known: Record<
+  number,
+  { name: string; rpcUrl: string; explorer?: string }
+> = {
+  // A local Hardhat node has no block explorer; addresses are copy-only there.
   31337: { name: "Local Ethereum", rpcUrl: LOCAL_RPC },
-  [SEPOLIA_CHAIN_ID]: { name: "Sepolia testnet", rpcUrl: SEPOLIA_PUBLIC_RPC },
+  [SEPOLIA_CHAIN_ID]: {
+    name: "Sepolia testnet",
+    rpcUrl: SEPOLIA_PUBLIC_RPC,
+    explorer: "https://sepolia.etherscan.io",
+  },
 };
 
 // VITE_RPC_URL overrides the default for the deployment's chain.
@@ -18,7 +26,15 @@ export function networkFor(chainId: number, rpcOverride?: string) {
     chainId,
     name: entry?.name ?? `Ethereum · ${chainId}`,
     rpcUrl: rpcOverride || entry?.rpcUrl || LOCAL_RPC,
+    explorer: entry?.explorer,
   };
+}
+
+/** Block-explorer URL for an address or transaction, when the network has one. */
+export function explorerUrl(kind: "address" | "tx", value: string) {
+  return targetNetwork.explorer
+    ? `${targetNetwork.explorer}/${kind}/${value}`
+    : undefined;
 }
 
 export const targetNetwork = networkFor(

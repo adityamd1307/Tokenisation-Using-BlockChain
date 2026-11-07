@@ -13,6 +13,8 @@ export interface TxState {
   phase: TxPhase;
   label?: string;
   hash?: string;
+  /** Block that included the confirmed transaction. */
+  block?: number;
   error?: string;
 }
 export async function confirmTransaction(

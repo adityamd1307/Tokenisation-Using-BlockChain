@@ -209,7 +209,7 @@ describe("Issuer controls", () => {
     await mount();
     fireEvent.click(screen.getByRole("button", { name: "Withdraw Proceeds" }));
     expect(screen.getByRole("dialog")).toHaveTextContent(
-      `Withdraw 0.1 ETH to issuer ${ISSUER}`,
+      `Withdraw 0.1000 ETH to issuer ${ISSUER}`,
     );
     fireEvent.click(screen.getByRole("button", { name: "Confirm" }));
     await waitFor(() =>
