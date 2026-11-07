@@ -17,6 +17,8 @@ async function rpc(method: string, params: unknown[] = []) {
 }
 
 export default async function globalSetup() {
+  // 03-regulated runs against deploy:compliance:local state, which a revert would undo.
+  if (process.env.E2E_NO_REVERT) return;
   if (existsSync(file)) {
     const { id } = JSON.parse(readFileSync(file, "utf8"));
     if (!(await rpc("evm_revert", [id])))

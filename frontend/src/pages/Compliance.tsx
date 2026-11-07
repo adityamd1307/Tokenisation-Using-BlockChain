@@ -169,6 +169,9 @@ function Workspace({ asset }: { asset: Asset }) {
       : tx.pending
         ? "Another transaction is in progress."
         : undefined;
+  const needsInvestor = investor.trim()
+    ? undefined
+    : "Enter an investor wallet.";
   const write = (label: string, action: () => Promise<TransactionResponse>) =>
     void tx.run(label, action);
   const p = state.data;
@@ -355,7 +358,7 @@ function Workspace({ asset }: { asset: Asset }) {
                 />
                 <div className="row">
                   <ActionButton
-                    reason={blocked}
+                    reason={blocked ?? needsInvestor}
                     onClick={() =>
                       write("Register identity", () =>
                         compliance.attest(
@@ -373,7 +376,7 @@ function Workspace({ asset }: { asset: Asset }) {
                   </ActionButton>
                   <ActionButton
                     variant="secondary"
-                    reason={blocked}
+                    reason={blocked ?? needsInvestor}
                     onClick={() =>
                       write("Renew identity", () =>
                         compliance.attest(
