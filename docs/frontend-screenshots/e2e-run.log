@@ -1,1 +1,39 @@
-﻿
+﻿node.exe : [WebServer] (node:24848) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+At line:1 char:1
++ & "C:\Users\laksh\AppData\Local\Microsoft\WinGet\Packages\OpenJS.Node ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([WebServer] (no... env being set.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:29416) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 22 tests using 1 worker
+
+(node:16288) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 e2e\01-flows.spec.ts:26:1 › 1. connect wallet shows address, role and network (1.8s)
+  ok  2 e2e\01-flows.spec.ts:34:1 › 2. issuer verifies an investor (1.7s)
+  ok  3 e2e\01-flows.spec.ts:44:1 › 3. investor subscribes (DvP: ETH paid and units delivered in one transaction) (742ms)
+  ok  4 e2e\01-flows.spec.ts:57:1 › 4. investor transfers to another verified investor (544ms)
+  ok  5 e2e\01-flows.spec.ts:66:1 › 5. transfer to an unverified address is blocked with the reason (170ms)
+  ok  6 e2e\01-flows.spec.ts:78:1 › 6. issuer revokes (freezes) an investor's eligibility (805ms)
+  ok  7 e2e\01-flows.spec.ts:88:1 › 7. a revoked (frozen) holder cannot transfer (1.3s)
+  ok  8 e2e\01-flows.spec.ts:100:1 › 7b. issuer force-transfers the revoked holding to a verified investor (622ms)
+  ok  9 e2e\01-flows.spec.ts:110:1 › 8. pause blocks transfers and subscriptions, unpause restores them (1.4s)
+  ok 10 e2e\01-flows.spec.ts:129:1 › 9. activity log labels every operation from real logs (441ms)
+  ok 11 e2e\01-flows.spec.ts:136:1 › 10. issuer funds more inventory with approve, then deposit (907ms)
+  ok 12 e2e\01-flows.spec.ts:147:1 › no console errors or warnings (9ms)
+  ok 13 e2e\02-screenshots.spec.ts:38:3 › connected investor at 1440px (9.5s)
+  ok 14 e2e\02-screenshots.spec.ts:60:3 › connected issuer at 1440px (13.9s)
+  ok 15 e2e\02-screenshots.spec.ts:72:3 › administrator at 1440px (2.5s)
+  ok 16 e2e\02-screenshots.spec.ts:80:3 › not connected at 1440px (6.4s)
+  ok 17 e2e\02-screenshots.spec.ts:95:3 › wrong network at 1440px (2.7s)
+  ok 18 e2e\02-screenshots.spec.ts:38:3 › connected investor at 390px (10.3s)
+  ok 19 e2e\02-screenshots.spec.ts:60:3 › connected issuer at 390px (13.8s)
+  ok 20 e2e\02-screenshots.spec.ts:72:3 › administrator at 390px (4.5s)
+  ok 21 e2e\02-screenshots.spec.ts:80:3 › not connected at 390px (6.3s)
+  ok 22 e2e\02-screenshots.spec.ts:95:3 › wrong network at 390px (3.1s)
+
+  22 passed (1.5m)

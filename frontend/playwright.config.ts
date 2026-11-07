@@ -10,7 +10,10 @@ export default defineConfig({
   timeout: 90_000,
   expect: { timeout: 20_000 },
   reporter: [["list"]],
-  use: { baseURL: "http://127.0.0.1:5173", viewport: { width: 1440, height: 900 } },
+  use: {
+    baseURL: "http://127.0.0.1:5173",
+    viewport: { width: 1440, height: 900 },
+  },
   webServer: {
     command: "npx vite --port 5173 --strictPort",
     url: "http://127.0.0.1:5173",

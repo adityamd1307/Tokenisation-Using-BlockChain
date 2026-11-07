@@ -20,7 +20,9 @@ export default async function globalSetup() {
   if (existsSync(file)) {
     const { id } = JSON.parse(readFileSync(file, "utf8"));
     if (!(await rpc("evm_revert", [id])))
-      throw new Error("Could not revert to the seeded snapshot. Restart the node, deploy and seed again.");
+      throw new Error(
+        "Could not revert to the seeded snapshot. Restart the node, deploy and seed again.",
+      );
   }
   writeFileSync(file, JSON.stringify({ id: await rpc("evm_snapshot") }));
 }

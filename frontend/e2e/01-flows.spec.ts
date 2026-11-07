@@ -3,7 +3,8 @@
 import { expect, test, type Page } from "@playwright/test";
 import { accounts, connect, nav, walletPage } from "./wallet";
 
-const PAUSED = "This asset is paused by its issuer. No tokens can move until it is unpaused.";
+const PAUSED =
+  "This asset is paused by its issuer. No tokens can move until it is unpaused.";
 test.describe.configure({ mode: "serial" });
 
 const confirmed = (page: Page, label: string) =>
@@ -11,7 +12,8 @@ const confirmed = (page: Page, label: string) =>
 const errors: string[] = [];
 const watch = (page: Page) => {
   page.on("console", (m) => {
-    if (m.type() === "error" || m.type() === "warning") errors.push(`${m.type()}: ${m.text()}`);
+    if (m.type() === "error" || m.type() === "warning")
+      errors.push(`${m.type()}: ${m.text()}`);
   });
   page.on("pageerror", (e) => errors.push(`pageerror: ${e.message}`));
   return page;
@@ -27,7 +29,9 @@ test("1. connect wallet shows address, role and network", async () => {
   await nav(investor, "/funds/0");
   await connect(investor);
   await expect(investor.getByText("0x3C44…93BC").first()).toBeVisible();
-  await expect(investor.locator(".pill", { hasText: /^Investor · CPT$/ })).toBeVisible();
+  await expect(
+    investor.locator(".pill", { hasText: /^Investor · CPT$/ }),
+  ).toBeVisible();
   await expect(investor.getByText("Local Ethereum").first()).toBeVisible();
 });
 
@@ -44,7 +48,9 @@ test("2. issuer verifies an investor", async () => {
 test("3. investor subscribes (DvP: ETH paid and units delivered in one transaction)", async () => {
   await nav(investor, "/funds/0/subscribe");
   await investor.getByLabel("Units to subscribe").fill("100");
-  await expect(investor.getByText("You will pay 0.1000 ETH and receive 100 CPT.")).toBeVisible();
+  await expect(
+    investor.getByText("You will pay 0.1000 ETH and receive 100 CPT."),
+  ).toBeVisible();
   await investor.getByRole("button", { name: "Subscribe" }).click();
   await confirmed(investor, "Subscription");
   await expect(investor.getByText(/Confirmed in block \d+/)).toBeVisible();
@@ -57,7 +63,9 @@ test("3. investor subscribes (DvP: ETH paid and units delivered in one transacti
 test("4. investor transfers to another verified investor", async () => {
   await nav(investor, "/funds/0/transfer");
   await investor.getByLabel("Recipient address").fill(accounts.investor2);
-  await expect(investor.getByText("Recipient is a verified investor in CPT.")).toBeVisible();
+  await expect(
+    investor.getByText("Recipient is a verified investor in CPT."),
+  ).toBeVisible();
   await investor.getByLabel("Units to send").fill("20");
   await investor.getByRole("button", { name: "Transfer" }).click();
   await confirmed(investor, "Transfer");
@@ -68,20 +76,31 @@ test("5. transfer to an unverified address is blocked with the reason", async ()
   await investor.getByLabel("Recipient address").fill(accounts.outsider);
   await investor.getByLabel("Units to send").fill("1");
   await expect(
-    investor.getByText("Recipient is not a verified investor in CPT. A transfer to it would be rejected."),
+    investor.getByText(
+      "Recipient is not a verified investor in CPT. A transfer to it would be rejected.",
+    ),
   ).toBeVisible();
   const button = investor.getByRole("button", { name: "Transfer" });
   await expect(button).toBeDisabled();
-  await expect(button).toHaveAccessibleDescription(/Recipient is not a verified investor in CPT/);
+  await expect(button).toHaveAccessibleDescription(
+    /Recipient is not a verified investor in CPT/,
+  );
 });
 
 test("6. issuer revokes (freezes) an investor's eligibility", async () => {
   await nav(issuer, "/issuer/0/registry");
   await issuer.getByLabel("Investor address").fill(accounts.investor2);
   await expect(issuer.getByText("Verified investor in CPT")).toBeVisible();
-  await issuer.getByRole("button", { name: "Revoke eligibility", exact: true }).click();
-  await expect(issuer.getByRole("dialog")).toContainText("even if it already holds tokens");
-  await issuer.getByRole("dialog").getByRole("button", { name: "Revoke eligibility" }).click();
+  await issuer
+    .getByRole("button", { name: "Revoke eligibility", exact: true })
+    .click();
+  await expect(issuer.getByRole("dialog")).toContainText(
+    "even if it already holds tokens",
+  );
+  await issuer
+    .getByRole("dialog")
+    .getByRole("button", { name: "Revoke eligibility" })
+    .click();
   await confirmed(issuer, "Revoke eligibility");
 });
 
@@ -92,7 +111,9 @@ test("7. a revoked (frozen) holder cannot transfer", async ({ browser }) => {
   await holder.getByLabel("Recipient address").fill(accounts.investor1);
   await holder.getByLabel("Units to send").fill("1");
   const button = holder.getByRole("button", { name: "Transfer" });
-  await expect(button).toHaveAccessibleDescription(/eligibility for this fund has been revoked/);
+  await expect(button).toHaveAccessibleDescription(
+    /eligibility for this fund has been revoked/,
+  );
   await expect(button).toBeDisabled();
   await holder.context().close();
 });
@@ -103,33 +124,53 @@ test("7b. issuer force-transfers the revoked holding to a verified investor", as
   await issuer.getByRole("button", { name: /^Max/ }).click();
   await expect(issuer.getByLabel("Units to move")).toHaveValue("20");
   await issuer.getByRole("button", { name: "Force transfer" }).click();
-  await issuer.getByRole("dialog").getByRole("button", { name: "Force transfer" }).click();
+  await issuer
+    .getByRole("dialog")
+    .getByRole("button", { name: "Force transfer" })
+    .click();
   await confirmed(issuer, "Forced transfer");
 });
 
 test("8. pause blocks transfers and subscriptions, unpause restores them", async () => {
   await nav(issuer, "/issuer/0/controls");
   await issuer.getByRole("button", { name: "Pause transfers" }).click();
-  await issuer.getByRole("dialog").getByRole("button", { name: "Pause" }).click();
+  await issuer
+    .getByRole("dialog")
+    .getByRole("button", { name: "Pause" })
+    .click();
   await confirmed(issuer, "Pause");
   await nav(investor, "/funds/0/transfer");
   // Verified in test 2 (investor2 was revoked in test 6).
   await investor.getByLabel("Recipient address").fill(accounts.unapproved);
   await investor.getByLabel("Units to send").fill("1");
-  await expect(investor.getByRole("button", { name: "Transfer" })).toHaveAccessibleDescription(PAUSED);
+  await expect(
+    investor.getByRole("button", { name: "Transfer" }),
+  ).toHaveAccessibleDescription(PAUSED);
   await nav(investor, "/funds/0/subscribe");
   await investor.getByLabel("Units to subscribe").fill("1");
-  await expect(investor.getByRole("button", { name: "Subscribe" })).toHaveAccessibleDescription(PAUSED);
+  await expect(
+    investor.getByRole("button", { name: "Subscribe" }),
+  ).toHaveAccessibleDescription(PAUSED);
   await nav(issuer, "/issuer/0/controls");
   await issuer.getByRole("button", { name: "Unpause transfers" }).click();
-  await issuer.getByRole("dialog").getByRole("button", { name: "Unpause" }).click();
+  await issuer
+    .getByRole("dialog")
+    .getByRole("button", { name: "Unpause" })
+    .click();
   await confirmed(issuer, "Unpause");
 });
 
 test("9. activity log labels every operation from real logs", async () => {
   await nav(investor, "/activity?fund=0");
   const table = investor.getByRole("table", { name: "Event log" });
-  for (const type of ["Purchase", "Transfer", "Forced transfer", "Paused", "Unpaused", "Eligibility revoked"])
+  for (const type of [
+    "Purchase",
+    "Transfer",
+    "Forced transfer",
+    "Paused",
+    "Unpaused",
+    "Eligibility revoked",
+  ])
     await expect(table.getByText(type, { exact: true }).first()).toBeVisible();
 });
 

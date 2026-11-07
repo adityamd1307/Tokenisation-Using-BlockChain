@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { CircleAlert, TriangleAlert } from "lucide-react";
 import { useWallet } from "../../context/WalletContext";
@@ -50,9 +50,11 @@ export function AppShell() {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
   const { refreshRegistry } = useData();
+  const firstLocation = useRef(location.key);
   useEffect(() => {
     setMenuOpen(false);
-    refreshRegistry();
+    // The initial load already reads the registry; refresh on later navigations only.
+    if (location.key !== firstLocation.current) refreshRegistry();
     // refreshRegistry is a fresh closure each render; run on navigation only
     // (location.key changes on every navigation, even to the same path).
     // eslint-disable-next-line react-hooks/exhaustive-deps

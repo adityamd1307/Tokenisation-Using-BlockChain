@@ -33,7 +33,13 @@ function inject({ account, chain }: { account: string; chain: string | null }) {
     return body.result;
   };
   const provider = {
-    async request({ method, params = [] }: { method: string; params?: unknown[] }) {
+    async request({
+      method,
+      params = [],
+    }: {
+      method: string;
+      params?: unknown[];
+    }) {
       switch (method) {
         case "eth_requestAccounts":
         case "eth_accounts":
@@ -61,7 +67,10 @@ function inject({ account, chain }: { account: string; chain: string | null }) {
       listeners[event] = (listeners[event] ?? []).filter((l) => l !== listener);
     },
   };
-  Object.defineProperty(window, "ethereum", { value: provider, configurable: true });
+  Object.defineProperty(window, "ethereum", {
+    value: provider,
+    configurable: true,
+  });
 }
 
 /** A page whose injected wallet controls `account`, optionally on another chain. */
@@ -73,13 +82,18 @@ export async function walletPage(
   const context = await browser.newContext({
     viewport: { width: options.width ?? 1440, height: options.height ?? 900 },
   });
-  await context.addInitScript(inject, { account, chain: options.chain ?? null });
+  await context.addInitScript(inject, {
+    account,
+    chain: options.chain ?? null,
+  });
   return context.newPage();
 }
 
 /** A page with no wallet installed at all. */
 export async function noWalletPage(browser: Browser, width = 1440) {
-  const context = await browser.newContext({ viewport: { width, height: 900 } });
+  const context = await browser.newContext({
+    viewport: { width, height: 900 },
+  });
   return context.newPage();
 }
 

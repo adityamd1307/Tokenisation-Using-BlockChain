@@ -23,13 +23,20 @@ const issuerPages: [string, string][] = [
 
 async function settle(page: Page) {
   await page.waitForLoadState("networkidle");
-  await page.waitForFunction(() => !document.querySelector(".skeleton"), null, {
-    timeout: 20_000,
-  }).catch(() => undefined);
+  // Client-side navigation renders before its reads start; let them begin.
+  await page.waitForTimeout(1000);
+  await page
+    .waitForFunction(() => !document.querySelector(".skeleton"), null, {
+      timeout: 20_000,
+    })
+    .catch(() => undefined);
 }
 async function shoot(page: Page, name: string, width: number) {
   await settle(page);
-  await page.screenshot({ path: `${out}/${name}-${width}.png`, fullPage: true });
+  await page.screenshot({
+    path: `${out}/${name}-${width}.png`,
+    fullPage: true,
+  });
 }
 
 for (const width of widths) {
@@ -39,7 +46,8 @@ for (const width of widths) {
     await connect(page);
     for (const [name, path] of investorPages) {
       await nav(page, path);
-      if (name === "subscribe") await page.getByLabel("Units to subscribe").fill("250");
+      if (name === "subscribe")
+        await page.getByLabel("Units to subscribe").fill("250");
       if (name === "transfer") {
         await page.getByLabel("Recipient address").fill(accounts.outsider);
         await page.getByLabel("Units to send").fill("10");
@@ -50,7 +58,9 @@ for (const width of widths) {
       await nav(page, "/");
       await settle(page);
       await page.getByRole("button", { name: "Open navigation" }).click();
-      await page.screenshot({ path: `${out}/investor-navigation-open-390.png` });
+      await page.screenshot({
+        path: `${out}/investor-navigation-open-390.png`,
+      });
     }
     await page.context().close();
   });
@@ -61,7 +71,8 @@ for (const width of widths) {
     await connect(page);
     for (const [name, path] of issuerPages) {
       await nav(page, path);
-      if (name === "offering") await page.getByLabel("Deposit quantity").fill("500");
+      if (name === "offering")
+        await page.getByLabel("Deposit quantity").fill("500");
       await shoot(page, `issuer-${name}`, width);
     }
     await page.context().close();
@@ -91,7 +102,10 @@ for (const width of widths) {
   });
 
   test(`wrong network at ${width}px`, async ({ browser }) => {
-    const page = await walletPage(browser, accounts.investor1, { chain: "0x1", width });
+    const page = await walletPage(browser, accounts.investor1, {
+      chain: "0x1",
+      width,
+    });
     await nav(page, "/funds/0/subscribe");
     await page.getByRole("button", { name: "Connect wallet" }).first().click();
     await page.getByText(/Your wallet is on chain 1\./).waitFor();

@@ -554,6 +554,7 @@ tr:hover > td.data-table__empty {
 /* ---------- Notices ---------- */
 .notice {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-start;
   gap: var(--space-3);
   padding: var(--space-3) var(--space-4);
@@ -566,7 +567,7 @@ tr:hover > td.data-table__empty {
   margin-top: var(--space-half);
 }
 .notice__body {
-  flex: 1;
+  flex: 1 1 var(--field-grow);
   min-width: 0;
 }
 .notice__title {
@@ -990,10 +991,13 @@ select.field__input {
 }
 
 /* ---------- App shell ---------- */
+/* The shell is surface-coloured so the sidebar column continues past the
+   viewport on long pages; the divider sits on the main column for the same reason. */
 .shell {
   display: grid;
   grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
   min-height: 100vh;
+  background: var(--color-surface);
 }
 .sidebar {
   position: sticky;
@@ -1003,7 +1007,6 @@ select.field__input {
   height: 100vh;
   overflow-y: auto;
   background: var(--color-surface);
-  border-right: var(--hairline);
 }
 .sidebar__brand {
   display: flex;
@@ -1118,6 +1121,8 @@ select.field__input {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  background: var(--color-bg);
+  border-left: var(--hairline);
 }
 .topbar {
   position: sticky;
@@ -1272,6 +1277,9 @@ select.field__input {
   }
   .menu-btn {
     display: inline-flex;
+  }
+  .main {
+    border-left: 0;
   }
   .topbar {
     padding: 0 var(--space-4);
