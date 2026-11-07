@@ -32,6 +32,14 @@ export default defineConfig({
       chainType: "l1",
       chainId: 31337,
     },
+    // Persistent UI node follows wall time even when nobody submits transactions.
+    // Keep hardhatMainnet deterministic for isolated tests and time-travel demos.
+    localDemo: {
+      type: "edr-simulated",
+      chainType: "l1",
+      chainId: 31337,
+      mining: { auto: true, interval: 2000 },
+    },
     localhost: {
       type: "http",
       chainType: "l1",

@@ -1,0 +1,6 @@
+{
+  "network": "localDemo",
+  "beforeBlock": 0,
+  "afterBlock": 2,
+  "clockDeltaSeconds": -1
+}

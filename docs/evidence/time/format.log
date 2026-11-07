@@ -1,0 +1,14 @@
+frontend/src/utils/time.ts 45ms
+frontend/src/test/time.test.ts 12ms
+frontend/src/components/shell/SingaporeClock.tsx 3ms
+frontend/src/components/shell/TopBar.tsx 14ms (unchanged)
+frontend/src/pages/Compliance.tsx 55ms
+frontend/src/pages/SubscriptionOfferings.tsx 18ms (unchanged)
+frontend/src/services/compliance.ts 11ms (unchanged)
+frontend/src/utils/formatting.ts 3ms (unchanged)
+frontend/src/utils/subscription.ts 4ms (unchanged)
+frontend/integration/compliance.test.ts 11ms
+frontend/integration/lifecycle.test.ts 15ms
+frontend/integration/subscriptions.test.ts 13ms
+scripts/runIntegration.mjs 18ms
+scripts/syncLocalTime.mjs 3ms

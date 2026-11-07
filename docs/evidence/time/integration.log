@@ -1,0 +1,14 @@
+
+> rwa-tokenisation@1.0.0 test:integration
+> node scripts/runIntegration.mjs
+
+Integration tests use an isolated node at http://127.0.0.1:53452; the demo chain is untouched.
+
+ RUN  v4.1.12 /Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/frontend
+
+
+ Test Files  3 passed (3)
+      Tests  3 passed (3)
+   Start at  23:23:58
+   Duration  40.71s (transform 122ms, setup 0ms, import 425ms, tests 40.01s, environment 0ms)
+

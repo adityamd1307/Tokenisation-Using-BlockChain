@@ -11,10 +11,14 @@ import { Blockchain } from "../src/services/blockchain";
 import { Subscriptions } from "../src/services/subscriptions";
 import { confirmTransaction } from "../src/services/transactions";
 import type { WalletProvider } from "../src/types";
-const provider = new JsonRpcProvider("http://127.0.0.1:8545", undefined, {
-  cacheTimeout: -1,
-  pollingInterval: 30,
-});
+const provider = new JsonRpcProvider(
+  process.env.INTEGRATION_RPC_URL || "http://127.0.0.1:18545",
+  undefined,
+  {
+    cacheTimeout: -1,
+    pollingInterval: 30,
+  },
+);
 afterAll(() => provider.destroy());
 describe("Subscription frontend services against real local contracts", () => {
   it("creates, funds, oversubscribes, finalises, settles, refunds, claims and preserves direct sales", async () => {

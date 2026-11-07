@@ -80,7 +80,7 @@ npm test                              # 240 contract and script tests (merged tr
 npm test --prefix frontend            # 144 frontend behaviour tests (merged tree, 7 November 2026)
 npm run build --prefix frontend       # TypeScript + production Vite build
 npx tsc --noEmit                      # root scripts and contract tests
-npm run test:integration              # needs `npm run node` running; deploys its own fixture
+npm run test:integration              # starts/stops an isolated node; never time-travels the demo
 npm run replay:ephemeral              # the 12 Task 5.1 steps in-process, Hardhat accounts 0-3 as Wallets A-D
 npm run demo:subscriptions            # actual oversubscribed and failed offerings; ephemeral local chain
 bash scripts/evidence.sh <label>      # build, test, gas, coverage (slither if installed) into docs/evidence/runs/
@@ -89,6 +89,14 @@ bash scripts/evidence.sh <label>      # build, test, gas, coverage (slither if i
 The integration suites run production frontend services against real local contracts, including direct sales and subscription creation, funding, settlement, refunds and claims. They sign through an EIP-1193 adapter over Hardhat's unlocked accounts, so they do not test MetaMask. Counts are from 7 November 2026; measured aggregate contract line coverage is 98.02% including harnesses. See the [detailed results and limits](docs/subscription-testing-results.md).
 
 Phase 6 coverage (measured on c7cb0d1 alone, before this merge): each of AssetToken, AssetFactory and AssetSale had 100% line and statement coverage. That figure does not cover the subscription and compliance contracts. These measurements are not a proof of security.
+
+## Singapore time
+
+All dates are displayed and entered in **Singapore time (SGT, UTC+08:00)**, regardless of the browser's timezone. The header shows the live Singapore clock. Offering and credential timestamps remain standard Unix seconds, and confirmed blockchain state remains authoritative.
+
+`npm run node` now starts a demo network that mines every two seconds even when idle. If a node was started before this change, run `npm run time:sync:local` once to catch up its clock and enable periodic mining without resetting contracts or balances. A chain already ahead of wall time is not silently rewound or reset; the command explains the remaining drift.
+
+`npm run test:integration` now creates and stops its own isolated node. Test time travel cannot advance the demo chain. Direct frontend integration runs require an explicitly configured `INTEGRATION_RPC_URL` or a separate node on port 18545; they no longer default to the demo on 8545. [Implementation and validation](docs/issues/AUD-031-singapore-scheduling-uses-browser-timezone-and-idl.md).
 
 ## Regulated compliance demo
 

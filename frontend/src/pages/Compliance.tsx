@@ -1,3 +1,4 @@
+import { singaporeDateTimeInput } from "../utils/time";
 // Compliance workspace for regulated (ERC-3643-inspired Lite) funds, ported from
 // main's CompliancePage (PRs #3 and #4) into the new design. Reads and writes go
 // through services/compliance.ts unchanged.
@@ -298,12 +299,10 @@ function Workspace({ asset }: { asset: Asset }) {
                             kycApproved: i.kycApproved,
                             accredited: i.accredited,
                             validUntil: i.validUntil
-                              ? new Date(
-                                  Number(i.validUntil) * 1000 -
-                                    new Date().getTimezoneOffset() * 60000,
+                              ? singaporeDateTimeInput(
+                                  Number(i.validUntil) * 1000,
+                                  true,
                                 )
-                                  .toISOString()
-                                  .slice(0, 16)
                               : "",
                           }),
                         )
@@ -327,13 +326,14 @@ function Workspace({ asset }: { asset: Asset }) {
                   />
                   <div className="field">
                     <label className="field__label" htmlFor="credential-expiry">
-                      Credential expiry
+                      Credential expiry (Singapore, UTC+08:00)
                     </label>
                     <div className="field__control">
                       <input
                         id="credential-expiry"
                         className="field__input"
                         type="datetime-local"
+                        step="1"
                         value={data.validUntil}
                         onChange={(e) =>
                           setData((v) => ({ ...v, validUntil: e.target.value }))
@@ -723,12 +723,14 @@ export default function Compliance() {
         </Panel>
       ) : !selected ? (
         // main's AUD-016: no compliance reads are mounted when nothing is regulated.
-        <Panel title="No regulated assets">
+        <Panel title="No regulated fund exists yet">
           <EmptyState
             action={<Link to="/issuer/create">Create a regulated fund</Link>}
           >
-            Funds created in regulated mode are managed here. Existing funds
-            keep their whitelist.
+            No regulated fund has been created on this network yet. Once an
+            authorised issuer creates a fund in regulated mode, its investor
+            credentials and transfer policy will be available here. Existing
+            funds continue to use their whitelist.
           </EmptyState>
         </Panel>
       ) : (

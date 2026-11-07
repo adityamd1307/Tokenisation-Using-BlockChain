@@ -25,13 +25,5 @@ export function eth(value: bigint, minDecimals = 4) {
 export const categoryName = (category: number) =>
   category === 0 ? "Real-world asset" : "Digital asset";
 
-const dateTime = new Intl.DateTimeFormat("en-GB", {
-  day: "2-digit",
-  month: "short",
-  year: "numeric",
-  hour: "2-digit",
-  minute: "2-digit",
-});
-/** Block timestamp (seconds) as "07 Nov 2026, 14:32" in local time. */
-export const formatTime = (seconds: number) =>
-  dateTime.format(new Date(seconds * 1000));
+/** All event, offering and identity timestamps use Singapore time. */
+export { formatSingaporeTime as formatTime } from "./time";

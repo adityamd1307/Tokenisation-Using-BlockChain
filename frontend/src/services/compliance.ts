@@ -1,3 +1,4 @@
+import { parseSingaporeDateTime } from "../utils/time";
 import {
   Contract,
   ZeroHash,
@@ -122,7 +123,7 @@ export class Compliance {
     const country = Number(data.country);
     if (!countries.some((c) => c.code === country))
       throw new Error("Unsupported demo country.");
-    const milliseconds = Date.parse(data.validUntil),
+    const milliseconds = parseSingaporeDateTime(data.validUntil),
       block = await this.api.provider.getBlock("latest");
     if (
       !Number.isFinite(milliseconds) ||

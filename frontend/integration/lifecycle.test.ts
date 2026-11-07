@@ -12,10 +12,14 @@ import { Blockchain } from "../src/services/blockchain";
 import { assetHistory } from "../src/services/history";
 import { confirmTransaction } from "../src/services/transactions";
 import type { WalletProvider } from "../src/types";
-const provider = new JsonRpcProvider("http://127.0.0.1:8545", undefined, {
-  cacheTimeout: -1,
-  pollingInterval: 50,
-});
+const provider = new JsonRpcProvider(
+  process.env.INTEGRATION_RPC_URL || "http://127.0.0.1:18545",
+  undefined,
+  {
+    cacheTimeout: -1,
+    pollingInterval: 50,
+  },
+);
 afterAll(() => provider.destroy());
 describe("Local frontend-service integration", () => {
   it("completes administration → two assets → funding → purchase → transfer → withdrawal → closure → recovery", async () => {
@@ -185,7 +189,9 @@ describe("Local frontend-service integration", () => {
     expect(await api.eligibility(dlt, investor1)).toBe(false);
     expect((await api.account(dlt, investor1)).balance).toBe(50n);
     // D5 (AUD-013): recover the revoked holding, then check real-log history types it once.
-    await confirm(api.token(dlt, signers[1]).forcedTransfer(investor1, issuer, 50n));
+    await confirm(
+      api.token(dlt, signers[1]).forcedTransfer(investor1, issuer, 50n),
+    );
     expect((await api.account(dlt, investor1)).balance).toBe(0n);
     const dltHistory = await assetHistory(api, dlt, investor1);
     expect(dltHistory.filter((row) => row.type === "Forced transfer")).toEqual([

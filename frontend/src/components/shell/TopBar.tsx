@@ -1,3 +1,4 @@
+import { SingaporeClock } from "./SingaporeClock";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { LogOut, Menu } from "lucide-react";
@@ -93,6 +94,7 @@ export function TopBar({
         )}
       </div>
       <div className="topbar__right">
+        <SingaporeClock />
         <span
           className={`network${wallet.wrongNetwork ? " network--wrong" : wallet.account ? "" : " network--idle"}`}
           title={`Chain ID ${wallet.wrongNetwork ? wallet.chainId : targetNetwork.chainId}`}

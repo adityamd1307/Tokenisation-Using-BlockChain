@@ -1,3 +1,4 @@
+import { parseSingaporeDateTime } from "./time";
 import { formatUnits, MaxUint256, parseUnits } from "ethers";
 export const offeringStatuses = [
   "Upcoming",
@@ -42,8 +43,8 @@ export function offeringArgs(input: OfferingInput, now: bigint) {
     softCap = parseUSD(input.softCap);
   if (supply > MaxUint256 / price)
     throw new Error("Offering hard cap exceeds the token limit.");
-  const startMs = Date.parse(input.start),
-    endMs = Date.parse(input.end);
+  const startMs = parseSingaporeDateTime(input.start),
+    endMs = parseSingaporeDateTime(input.end);
   if (!Number.isFinite(startMs) || !Number.isFinite(endMs))
     throw new Error("Choose valid subscription dates.");
   const start = BigInt(Math.floor(startMs / 1000)),

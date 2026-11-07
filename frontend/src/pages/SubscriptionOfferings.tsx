@@ -1,3 +1,4 @@
+import { futureSingaporeInput } from "../utils/time";
 // mUSD subscription offerings (main, PRs #3 and #4) in the new design. The list
 // and the create form read only when the subscription deployment is configured
 // (main's AUD-016: optional features mount no reads when absent).
@@ -199,14 +200,6 @@ export default function SubscriptionOfferings() {
   );
 }
 
-function futureDate(minutes: number) {
-  const d = new Date(Date.now() + minutes * 60000);
-  d.setSeconds(0, 0);
-  return new Date(d.getTime() - d.getTimezoneOffset() * 60000)
-    .toISOString()
-    .slice(0, 16);
-}
-
 /** Issuer: SubscriptionFactory.createOffering for one fund. */
 export function CreateOffering({ asset }: { asset: Asset }) {
   const wallet = useWallet(),
@@ -215,8 +208,8 @@ export function CreateOffering({ asset }: { asset: Asset }) {
     supply: "1000",
     price: "2",
     softCap: "1200",
-    start: futureDate(5),
-    end: futureDate(10),
+    start: futureSingaporeInput(5),
+    end: futureSingaporeInput(10),
   }));
   const [created, setCreated] = useState("");
   let issue: string | undefined, hardCap: bigint | undefined;
@@ -312,8 +305,8 @@ export function CreateOffering({ asset }: { asset: Asset }) {
           />
         </div>
         <div className="form-grid">
-          {dateField("start", "Subscription start (local time)")}
-          {dateField("end", "Subscription end (local time)")}
+          {dateField("start", "Subscription start (Singapore, UTC+08:00)")}
+          {dateField("end", "Subscription end (Singapore, UTC+08:00)")}
         </div>
         {hardCap !== undefined && (
           <Summary

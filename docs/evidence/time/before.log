@@ -1,0 +1,72 @@
+
+> rwa-tokenisation-frontend@0.0.1 pretest
+> node ../scripts/syncFrontend.mjs
+
+Synced frontend ABIs from compiled artifacts.
+
+> rwa-tokenisation-frontend@0.0.1 test
+> vitest run src/test/time.test.ts
+
+
+ RUN  v4.1.12 /Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/frontend
+
+ ❯ src/test/time.test.ts (3 tests | 3 failed) 7ms
+     × interprets a timezone-free form value as Singapore time 5ms
+     × shows historical timestamps in Singapore with a timezone label 1ms
+     × rejects calendar dates that JavaScript would silently normalize 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/time.test.ts > Singapore scheduling independent of browser timezone > interprets a timezone-free form value as Singapore time
+AssertionError: expected 1893484800n to be 1893456000n // Object.is equality
+
+- Expected
++ Received
+
+- 1893456000n
++ 1893484800n
+
+ ❯ src/test/time.test.ts:8:21
+      6|   it("interprets a timezone-free form value as Singapore time", () => {
+      7|     const args = offeringArgs({ supply:"1000",price:"2",softCap:"1200"…
+      8|     expect(args[3]).toBe(BigInt(Date.parse("2030-01-01T00:00:00Z")/100…
+       |                     ^
+      9|     expect(args[4]-args[3]).toBe(3600n);
+     10|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/test/time.test.ts > Singapore scheduling independent of browser timezone > shows historical timestamps in Singapore with a timezone label
+AssertionError: expected '07 Nov 2026, 10:00' to contain '18:00'
+
+Expected: "18:00"
+Received: "07 Nov 2026, 10:00"
+
+ ❯ src/test/time.test.ts:13:23
+     11|   it("shows historical timestamps in Singapore with a timezone label",…
+     12|     const formatted = formatTime(Date.parse("2026-11-07T10:00:00Z")/10…
+     13|     expect(formatted).toContain("18:00");
+       |                       ^
+     14|     expect(formatted).toContain("SGT");
+     15|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/test/time.test.ts > Singapore scheduling independent of browser timezone > rejects calendar dates that JavaScript would silently normalize
+AssertionError: expected [Function] to throw an error
+ ❯ src/test/time.test.ts:17:119
+     15|   });
+     16|   it("rejects calendar dates that JavaScript would silently normalize"…
+     17|     expect(()=>offeringArgs({supply:"10",price:"2",softCap:"10",start:…
+       |                                                                                                                       ^
+     18|   });
+     19| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed (3)
+   Start at  15:22:03
+   Duration  735ms (transform 41ms, setup 134ms, import 128ms, tests 7ms, environment 377ms)
+

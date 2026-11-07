@@ -6,19 +6,20 @@
   "scripts": {
     "test": "hardhat test",
     "compile": "hardhat compile",
-    "node": "hardhat node --hostname 127.0.0.1",
+    "node": "hardhat node --network localDemo --hostname 127.0.0.1",
     "deploy:local": "hardhat run scripts/deploy.ts --network localhost",
     "deploy:ephemeral": "hardhat run scripts/deploy.ts --network hardhatMainnet",
     "frontend:sync": "hardhat compile && node scripts/syncFrontend.mjs",
     "demo:local": "hardhat run scripts/seedLocal.ts --network localhost",
-    "test:integration": "npm --prefix frontend run test:integration",
+    "test:integration": "node scripts/runIntegration.mjs",
     "deploy:sepolia": "hardhat run --build-profile production scripts/deploy.ts --network sepolia",
     "replay:ephemeral": "hardhat run scripts/replay.ts --network hardhatMainnet",
     "replay:sepolia": "hardhat run --build-profile production scripts/replay.ts --network sepolia",
     "deploy:subscriptions:local": "hardhat run scripts/deploySubscriptions.ts --network localhost",
     "demo:subscriptions": "hardhat run scripts/demoSubscriptionOffering.ts --network hardhatMainnet",
     "demo:compliance": "hardhat run scripts/demoCompliance.ts --network hardhatMainnet",
-    "deploy:compliance:local": "hardhat run scripts/deployCompliance.ts --network localhost"
+    "deploy:compliance:local": "hardhat run scripts/deployCompliance.ts --network localhost",
+    "time:sync:local": "node scripts/syncLocalTime.mjs"
   },
   "repository": {
     "type": "git",

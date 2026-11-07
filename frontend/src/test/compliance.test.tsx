@@ -92,7 +92,9 @@ describe("Compliance workspace", () => {
     vi.spyOn(blockchain, "assets").mockResolvedValue([asset]);
     mount();
     await connect();
-    expect(await screen.findByText("No regulated assets")).toBeInTheDocument();
+    expect(
+      await screen.findByText("No regulated fund exists yet"),
+    ).toBeInTheDocument();
     expect(compliance.state).not.toHaveBeenCalled();
     expect(compliance.identity).not.toHaveBeenCalled();
   });

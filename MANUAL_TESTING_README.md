@@ -31,7 +31,7 @@ This is a test plan, **not a claim that these manual tests have already passed**
 - Wait for **Confirmed successfully** before switching roles. After console transactions, use the page's refresh control, wait for its polling, or reload. Public state and account state can refresh at different times.
 - Use a **fresh asset for each major section/scenario**. Do not reuse balances from an earlier scenario unless instructed. Asset IDs are assigned sequentially; record actual IDs and addresses rather than assuming an ID.
 - Keep a result sheet: `Case ID | PASS/FAIL/BLOCKED | wallet | asset/offering | transaction hash | before/after values | screenshot/notes`.
-- Run reset/network-failure tests last. Time travel affects the **entire local chain**, including every credential and offering.
+- Run reset/network-failure tests last. Time travel affects the **entire local chain**, including every credential and offering. The demo now mines every two seconds. For exact-boundary console tests, temporarily disable interval mining with `await rpc.send('evm_setIntervalMining', [0])`; otherwise a new block can cross the boundary between your reads. Restore `[2000]` afterward. Run manual time-travel scenarios on a disposable demo; a future block cannot be moved backward to wall time.
 
 ## 1. Set up the local environment and wallets
 
@@ -229,13 +229,12 @@ console.log('Chain time:', new Date((await now()) * 1000).toISOString());
 var startTime = await now() + 3600;
 var endTime = startTime + 3600;
 var localInput = seconds => {
-  var date = new Date(seconds * 1000);
-  return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+  return new Date(seconds * 1000 + 8 * 60 * 60 * 1000).toISOString().slice(0, 16);
 };
 console.log({ start: localInput(startTime), end: localInput(endTime) });
 ```
 
-Enter those **local-time** values in the UI. Minute truncation can change the exact stored seconds, so afterward read `offering.subscriptionStart()` / `subscriptionEnd()` rather than assuming the local variables equal the contract timestamps. Choose dates later than **both current chain time and your computer time** if you have advanced the chain. Fund escrow before opening. Do not jump past the start of an underfunded offering and expect to repair it later.
+Enter those **Singapore-time (SGT, UTC+08:00)** values in the UI, even if your browser is elsewhere. Minute truncation can change the exact stored seconds, so afterward read `offering.subscriptionStart()` / `subscriptionEnd()` rather than assuming the local variables equal the contract timestamps. Choose dates later than **both current chain time and your computer time** if you have advanced the chain. Fund escrow before opening. Do not jump past the start of an underfunded offering and expect to repair it later.
 
 ## 3. Wallet, navigation and transaction behavior
 
@@ -685,7 +684,7 @@ Permanent custody and immutable references reduce some attack paths; they do not
 ### 14.2 Pending receipts — do last, local chain only
 
 1. Ensure there is a valid small transfer/approval to make on the currently selected fixture.
-2. Console: `await rpc.send('evm_setAutomine', [false])`.
+2. Console: disable interval mining with `await rpc.send('evm_setIntervalMining', [0])`, then `await rpc.send('evm_setAutomine', [false])`. Both are needed to keep the transaction pending.
 3. Submit the valid transaction through MetaMask. Do not use the `tx` helper for this submission because it waits for a receipt.
 4. Check submitted/pending hash and disabled duplicate actions. Wait long enough to reach the app's uncertain-receipt state if testing that branch; do not assume a particular timeout duration.
 5. Restore mining and mine a block:
@@ -693,6 +692,7 @@ Permanent custody and immutable references reduce some attack paths; they do not
 ```js
 await rpc.send('evm_setAutomine', [true]);
 await rpc.send('evm_mine', []);
+await rpc.send('evm_setIntervalMining', [2000]);
 ```
 
 6. Use **Check confirmation** if shown. Inspect actual receipt and balances.
@@ -717,7 +717,7 @@ Always restore automining even if you abort this test. Never leave a pending tra
 
 Some cases are better exercised by existing adversarial harnesses than by pretending they are manual browser features: callback reentrancy, dishonest/fee-on-transfer payment tokens, unusual return values, arithmetic extremes, constructor-invalid combinations, forced reserve loss, provider log-range splitting and randomized operation sequences.
 
-Run these from the root after completing your rehearsal; integration tests require a local node and use their own deployed fixtures:
+Run these from the root after completing your rehearsal; the root integration command starts an isolated local node with its own fixtures:
 
 ```bash
 npm test
@@ -729,7 +729,7 @@ npm run demo:subscriptions
 npm run demo:compliance
 ```
 
-The two `demo:*` commands above use isolated ephemeral chains; they do not populate your currently open UI. `test:integration` uses the running localhost node and may advance its time, so avoid running it in the middle of time-sensitive manual cases.
+The two `demo:*` commands above use isolated ephemeral chains; they do not populate your currently open UI. `npm run test:integration` starts and stops an isolated node, so its time travel does not advance the demo on port 8545.
 
 Latest recorded enhancement baseline for comparison: **229 contract tests, 140 frontend tests, 3 integration tests**, successful build/typechecks. Re-run and record your actual results; do not copy these counts as evidence of a new run. [Detailed prior evidence](docs/compliance-test-results.md), [subscription mathematics](docs/subscription-allocation-mathematics.md), [security review](docs/compliance-threat-model.md), and [full-standard comparison](docs/erc3643-comparison.md) explain the intended behavior and limitations.
 

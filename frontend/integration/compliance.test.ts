@@ -12,10 +12,14 @@ import { Blockchain } from "../src/services/blockchain";
 import { Compliance } from "../src/services/compliance";
 import { Subscriptions } from "../src/services/subscriptions";
 import type { WalletProvider } from "../src/types";
-const provider = new JsonRpcProvider("http://127.0.0.1:8545", undefined, {
-  cacheTimeout: -1,
-  pollingInterval: 30,
-});
+const provider = new JsonRpcProvider(
+  process.env.INTEGRATION_RPC_URL || "http://127.0.0.1:18545",
+  undefined,
+  {
+    cacheTimeout: -1,
+    pollingInterval: 30,
+  },
+);
 afterAll(() => provider.destroy());
 describe("Regulated frontend services against real contracts", () => {
   it("creates regulated assets, administers credentials/policy, preflights, buys and claims with independent refunds", async () => {
