@@ -1,0 +1,17 @@
+﻿
+> rwa-tokenisation@1.0.0 test:integration
+> npm --prefix frontend run test:integration
+
+
+> rwa-tokenisation-frontend@0.0.1 test:integration
+> vitest run --config vite.integration.config.ts
+
+
+ RUN  v4.1.12 C:/Users/laksh/AppData/Local/Temp/claude/aeb57e520ad1640f/f349e0d7-844e-41a7-826c-851a9fd89743/scratchpad/p6-verify/frontend
+
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  15:38:44
+   Duration  16.92s (transform 353ms, setup 0ms, import 1.28s, tests 14.94s, environment 0ms)
+

@@ -1,0 +1,24 @@
+﻿
+
+
+
+
+
+
+node.exe : Warning: "selfdestruct" has been deprecated. Note that, starting from the Cancun hard fork, the underlying 
+opcode no longer deletes the code and data associated with an account and only transfers its Ether to the beneficiary, 
+unless executed in the same transaction in which the contract was created (see EIP-6780). Any use in newly deployed 
+contracts is strongly discouraged even if the new behavior is taken into account. Future changes to the EVM might 
+further reduce the functionality of the opcode.
+At line:1 char:1
++ & "C:\Users\laksh\AppData\Local\Microsoft\WinGet\Packages\OpenJS.Node ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Warning: "selfd... of the opcode.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ --> .\contracts\test\ForceSendHarness.sol:9:9:
+  |
+9 |         selfdestruct(target);
+  |         ^^^^^^^^^^^^
+
+Compiled 7 Solidity files with solc 0.8.24 (evm target: shanghai)
