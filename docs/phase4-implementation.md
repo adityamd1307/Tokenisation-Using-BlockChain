@@ -127,6 +127,8 @@ The integration suite creates an isolated factory on the persistent local node, 
 
 Use a fresh unseeded `deploy:local` for the complete demonstration; seeding intentionally pre-completes administration/funding. Do not mark these checked based on mocked tests.
 
+> Update, 7 November 2026: Chordia Laksh ran this checklist with MetaMask against a local node at `main` 0b1249e and recorded it as accepted. The rows below keep their original "Pending" text because per-scenario results were not given; see [AUD-002](issues/AUD-002-frontend-dashboards-and-wallet-integration-are-uni.md) for what the acceptance rests on.
+
 | Manual scenario | Expected result | Status |
 |---|---|---|
 | Wallet A (account 0): connect, inspect role, authorise B (account 1) | Admin role and issuer status update after confirmation | Pending |
