@@ -19,5 +19,5 @@ Inventory for Report Section 5. AUD-001 to AUD-003 are tracking issues for unbui
 | [AUD-013](AUD-013-transaction-history-shows-a-forced-transfer-as-an-.md) | Transaction history shows a forced transfer as an ordinary transfer sent by the holder | low | frontend | fixed (7da8dda) |
 | [AUD-014](AUD-014-default-build-profile-leaves-assetfactory-at-the-e.md) | Default build profile leaves AssetFactory at the EIP-170 limit so local deploys and tests break on any contract growth | low | build configuration / contract size | fixed (e1fc698) |
 | [AUD-015](AUD-015-frontend-unit-tests-fail-once-the-committed-deploy.md) | Frontend unit tests fail once the committed deployment is on Sepolia | low | test isolation / build configuration | fixed (a36b1e9) |
-| [AUD-016](AUD-016-frontend-ignores-the-d5-pause-no-pre-flight-check-.md) | Frontend ignores the D5 pause: no pre-flight check and a raw EnforcedPause error | | | open |
-| [AUD-017](AUD-017-activity-history-drops-pause-unpause-and-role-chan.md) | Activity history drops pause, unpause and role-change events | | | open |
+| [AUD-016](AUD-016-frontend-ignores-the-d5-pause-no-pre-flight-check-.md) | Frontend ignores the D5 pause: no pre-flight check and a raw EnforcedPause error | low | frontend | fixed (fd74329) |
+| [AUD-017](AUD-017-activity-history-drops-pause-unpause-and-role-chan.md) | Activity history drops pause, unpause and role-change events | low | frontend | fixed (3f7e0c4) |
