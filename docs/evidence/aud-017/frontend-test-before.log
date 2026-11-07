@@ -1,0 +1,40 @@
+﻿
+ RUN  v4.1.12 C:/Users/laksh/OneDrive - Nanyang Technological University/NTU/Y4S1/SC4053/Project/frontend
+
+ ❯ src/test/history.test.ts (6 tests | 1 failed) 64ms
+     × labels pause, unpause and role changes instead of dropping them 26ms
+node.exe : 
+At line:1 char:1
++ & "C:\Users\laksh\AppData\Local\Microsoft\WinGet\Packages\OpenJS.Node ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/history.test.ts > On-chain event history > labels pause, unpause and role changes instead of dropping 
+them
+AssertionError: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ src/test/history.test.ts:177:30
+    175|     const rows = await assetHistory(api, asset);
+    176|     const byType = (type: string) => rows.filter((r) => r.type === typ…
+    177|     expect(byType("Paused")).toHaveLength(1);
+       |                              ^
+    178|     expect(byType("Paused")[0]).toMatchObject({ from: ISSUER });
+    179|     expect(byType("Unpaused")).toHaveLength(1);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 5 passed (6)
+   Start at  14:53:10
+   Duration  9.55s (transform 638ms, setup 1.66s, import 1.19s, tests 64ms, environment 5.83s)
+
