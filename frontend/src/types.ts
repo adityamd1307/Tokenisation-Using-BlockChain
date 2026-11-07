@@ -1,8 +1,23 @@
-import type { Eip1193Provider } from "ethers";
+import type { Eip1193Provider, TransactionReceipt } from "ethers";
 
+/** The fields ethers v6 and EIP-1193 wallets put on a thrown error. */
+export interface RpcErrorLike {
+  code?: string | number;
+  message?: string;
+  shortMessage?: string;
+  reason?: string;
+  data?: unknown;
+  cancelled?: boolean;
+  receipt?: TransactionReceipt | null;
+  info?: { error?: { code?: number; message?: string; data?: unknown } };
+}
+export const rpcError = (error: unknown): RpcErrorLike =>
+  typeof error === "object" && error !== null ? (error as RpcErrorLike) : {};
+
+type Listener = (...args: unknown[]) => void;
 export interface WalletProvider extends Eip1193Provider {
-  on?: (event: string, listener: (...args: any[]) => void) => void;
-  removeListener?: (event: string, listener: (...args: any[]) => void) => void;
+  on?: (event: string, listener: Listener) => void;
+  removeListener?: (event: string, listener: Listener) => void;
   providers?: WalletProvider[];
   isMetaMask?: boolean;
 }

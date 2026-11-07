@@ -16,9 +16,9 @@ describe("Target network configuration", () => {
     expect(SEPOLIA_PUBLIC_RPC).not.toMatch(/key|token|[0-9a-f]{32}/i);
   });
   it("lets VITE_RPC_URL override the Sepolia default", () => {
-    expect(networkFor(SEPOLIA_CHAIN_ID, "https://rpc.example.test").rpcUrl).toBe(
-      "https://rpc.example.test",
-    );
+    expect(
+      networkFor(SEPOLIA_CHAIN_ID, "https://rpc.example.test").rpcUrl,
+    ).toBe("https://rpc.example.test");
   });
   it("keeps the local chain on 127.0.0.1:8545", () => {
     expect(networkFor(31337)).toEqual({

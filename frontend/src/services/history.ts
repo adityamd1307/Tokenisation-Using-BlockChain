@@ -1,7 +1,14 @@
 // Phase 4 §8.4: bounded, real event queries. The ERC-20 transfer inside a purchase or a
 // forced transfer (D5, AUD-013) is deduplicated so each operation appears once, typed.
-import { Contract, id, ZeroHash, type EventLog, type Log } from "ethers";
-import type { Activity, Asset } from "../types";
+import {
+  Contract,
+  id,
+  ZeroHash,
+  type ContractEventName,
+  type EventLog,
+  type Log,
+} from "ethers";
+import { rpcError, type Activity, type Asset } from "../types";
 import { Blockchain } from "./blockchain";
 
 const COMPLIANCE_ROLE = id("COMPLIANCE_ROLE");
@@ -13,20 +20,21 @@ export function roleName(role: string) {
 
 async function logs(
   contract: Contract,
-  filter: any,
+  filter: ContractEventName,
   from: number,
   to: number,
 ): Promise<(EventLog | Log)[]> {
   try {
     return await contract.queryFilter(filter, from, to);
-  } catch (error: any) {
+  } catch (caught) {
     // Split only range/size-limit failures. Transport failures must surface promptly.
-    const message = `${error?.message || ""} ${error?.info?.error?.message || ""}`;
+    const error = rpcError(caught);
+    const message = `${error.message || ""} ${error.info?.error?.message || ""}`;
     if (
       from >= to ||
       !/range|too many|limit|more than|response size/i.test(message)
     )
-      throw error;
+      throw caught;
     const middle = Math.floor((from + to) / 2);
     return [
       ...(await logs(contract, filter, from, middle)),
