@@ -175,7 +175,7 @@ export class Blockchain {
       accounts[0].toLowerCase() !== expectedAccount.toLowerCase()
     )
       throw new Error("Wallet account changed. Review the form and try again.");
-    // AUD-016: two local chains can share an ID and deterministic addresses.
+    // AUD-030: two local chains can share an ID and deterministic addresses.
     // Validate the signing RPC against the same deployment fingerprint as reads.
     const provider = new BrowserProvider(wallet, "any");
     await this.ready(provider);

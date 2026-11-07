@@ -4,7 +4,7 @@ Baseline `0b1249e`, clean tracked tree, 6 November 2026. No production Solidity,
 
 | Change | Reason | Before / after evidence |
 |---|---|---|
-| SEC-013 / AUD-016: check signing-provider deployment and recheck account/chain | Same chain ID can identify distinct local chains; public RPC checking alone does not bind signing | `SEC-013-before.log`: 4 regression failures; `SEC-013-after.log`: 122 frontend passes; final integration/build pass |
+| SEC-013 / AUD-030: check signing-provider deployment and recheck account/chain | Same chain ID can identify distinct local chains; public RPC checking alone does not bind signing | `SEC-013-before.log`: 4 regression failures; `SEC-013-after.log`: 122 frontend passes; final integration/build pass |
 | Sidebar uses configured network and “ACADEMIC DEMO” | Hardcoded LOCAL DEVELOPMENT / PHASE 04 mislabels a Sepolia configuration | Source diff; frontend build and suite pass. No new visual screenshot claim |
 | Add 11 contract security tests and isolated callback helper | Boundary arithmetic, outsider matrix, cross-function callbacks, recovery, two-issuer state sequences | `security-tests.log`, `final-retry-security-tests.log`: 11 passes; full suite 153 |
 | Extend real-chain frontend integration to the exact CPT two-buyer flow | Previous scenario bought 100 only | `final-integration.log`: pass; 80/70/9850/0 final balances |

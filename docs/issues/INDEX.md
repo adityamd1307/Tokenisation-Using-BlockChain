@@ -2,6 +2,8 @@
 
 Inventory for Report Section 5. AUD-001 to AUD-003 are tracking issues for unbuilt phase work, not AI defects (audit-1 F-14). AUD-004 onward are defects. `scripts/new-issue.sh` appends a row here; update Status and Severity as you go.
 
+**Numbering gap (7 November 2026).** Three lines of work allocated numbers independently. AUD-016 and AUD-017 are used on the unmerged `frontend-redesign` branch (pause pre-flight; history labels). AUD-018 to AUD-029 are left for the independent review pass. AUD-030 is the Phase 6 signing-RPC issue, which commit c7cb0d1 numbers AUD-016; its raw logs and `docs/audit/source-manifest.json` keep that number. `scripts/new-issue.sh` takes the highest number plus one, so on any tree that contains AUD-030 it hands out AUD-031; give issues 018 to 029 their numbers by hand there.
+
 | ID | Title | Severity | Category | Status |
 |---|---|---|---|---|
 | [AUD-001](AUD-001-core-contracts-and-compliance-controls-are-unimple.md) | Core contracts and compliance controls are unimplemented | high | tracking (unbuilt phase work) | fixed (714366d; freeze dropped by D5) |
@@ -19,4 +21,4 @@ Inventory for Report Section 5. AUD-001 to AUD-003 are tracking issues for unbui
 | [AUD-013](AUD-013-transaction-history-shows-a-forced-transfer-as-an-.md) | Transaction history shows a forced transfer as an ordinary transfer sent by the holder | low | frontend | fixed (7da8dda) |
 | [AUD-014](AUD-014-default-build-profile-leaves-assetfactory-at-the-e.md) | Default build profile leaves AssetFactory at the EIP-170 limit so local deploys and tests break on any contract growth | low | build configuration / contract size | fixed (e1fc698) |
 | [AUD-015](AUD-015-frontend-unit-tests-fail-once-the-committed-deploy.md) | Frontend unit tests fail once the committed deployment is on Sepolia | low | test isolation / build configuration | fixed (a36b1e9) |
-| [AUD-016](AUD-016-signing-wallet-deployment-is-not-checked-against-t.md) | Signing wallet deployment is not checked against the public RPC | medium | frontend transaction correctness | fixed in Phase 6 working tree (SEC-013) |
+| [AUD-030](AUD-030-signing-wallet-deployment-is-not-checked-against-t.md) | Signing wallet deployment is not checked against the public RPC | medium | frontend transaction correctness | fixed in Phase 6 working tree (SEC-013) |

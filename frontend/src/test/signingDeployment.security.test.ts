@@ -1,4 +1,4 @@
-// Phase 6 I13 / AUD-016: identical chain IDs do not identify a local deployment.
+// Phase 6 I13 / AUD-030: identical chain IDs do not identify a local deployment.
 import { describe, expect, it, vi } from "vitest";
 import { JsonRpcProvider, keccak256 } from "ethers";
 import { Blockchain } from "../services/blockchain";
@@ -27,7 +27,7 @@ function fixture(code = "0x6000", hash = blockHash) {
   });
   return { api, wallet: { request } as WalletProvider, request };
 }
-describe("Signing deployment security (AUD-016)", () => {
+describe("Signing deployment security (AUD-030)", () => {
   it.each([
     ["missing factory", "0x", blockHash, "deployment not found"],
     ["different factory code", "0x6001", blockHash, "bytecode differs"],

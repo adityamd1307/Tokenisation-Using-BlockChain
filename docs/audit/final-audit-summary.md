@@ -5,7 +5,7 @@
 ## Results
 
 - Fresh baseline: 142 contract/script tests and 118 frontend tests passed; build/typechecks, existing demos and local integration passed after resolving compiler-cache permissions.
-- Confirmed new issue: SEC-013 / AUD-016, medium, signing RPC deployment not validated. Four failing-before cases now pass. Wallet code/block checks and account/network rechecks implemented. No production Solidity changed.
+- Confirmed new issue: SEC-013 / AUD-030, medium, signing RPC deployment not validated. Four failing-before cases now pass. Wallet code/block checks and account/network rechecks implemented. No production Solidity changed.
 - Final: 153 contract/script tests, 122 frontend tests, one real-chain frontend-service integration test; builds and typechecks pass. Eleven new adversarial contract tests include 144 modeled operations over three seeds and two independent issuers.
 - Exact demonstration: 31 checks, 18 mined local transactions, three expected reverts. CPT issuer 9850 / A 80 / B 70 / sale 0, supply 10000; 0.15 ETH withdrawn; DLT independent. Full receipt and event evidence: `final-demo.json`.
 - Coverage: each production contract 100% lines/statements; including test helpers 99.25%/99.37%. Gas measured, no new gas savings claimed. Runtime bytecode: factory 13545, token 4124, sale 3132 bytes in optimized builds.

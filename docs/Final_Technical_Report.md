@@ -62,7 +62,7 @@ All quantities, prices and payments use BigInt with uint256 bounds; ETH input su
 
 Transaction state distinguishes wallet approval, submitted hash, pending receipt, confirmed receipt, revert, rejection and unknown confirmation. A receipt timeout retains the hash and disables repeated submission in the active session. Rechecking a real receipt determines success or failure. This state is not durable across page reloads. A malicious provider or a state change after preflight cannot be eliminated by UI checks.
 
-Phase 6 fixed AUD-016/SEC-013: signer acquisition now validates factory runtime and deployment block fingerprints through the wallet RPC as well as the public RPC, then rechecks chain/account. Equal chain IDs alone do not identify the same local deployment. The sidebar now names the configured network instead of hardcoding a previous phase.
+Phase 6 fixed AUD-030/SEC-013: signer acquisition now validates factory runtime and deployment block fingerprints through the wallet RPC as well as the public RPC, then rechecks chain/account. Equal chain IDs alone do not identify the same local deployment. The sidebar now names the configured network instead of hardcoding a previous phase.
 
 ## Validation and security results
 

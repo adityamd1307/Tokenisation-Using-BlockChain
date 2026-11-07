@@ -48,7 +48,7 @@ Representative verbatim excerpts from preserved user requirements:
 - Phase 5: “Use four distinct MetaMask accounts.”
 - Phase 6: “Do not fabricate bugs, prompt logs, screenshots, team contributions, or passing tests.”
 
-The strongest prompt refinement was not adding length but reconciling contradictions: old “every holder is eligible” wording conflicted with later revocation behavior, and immutable issuer addresses did not imply immutable roles. CLAUDE.md accumulates issue-specific rules; AUD-016 now requires both read and signing provider deployment validation. The refined context includes consumers and lifecycle transitions, not only individual functions.
+The strongest prompt refinement was not adding length but reconciling contradictions: old “every holder is eligible” wording conflicted with later revocation behavior, and immutable issuer addresses did not imply immutable roles. CLAUDE.md accumulates issue-specific rules; AUD-030 now requires both read and signing provider deployment validation. The refined context includes consumers and lifecycle transitions, not only individual functions.
 
 There is no complete verbatim Codex conversation for Phases 2/4 in this repository; curated summaries are labelled as such. Phase 6 preserves the exact request and a work summary, not invented dialogue. [Team: add any separately retained original prompt exports if required by the course.] No claims about hidden model reasoning or unrecorded human contributions are made.
 
@@ -102,7 +102,7 @@ The following SEC IDs map one-to-one to existing AUD records. They include secur
 | SEC-010 (AUD-013) | Frontend history | Low | Forced transfer was mislabeled as holder transfer | Fixed historically; regression retained | [AUD-013](issues/AUD-013-transaction-history-shows-a-forced-transfer-as-an-.md) |
 | SEC-011 (AUD-014) | Build configuration | Low | Default build retained the factory size risk | Fixed historically; regression retained | [AUD-014](issues/AUD-014-default-build-profile-leaves-assetfactory-at-the-e.md) |
 | SEC-012 (AUD-015) | Frontend test isolation | Low | Unit tests depended on generated deployment network | Fixed historically; regression retained | [AUD-015](issues/AUD-015-frontend-unit-tests-fail-once-the-committed-deploy.md) |
-| SEC-013 (AUD-016) | Frontend signer | Medium | Signing RPC deployment was not verified | Fixed in Phase 6 working tree | [AUD-016](issues/AUD-016-signing-wallet-deployment-is-not-checked-against-t.md) |
+| SEC-013 (AUD-030) | Frontend signer | Medium | Signing RPC deployment was not verified | Fixed in Phase 6 working tree | [AUD-030](issues/AUD-030-signing-wallet-deployment-is-not-checked-against-t.md) |
 
 ### SEC-001 — Whitelist existed without transfer enforcement (High; AUD-004)
 
@@ -320,7 +320,7 @@ Mock fixed test deployment data in unit setup, retain real ABIs, and keep integr
 
 deploymentIsolation.regression.test.ts; aud-015 reports 40 failing with the new test/Sepolia config before, 118 passing after. Current 122 frontend passes. See the [full finding and evidence links](issues/AUD-015-frontend-unit-tests-fail-once-the-committed-deploy.md).
 
-### SEC-013 — Signing RPC deployment was not verified (Medium; AUD-016)
+### SEC-013 — Signing RPC deployment was not verified (Medium; AUD-030)
 
 **1. Why AI made the mistake**
 
@@ -336,7 +336,7 @@ Apply code/block fingerprint validation to the BrowserProvider and recheck its a
 
 **4. Evidence that the fix works**
 
-signingDeployment.security.test.ts: 4 failures before, 4 passing after within the 122-test suite. Real-chain frontend integration passes with the new signer checks. See the [full finding and evidence links](issues/AUD-016-signing-wallet-deployment-is-not-checked-against-t.md).
+signingDeployment.security.test.ts: 4 failures before, 4 passing after within the 122-test suite. Real-chain frontend integration passes with the new signer checks. See the [full finding and evidence links](issues/AUD-030-signing-wallet-deployment-is-not-checked-against-t.md).
 
 Scanner findings are reported separately: 29 results, individually triaged, with no confirmed new production-contract exploit. `allocate`'s high arbitrary-source warning is a false positive because the source is immutable issuer and the caller/allowance are restricted. The other high warning is an intentionally minimal test holder. Exact zero checks are valid; callback-event ordering does not establish double payout. Development dependency warnings, issuer trust, unsupported directly deployed tokens, scalability and potential compiler applicability are disclosed in [security findings](audit/security-findings.md), [Slither summary](audit/slither-summary.md) and [dependency review](audit/dependency-review.md). They are not counted as fixed exploits.
 

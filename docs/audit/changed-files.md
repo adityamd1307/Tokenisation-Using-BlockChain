@@ -4,7 +4,7 @@ Baseline `0b1249e`; no commits made. Includes all changed/untracked deliverables
 
 | File | Purpose |
 |---|---|
-| `CLAUDE.md` | AUD-016 rule: validate deployment identity through read and signing RPCs |
+| `CLAUDE.md` | AUD-030 rule: validate deployment identity through read and signing RPCs |
 | `README.md` | Current readiness, commands, counts and final report links |
 | `contracts/test/SaleCallbackHarness.sol` | Test-only nested sweep/withdrawal and rejecting-payment issuer |
 | `docs/AI_Audit_Report.md` | Eight-section AI audit with historical provenance and four-part findings |
@@ -93,8 +93,8 @@ Baseline `0b1249e`; no commits made. Includes all changed/untracked deliverables
 | `docs/audit/threat-model.md` | Audit analysis, evidence or quality-gate report |
 | `docs/evidence/phase5/replay-hardhatMainnet-20261106T060908Z.json` | Actual baseline output from existing Phase 5 replay |
 | `docs/issues/AUD-007-eth-forced-into-assetsale-is-unrecoverable.md` | Follow-up verification of sweep callback behavior |
-| `docs/issues/AUD-016-signing-wallet-deployment-is-not-checked-against-t.md` | New confirmed frontend finding, cause/impact/fix and before/after evidence |
-| `docs/issues/INDEX.md` | AUD-016 registration and status |
+| `docs/issues/AUD-030-signing-wallet-deployment-is-not-checked-against-t.md` | New confirmed frontend finding, cause/impact/fix and before/after evidence |
+| `docs/issues/INDEX.md` | AUD-030 registration and status |
 | `docs/report/REPORT-MAP.md` | Correct baseline-tag references and link the final evidence |
 | `docs/spec/phase6-requirements.md` | Verbatim supplied Phase 6 request |
 | `frontend/integration/lifecycle.test.ts` | Exact two-buyer CPT flow through production services |
