@@ -5,7 +5,7 @@
 | 1. Initial Specification & System Scope | `docs/spec/spec-v0.md`, preserved `spec-v0` content and session evidence (tag dates alone do not establish when the prose was written) |
 | 2. Development Methodology & AI Tooling | `CLAUDE.md`, `.claude/settings.json`, `.claude/hooks/`, `scripts/`, `docs/ai-logs/INDEX.md` (Who and Tool columns show division of labour) |
 | 3. Specification Engineering & Prompt Logs | `docs/spec/spec-v1.md` and its git history, `git log -p CLAUDE.md` (how our instructions to the AI evolved), `docs/ai-logs/exports/` |
-| 4. AI-Generated Architecture | Per-phase tags marking each first complete AI generation, never edited: `ai-baseline-phase2`, `ai-baseline-phase3` (both created retroactively), `ai-baseline-phase4`, `ai-baseline-d5`. A single `ai-baseline` tag was planned but never created; each tag's annotation says how and when it was made |
+| 4. AI-Generated Architecture | Per-phase tags marking each first complete AI generation, never edited: `ai-baseline-phase2`, `ai-baseline-phase3` (both created retroactively), `ai-baseline-phase4`, `ai-baseline-d5`, `ai-baseline-phase5`, `ai-baseline-phase6` (created retroactively on c7cb0d1 on 7 November 2026). A single `ai-baseline` tag was planned but never created; each tag's annotation says how and when it was made |
 | 5. Problems Discovered & Vulnerability Analysis | `docs/issues/INDEX.md` and each `AUD-NNN` file |
 | 6. Validation Process & Testing Strategy | `test/`, `docs/evidence/runs/`, `docs/evidence/testnet-log.md` |
 | 7. Improvements & Refinements | `git diff ai-baseline-phase3..main`, commits prefixed `human:` and `fix(...)` |
@@ -31,4 +31,4 @@ Phase 4 additions (28 October 2026, uncommitted by user instruction):
 - Command outputs and per-file manifest: `docs/evidence/phase4/`.
 - Manual MetaMask and responsive layout verification remain outstanding; do not describe automated EIP-1193 adapter tests as wallet-extension evidence.
 
-Phase 6: the eight-section report is `docs/AI_Audit_Report.md`; fresh command results, detector triage, exact local lifecycle and file hashes are in `docs/audit/`. No commits or public transactions were made.
+Phase 6: the eight-section report is `docs/AI_Audit_Report.md`; fresh command results, detector triage, exact local lifecycle and file hashes are in `docs/audit/`. The Codex session made no commits or public transactions; adityamd committed the result as `c7cb0d1`. Pre-merge verification by a separate Claude Code session: `docs/phase6-verification.md`, evidence in `docs/evidence/phase6-verification/` and `docs/evidence/aud-030/`.

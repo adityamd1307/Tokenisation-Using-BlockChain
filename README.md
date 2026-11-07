@@ -86,9 +86,9 @@ AI tools (Claude Code, Codex, claude.ai) generated the contracts, tests and fron
 
 | Where | What |
 |---|---|
-| [`docs/issues/INDEX.md`](docs/issues/INDEX.md) | AUD-001 to AUD-015 and AUD-030 (Phase 6; numbered AUD-016 in c7cb0d1). AUD-016 to AUD-029 are reserved, see the index. AUD-001 to AUD-003 are tracking issues; the rest record security, correctness or reproducibility issues. Each defect has before/after evidence and an analysis of why the AI made the mistake. Defects from AUD-005 onward, except AUD-009 and AUD-010 (Phase 4, uncommitted at the time), also have a separate failing-test commit and fix commit |
+| [`docs/issues/INDEX.md`](docs/issues/INDEX.md) | AUD-001 to AUD-015 and AUD-030 (Phase 6; numbered AUD-016 in c7cb0d1). AUD-016 to AUD-029 are reserved, see the index. AUD-001 to AUD-003 are tracking issues; the rest record security, correctness or reproducibility issues. Each defect has before/after evidence and an analysis of why the AI made the mistake. Defects from AUD-005 onward, except AUD-009 and AUD-010 (Phase 4, uncommitted at the time) and AUD-030 (Phase 6, one commit; evidence runs added afterwards), also have a separate failing-test commit and fix commit |
 | [`docs/ai-logs/INDEX.md`](docs/ai-logs/INDEX.md) | Every AI session: tool, model, context given and outcome. Transcripts are in `docs/ai-logs/raw/` (emails and Hardhat dev keys redacted, decisions D9 and D10) |
-| Tags `ai-baseline-phase2`, `-phase3`, `-phase4`, `-d5`, `-phase5` | Each first complete AI generation, never edited afterwards. The pre-AI spec is tagged `spec-v0` (pushed on 6 November 2026) |
+| Tags `ai-baseline-phase2`, `-phase3`, `-phase4`, `-d5`, `-phase5`, `-phase6` | Each first complete AI generation, never edited afterwards. The pre-AI spec is tagged `spec-v0` (pushed on 6 November 2026) |
 | [`docs/evidence/`](docs/evidence/) | Evidence runs and per-issue logs |
 | [`docs/report/REPORT-MAP.md`](docs/report/REPORT-MAP.md) | Which evidence backs each section of the AI Audit Report |
 
@@ -116,4 +116,4 @@ The exact demo records 31 checks and 18 mined transactions (three expected rever
 - [Test results](docs/audit/test-results.md), [coverage/gas](docs/audit/coverage-summary.md), [remediation log](docs/audit/remediation-log.md)
 - [Changed-file manifest](docs/audit/changed-files.md), [submission readiness](docs/audit/final-audit-summary.md)
 
-Slither executed with 29 findings, all classified; no new production-contract exploit was confirmed. Root npm audit flags development-tool dependencies; frontend and root production-only scans report zero. Compiler 0.8.24 has newer advisories with residual applicability uncertainty. Issuer/delegated admin recovery powers are trusted by design; the software is not approved for real assets or production funds. Full MetaMask and testnet acceptance remain outstanding. No public transactions or Git commits were made during this audit.
+Slither executed with 29 findings, all classified; no new production-contract exploit was confirmed. Root npm audit flags development-tool dependencies; frontend and root production-only scans report zero. Compiler 0.8.24 has newer advisories with residual applicability uncertainty. Issuer/delegated admin recovery powers are trusted by design; the software is not approved for real assets or production funds. Full MetaMask and testnet acceptance remain outstanding. The Codex audit session made no public transactions or commits; adityamd committed its result as `c7cb0d1`.

@@ -1,6 +1,6 @@
 # Final Technical Report
 
-Tokenisation of Real-World and Digital Assets on Ethereum — NTU SC4053, AY2026–2027 Semester 1. Reviewed 6 November 2026 (Asia/Singapore), starting revision `0b1249e`. Phase 6 changes are uncommitted by instruction.
+Tokenisation of Real-World and Digital Assets on Ethereum — NTU SC4053, AY2026–2027 Semester 1. Reviewed 6 November 2026 (Asia/Singapore), starting revision `0b1249e`. The Codex session made no commits, by instruction; the work was committed afterwards as `c7cb0d1`.
 
 ## Problem and scope
 
@@ -82,6 +82,6 @@ Local deployments use chain 31337. Deploy scripts write the factory address, cha
 
 ## Remaining limitations and future work
 
-A real MetaMask/browser rehearsal and required Sepolia evidence remain outstanding. Browser connection discovery returned no available browser, so no screenshots or browser acceptance are claimed. The assignment PDF was absent; the team must check course packaging and complete identity/contribution fields in the AI report.
+Required Sepolia evidence remains outstanding. AUD-002's manual MetaMask rehearsal was accepted on 7 November 2026 for 0b1249e (user-reported, commit 7c73461, screenshots pending); it predates the Phase 6 signing change, which has not been checked in MetaMask. Browser connection discovery returned no available browser, so no screenshots or browser acceptance are claimed. The assignment PDF was absent; the team must check course packaging and complete identity/contribution fields in the AI report.
 
 Production use would require independent review, resolution of compiler/dependency concerns, key governance/recovery design, verified legal/custody arrangements and stronger operational monitoring. Registry/history pagination, durable pending-transaction tracking and explicit UI pause status are possible future refinements. They are not implemented features. The present system is an academic local demonstration, not a production investment platform.

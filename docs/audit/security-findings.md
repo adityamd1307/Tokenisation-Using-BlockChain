@@ -16,7 +16,7 @@ SEC identifiers are report aliases for the existing AUD issue IDs, not new claim
 | SEC-010 (AUD-013) | Frontend history | Low | Forced transfer was mislabeled as holder transfer | Fixed historically; regression retained | [AUD-013](../issues/AUD-013-transaction-history-shows-a-forced-transfer-as-an-.md) |
 | SEC-011 (AUD-014) | Build configuration | Low | Default build retained the factory size risk | Fixed historically; regression retained | [AUD-014](../issues/AUD-014-default-build-profile-leaves-assetfactory-at-the-e.md) |
 | SEC-012 (AUD-015) | Frontend test isolation | Low | Unit tests depended on generated deployment network | Fixed historically; regression retained | [AUD-015](../issues/AUD-015-frontend-unit-tests-fail-once-the-committed-deploy.md) |
-| SEC-013 (AUD-030) | Frontend signer | Medium | Signing RPC deployment was not verified | Fixed in Phase 6 working tree | [AUD-030](../issues/AUD-030-signing-wallet-deployment-is-not-checked-against-t.md) |
+| SEC-013 (AUD-030) | Frontend signer | Medium | Signing RPC deployment was not verified | Fixed (c7cb0d1) | [AUD-030](../issues/AUD-030-signing-wallet-deployment-is-not-checked-against-t.md) |
 
 ## Informational findings and potential risks (separate from confirmed defects)
 

@@ -1,9 +1,9 @@
 # SC4053 AI Audit Report
 
 **Tokenisation of Real-World and Digital Assets on Ethereum**  
-NTU SC4053, AY2026–2027 Semester 1. Evidence cut-off: 6 November 2026 (Asia/Singapore). Baseline revision: `0b1249e`; Phase 6 changes remain uncommitted by explicit instruction.
+NTU SC4053, AY2026–2027 Semester 1. Evidence cut-off: 6 November 2026 (Asia/Singapore). Baseline revision: `0b1249e`. The Codex session made no commits, by explicit instruction; adityamd committed its result afterwards as `c7cb0d1`, merged into main as `07f0cf8`.
 
-This report separates executed observations from historical records and remaining acceptance checks. No assignment PDF was found in the repository. The eight section titles below follow the supplied [Phase 6 request](spec/phase6-requirements.md); the team must compare the final submission against the original course brief. The implementation is locally demonstrable, but full submission acceptance remains pending real MetaMask rehearsal and required Sepolia evidence.
+This report separates executed observations from historical records and remaining acceptance checks. No assignment PDF was found in the repository. The eight section titles below follow the supplied [Phase 6 request](spec/phase6-requirements.md); the team must compare the final submission against the original course brief. The implementation is locally demonstrable, but full submission acceptance remains pending required Sepolia evidence. AUD-002's manual MetaMask rehearsal was accepted on 7 November 2026 for 0b1249e (user-reported, commit 7c73461, screenshots pending); it predates the Phase 6 signing change, which has not been checked in MetaMask.
 
 ## SECTION 1 — Initial Specification & System Scope
 
@@ -27,7 +27,7 @@ Deployment scripts use Hardhat config variables or encrypted keystore names. Per
 
 Human decisions are evidenced in D1–D18 and the session index. Chordia Laksh is named in research and decision records; adityamd-1307 is named in merge/implementation records. A commit prefix or merge is not evidence that every line received independent human review. Several reviews were performed by the same model/session that generated code. Phase 6 likewise includes AI self-review and finite tests, not independent professional certification.
 
-**Team completion fields:** [Team: add official student names/IDs and submission responsibilities]; [Team: confirm actual human code-review activities and approvals with evidence]. These are intentionally unfilled rather than invented. Historical workflow deviations—combined test/fix commits and no-commit Codex sessions—remain disclosed in the issue records. Current user instructions prohibit commits, so this phase records raw before/after logs and file hashes instead.
+**Team completion fields:** [Team: add official student names/IDs and submission responsibilities]; [Team: confirm actual human code-review activities and approvals with evidence]. These are intentionally unfilled rather than invented. Historical workflow deviations—combined test/fix commits and no-commit Codex sessions—remain disclosed in the issue records. The Codex session's instructions prohibited commits, so it recorded raw before/after logs and file hashes instead. adityamd later committed the result as the single commit `c7cb0d1`, with no separate test and fix commits; the `evidence.sh` runs were added afterwards by a separate Claude Code session (see AUD-030).
 
 ## SECTION 3 — Specification Engineering & Prompt Logs
 
@@ -102,7 +102,7 @@ The following SEC IDs map one-to-one to existing AUD records. They include secur
 | SEC-010 (AUD-013) | Frontend history | Low | Forced transfer was mislabeled as holder transfer | Fixed historically; regression retained | [AUD-013](issues/AUD-013-transaction-history-shows-a-forced-transfer-as-an-.md) |
 | SEC-011 (AUD-014) | Build configuration | Low | Default build retained the factory size risk | Fixed historically; regression retained | [AUD-014](issues/AUD-014-default-build-profile-leaves-assetfactory-at-the-e.md) |
 | SEC-012 (AUD-015) | Frontend test isolation | Low | Unit tests depended on generated deployment network | Fixed historically; regression retained | [AUD-015](issues/AUD-015-frontend-unit-tests-fail-once-the-committed-deploy.md) |
-| SEC-013 (AUD-030) | Frontend signer | Medium | Signing RPC deployment was not verified | Fixed in Phase 6 working tree | [AUD-030](issues/AUD-030-signing-wallet-deployment-is-not-checked-against-t.md) |
+| SEC-013 (AUD-030) | Frontend signer | Medium | Signing RPC deployment was not verified | Fixed (c7cb0d1) | [AUD-030](issues/AUD-030-signing-wallet-deployment-is-not-checked-against-t.md) |
 
 ### SEC-001 — Whitelist existed without transfer enforcement (High; AUD-004)
 
@@ -352,13 +352,13 @@ Native `npx hardhat test --coverage` reports 100% lines and statements for each 
 
 The exact local Phase 6 demo passed 31 checks across 18 mined transactions, including three expected reverts. It confirms issuer/A/B/sale CPT balances 9850/80/70/0, fixed supply 10000, 0.15 ETH withdrawn and DLT isolation. Hashes, event logs and fee-adjusted failure state are in [final-demo.json](audit/final-demo.json).
 
-Two new audit-harness errors were caught: a TypeChain overload mismatch and assumption that revert names were always decoded. Both first failures and corrected reruns remain in evidence. This demonstrates why generated validation code also needs validation. No browser was connected; no screenshots, actual MetaMask transaction, or Sepolia deployment was executed. Existing AUD-002/003 remain open acceptance work. Tests cannot establish off-chain asset truth, all call sequences, dishonest-provider safety or absence of compiler defects.
+Two new audit-harness errors were caught: a TypeChain overload mismatch and assumption that revert names were always decoded. Both first failures and corrected reruns remain in evidence. This demonstrates why generated validation code also needs validation. No browser was connected in the Codex session; no screenshots, actual MetaMask transaction, or Sepolia deployment was executed. AUD-003 remains open. AUD-002's manual MetaMask rehearsal was accepted on 7 November 2026 for 0b1249e (user-reported, commit 7c73461, screenshots pending); it predates the Phase 6 signing change, which has not been checked in MetaMask. Tests cannot establish off-chain asset truth, all call sequences, dishonest-provider safety or absence of compiler defects.
 
 ## SECTION 7 — Improvements & Refinements
 
 Historical refinements include transfer-hook enforcement, role-recovery liveness, separate forced-ETH accounting, form persistence, unknown-receipt handling, portable lock metadata, event attribution and network-independent fixtures. D5 introduced explicit recovery powers after user decision, not as an undocumented audit “fix”. The historical optimized factory reduction is 24,576 to 13,545 bytes; older unoptimized gas measurements should not be compared indiscriminately with current runs.
 
-Phase 6 changed only two production frontend files: Blockchain validates the signing provider as well as the read provider and rechecks account/network; AppLayout names the configured network instead of hardcoding a previous development phase. Production Solidity and dependency versions are unchanged. New tests, local demo, static triage, threat model and reports make the result reviewable. Source/ABI inventory and file hashes provide reproducibility without prohibited commits.
+Phase 6 changed two production frontend source files (it also committed a regenerated local `addresses.json`, which main restored to its earlier version after the merge): Blockchain validates the signing provider as well as the read provider and rechecks account/network; AppLayout names the configured network instead of hardcoding a previous development phase. Production Solidity and dependency versions are unchanged. New tests, local demo, static triage, threat model and reports make the result reviewable. Source/ABI inventory and file hashes provide reproducibility without prohibited commits.
 
 Current runtime sizes are factory 13,545, token 4,124 and sale 3,132 bytes. Current gas observations include factory deployment 2,973,114, createAsset 1,925,522–2,013,385 and buyTokens 55,057–89,269. No new gas optimization or savings is claimed; removing storage or compliance checks without a measured justified benefit would change behavior. Additional wallet RPC reads are a deliberate correctness cost. No unrelated product features were added.
 

@@ -27,7 +27,7 @@
 | Portfolio/history accuracy | Automated checks pass | balanceOf, genuine local logs, purchase/forced-transfer deduplication |
 | Secret handling / UI claims | Source and heuristic review complete | No matched tracked-file secrets; no .env read; no exhaustive historical scan; academic disclaimer present |
 | Complete local integration | Pass | Creation, funding, approval, buys, negative operations, transfers, withdrawal, closure/recovery and DLT isolation |
-| Browser/MetaMask | Pending | Browser bootstrap reported no browser; discovery returned []; no screenshots |
+| Browser/MetaMask | Pending for Phase 6 | Browser bootstrap reported no browser; discovery returned []; no screenshots. Later: AUD-002 accepted 7 Nov 2026 for 0b1249e (user-reported, 7c73461); the Phase 6 signing change has not been rehearsed |
 | Sepolia | Pending | No verified deployment/receipt record; AUD-003 remains open; no public transaction made |
 | Technical/demo/deployment documentation | Complete locally | Final_Technical_Report.md, Final_Demo_Guide.md, Deployment_Guide.md and updated README |
 | AI Audit Report | Eight sections present | Historical findings use four required elements; exact request preserved; curated logs labelled; team fields pending |
@@ -37,7 +37,7 @@
 
 The original failures are retained: sandbox cache timeout, Slither setup/argument retries, four SEC-013 regression failures, audit-helper TypeChain error and raw-revert decoding error. Corrected reruns establish current success. No skipped/unexecuted check is reported as a pass. The audit does not establish mathematical proof, off-chain custody, legal ownership, production readiness or independent human review.
 
-[Changed-file manifest](changed-files.md) lists every changed/untracked deliverable with purpose; `source-manifest.json` fingerprints final source and documents. No Git commits were made. Generated local addresses are session-specific; restart/reset requires redeployment. The guide distinguishes the exact Phase 6 replay from older Phase 5 quantities and manual presentation steps.
+[Changed-file manifest](changed-files.md) lists every changed/untracked deliverable with purpose; `source-manifest.json` fingerprints final source and documents. The Codex session made no Git commits; adityamd committed the result as `c7cb0d1`. Generated local addresses are session-specific; restart/reset requires redeployment. The guide distinguishes the exact Phase 6 replay from older Phase 5 quantities and manual presentation steps.
 
 See [test results](test-results.md), [findings](security-findings.md), [remediation](remediation-log.md), [Slither triage](slither-summary.md), [dependency review](dependency-review.md), and the [AI report](../AI_Audit_Report.md).
 
