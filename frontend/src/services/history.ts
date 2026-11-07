@@ -1,8 +1,15 @@
 // Phase 4 §8.4: bounded, real event queries. The ERC-20 transfer inside a purchase or a
 // forced transfer (D5, AUD-013) is deduplicated so each operation appears once, typed.
-import { Contract, type EventLog, type Log } from "ethers";
+import { Contract, id, ZeroHash, type EventLog, type Log } from "ethers";
 import type { Activity, Asset } from "../types";
 import { Blockchain } from "./blockchain";
+
+const COMPLIANCE_ROLE = id("COMPLIANCE_ROLE");
+export function roleName(role: string) {
+  if (role === ZeroHash) return "Token admin";
+  if (role === COMPLIANCE_ROLE) return "Compliance agent";
+  return `Role ${role.slice(0, 10)}…`;
+}
 
 async function logs(
   contract: Contract,
@@ -148,6 +155,26 @@ export async function assetHistory(
           break;
         case "SaleClosed":
           rows.push({ ...base, type: "Offering closed", from: asset.issuer });
+          break;
+        // AUD-017: D5 pause (OpenZeppelin Pausable) and AccessControl role changes.
+        case "Paused":
+          rows.push({ ...base, type: "Paused", from: a.account });
+          break;
+        case "Unpaused":
+          rows.push({ ...base, type: "Unpaused", from: a.account });
+          break;
+        case "RoleGranted":
+        case "RoleRevoked":
+          rows.push({
+            ...base,
+            type:
+              event.eventName === "RoleGranted"
+                ? "Role granted"
+                : "Role revoked",
+            detail: roleName(a.role),
+            from: a.sender,
+            to: a.account,
+          });
           break;
       }
     }

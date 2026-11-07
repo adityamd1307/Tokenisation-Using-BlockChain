@@ -55,6 +55,8 @@ export interface Roles {
 export interface Activity {
   id: string;
   type: string;
+  /** Extra label, e.g. the role named in a RoleGranted event (AUD-017). */
+  detail?: string;
   asset: string;
   quantity?: bigint;
   paid?: bigint;
