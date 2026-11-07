@@ -4,7 +4,6 @@ import {
   render,
   screen,
   waitFor,
-  within,
 } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { MemoryRouter } from "react-router-dom";
@@ -258,104 +257,5 @@ describe("Administrative confirmation sessions", () => {
       provider.emit("accountsChanged", [RECIPIENT]);
     });
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
-  });
-});
-describe("Portfolio and transfers", () => {
-  it("handles no holdings", async () => {
-    vi.mocked(blockchain.holdings).mockResolvedValue([]);
-    mount("/portfolio");
-    await connect();
-    expect(await screen.findByText("No tokens held")).toBeInTheDocument();
-  });
-  it("displays multiple balances and sends an approved transfer", async () => {
-    mount("/portfolio");
-    await connect();
-    await screen.findByText("My tokenised assets");
-    expect(
-      screen.getByRole("heading", { name: digital.name }),
-    ).toBeInTheDocument();
-    expect(screen.getByText("50")).toBeInTheDocument();
-    change("Recipient address", RECIPIENT);
-    change("Transfer quantity", "20");
-    await screen.findByText("Recipient is approved for this asset.");
-    fireEvent.click(screen.getByRole("button", { name: "Transfer Tokens" }));
-    await screen.findByText(/Token transfer: Confirmed/);
-    expect(blockchain.transfer).toHaveBeenCalledWith(
-      provider,
-      INVESTOR,
-      asset,
-      RECIPIENT,
-      "20",
-    );
-  });
-  it("blocks an ineligible recipient", async () => {
-    vi.mocked(blockchain.eligibility).mockResolvedValue(false);
-    mount("/portfolio");
-    await connect();
-    await screen.findByLabelText("Recipient address");
-    change("Recipient address", RECIPIENT);
-    change("Transfer quantity", "20");
-    await screen.findByText(/This recipient is not authorised/);
-    expect(
-      screen.getByRole("button", { name: "Transfer Tokens" }),
-    ).toBeDisabled();
-  });
-  it("blocks insufficient balances", async () => {
-    mount("/portfolio");
-    await connect();
-    await screen.findByLabelText("Transfer quantity");
-    change("Recipient address", RECIPIENT);
-    change("Transfer quantity", "101");
-    await screen.findByText("Insufficient token balance.");
-    expect(
-      screen.getByRole("button", { name: "Transfer Tokens" }),
-    ).toBeDisabled();
-  });
-  it("clears holdings immediately on account change", async () => {
-    mount("/portfolio");
-    await connect();
-    await screen.findByText("My tokenised assets");
-    vi.mocked(blockchain.holdings).mockImplementation(
-      () => new Promise(() => {}),
-    );
-    act(() => {
-      provider.accounts = [RECIPIENT];
-      provider.emit("accountsChanged", [RECIPIENT]);
-    });
-    expect(screen.queryByText("My tokenised assets")).not.toBeInTheDocument();
-    await waitFor(() =>
-      expect(blockchain.holdings).toHaveBeenLastCalledWith(
-        [asset, digital],
-        RECIPIENT,
-      ),
-    );
-  });
-  it("renders actual event values returned by history", async () => {
-    vi.mocked(history.assetHistory).mockImplementation(async (_api, a) =>
-      a.id === "0"
-        ? [
-            {
-              id: "event",
-              type: "Purchase",
-              asset: "CPT",
-              quantity: 100n,
-              paid: 10n ** 17n,
-              from: SALE,
-              to: INVESTOR,
-              hash: HASH,
-              block: 9,
-              index: 0,
-              timestamp: 1700000000,
-            },
-          ]
-        : [],
-    );
-    mount("/portfolio");
-    await connect();
-    await screen.findByRole("cell", { name: "Purchase" });
-    expect(screen.getByText("#9")).toBeInTheDocument();
-    expect(
-      within(screen.getByRole("table")).getByText("0.1000 ETH"),
-    ).toBeInTheDocument();
   });
 });

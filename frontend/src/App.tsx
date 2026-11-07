@@ -15,7 +15,9 @@ import FundOverview from "./pages/FundOverview";
 import Subscribe from "./pages/Subscribe";
 import AdminDashboard from "./pages/AdminDashboard";
 import IssuerDashboard from "./pages/IssuerDashboard";
-import InvestorPortfolio from "./pages/InvestorPortfolio";
+import Portfolio from "./pages/Portfolio";
+import Transfer from "./pages/Transfer";
+import Activity from "./pages/Activity";
 import { EmptyState } from "./components/common";
 import "./index.css";
 import "./styles/tokens.css";
@@ -37,7 +39,9 @@ export function AppRoutes() {
         <Route path="assets/:id" element={<LegacyAsset />} />
         <Route path="admin" element={<AdminDashboard key={session} />} />
         <Route path="issuer" element={<IssuerDashboard />} />
-        <Route path="portfolio" element={<InvestorPortfolio />} />
+        <Route path="funds/:id/transfer" element={<Transfer />} />
+        <Route path="portfolio" element={<Portfolio />} />
+        <Route path="activity" element={<Activity />} />
         <Route path="investor" element={<Navigate to="/portfolio" replace />} />
         <Route
           path="*"
