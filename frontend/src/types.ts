@@ -56,6 +56,7 @@ export interface Activity {
   asset: string;
   quantity?: bigint;
   paid?: bigint;
+  currency?: "ETH" | "mUSD";
   from?: string;
   to?: string;
   hash: string;

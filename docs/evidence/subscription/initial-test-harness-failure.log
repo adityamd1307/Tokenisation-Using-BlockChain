@@ -1,0 +1,237 @@
+Running Mocha tests
+
+
+  Subscription milestone 2 — currency, configuration and registry
+    1) mints six-decimal simulated currency only through its owner
+    ✔ preserves the asset registry and assigns the issuer, token, caps and immutable dates
+    2) rejects zero supply
+    3) rejects zero price
+    4) rejects zero softCap
+    5) rejects zero start
+    6) rejects zero end
+    7) rejects EOA/zero tokens, wrong decimals, wrong issuer, overflow and inconsistent caps/times
+    8) blocks outsiders, another authorised issuer and revoked issuers from offering this asset
+
+  Subscription milestone 3 — escrow and time window
+    9) requires issuer, whitelist, allowance, positive bounded deposits and permits partial funding
+    10) enforces exact start/end boundaries and rejects deposits at start
+    ✔ rejects underfunded subscriptions even when donated tokens supply the balance
+    11) checks eligibility, multiples, balances and allowances without changing accounting on failure
+    ✔ accepts oversubscription, accumulates top-ups and counts distinct subscribers only
+
+  Subscription milestones 4–5 — allocation, settlement and independent payouts
+    12) blocks early and repeated finalisation and all premature settlement/claims/refunds/recovery
+    ✔ settles 1800/1400/800 into 450/350/200, protects unsettled deposits and refunds (89ms)
+    ✔ handles 1400 mUSD undersubscription and protects unclaimed entitlements during recovery
+    13) fails with 700 mUSD, refunds fully after revocation and recovers all inventory
+    14) preserves refunds when claims are blocked by revocation or pause, then allows reapproved claims
+    15) prevents repeated payouts, settlement, claiming others and unauthorised issuer actions
+    16) never credits stablecoin donations as issuer earnings
+
+  Subscription rounding and bounded model invariants
+    ✔ three equal subscribers receive two of seven units each; dust unlocks only after all settle (40ms)
+    ✔ conservatively fails when gross demand exceeds soft cap but rounded funding is not guaranteed
+    ✔ allows zero-token subscribers a full refund without erasing others' entitlement
+    ✔ conserves exact accounting under seeded top-ups and payout ordering (7) (164ms)
+    ✔ conserves exact accounting under seeded top-ups and payout ordering (41) (135ms)
+    ✔ conserves exact accounting under seeded top-ups and payout ordering (2026) (133ms)
+    ✔ handles multiplication beyond 256 bits using full-precision mulDiv
+
+
+  12 passing (919ms)
+  16 failing
+
+  1) Subscription milestone 2 — currency, configuration and registry
+       mints six-decimal simulated currency only through its owner:
+     AssertionError: The .reverted matcher has been deprecated. Use .revert(ethers) instead.
+      at _Assertion.<anonymous> (node_modules/@nomicfoundation/hardhat-ethers-chai-matchers/src/internal/matchers/reverted/legacyReverted.ts:15:16)
+      at _Assertion.propertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1607:27)
+      at doAsserterAsyncAndAddThen (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:340:16)
+      at _Assertion.<anonymous> (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:329:15)
+      at _Assertion.overwritingPropertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1766:35)
+      at Reflect.get (<anonymous>)
+      at Object.proxyGetter [as get] (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1696:22)
+      at Context.<anonymous> (test/SubscriptionOffering.test.ts:66:79)
+
+  2) Subscription milestone 2 — currency, configuration and registry
+       rejects zero supply:
+     AssertionError: The .reverted matcher has been deprecated. Use .revert(ethers) instead.
+      at _Assertion.<anonymous> (node_modules/@nomicfoundation/hardhat-ethers-chai-matchers/src/internal/matchers/reverted/legacyReverted.ts:15:16)
+      at _Assertion.propertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1607:27)
+      at doAsserterAsyncAndAddThen (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:340:16)
+      at _Assertion.<anonymous> (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:329:15)
+      at _Assertion.overwritingPropertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1766:35)
+      at Reflect.get (<anonymous>)
+      at Object.proxyGetter [as get] (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1696:22)
+      at Context.<anonymous> (test/SubscriptionOffering.test.ts:85:98)
+
+  3) Subscription milestone 2 — currency, configuration and registry
+       rejects zero price:
+     AssertionError: The .reverted matcher has been deprecated. Use .revert(ethers) instead.
+      at _Assertion.<anonymous> (node_modules/@nomicfoundation/hardhat-ethers-chai-matchers/src/internal/matchers/reverted/legacyReverted.ts:15:16)
+      at _Assertion.propertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1607:27)
+      at doAsserterAsyncAndAddThen (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:340:16)
+      at _Assertion.<anonymous> (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:329:15)
+      at _Assertion.overwritingPropertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1766:35)
+      at Reflect.get (<anonymous>)
+      at Object.proxyGetter [as get] (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1696:22)
+      at Context.<anonymous> (test/SubscriptionOffering.test.ts:85:98)
+
+  4) Subscription milestone 2 — currency, configuration and registry
+       rejects zero softCap:
+     AssertionError: The .reverted matcher has been deprecated. Use .revert(ethers) instead.
+      at _Assertion.<anonymous> (node_modules/@nomicfoundation/hardhat-ethers-chai-matchers/src/internal/matchers/reverted/legacyReverted.ts:15:16)
+      at _Assertion.propertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1607:27)
+      at doAsserterAsyncAndAddThen (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:340:16)
+      at _Assertion.<anonymous> (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:329:15)
+      at _Assertion.overwritingPropertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1766:35)
+      at Reflect.get (<anonymous>)
+      at Object.proxyGetter [as get] (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1696:22)
+      at Context.<anonymous> (test/SubscriptionOffering.test.ts:85:98)
+
+  5) Subscription milestone 2 — currency, configuration and registry
+       rejects zero start:
+     AssertionError: The .reverted matcher has been deprecated. Use .revert(ethers) instead.
+      at _Assertion.<anonymous> (node_modules/@nomicfoundation/hardhat-ethers-chai-matchers/src/internal/matchers/reverted/legacyReverted.ts:15:16)
+      at _Assertion.propertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1607:27)
+      at doAsserterAsyncAndAddThen (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:340:16)
+      at _Assertion.<anonymous> (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:329:15)
+      at _Assertion.overwritingPropertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1766:35)
+      at Reflect.get (<anonymous>)
+      at Object.proxyGetter [as get] (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1696:22)
+      at Context.<anonymous> (test/SubscriptionOffering.test.ts:85:98)
+
+  6) Subscription milestone 2 — currency, configuration and registry
+       rejects zero end:
+     AssertionError: The .reverted matcher has been deprecated. Use .revert(ethers) instead.
+      at _Assertion.<anonymous> (node_modules/@nomicfoundation/hardhat-ethers-chai-matchers/src/internal/matchers/reverted/legacyReverted.ts:15:16)
+      at _Assertion.propertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1607:27)
+      at doAsserterAsyncAndAddThen (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:340:16)
+      at _Assertion.<anonymous> (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:329:15)
+      at _Assertion.overwritingPropertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1766:35)
+      at Reflect.get (<anonymous>)
+      at Object.proxyGetter [as get] (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1696:22)
+      at Context.<anonymous> (test/SubscriptionOffering.test.ts:85:98)
+
+  7) Subscription milestone 2 — currency, configuration and registry
+       rejects EOA/zero tokens, wrong decimals, wrong issuer, overflow and inconsistent caps/times:
+     AssertionError: The .reverted matcher has been deprecated. Use .revert(ethers) instead.
+      at _Assertion.<anonymous> (node_modules/@nomicfoundation/hardhat-ethers-chai-matchers/src/internal/matchers/reverted/legacyReverted.ts:15:16)
+      at _Assertion.propertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1607:27)
+      at doAsserterAsyncAndAddThen (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:340:16)
+      at _Assertion.<anonymous> (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:329:15)
+      at _Assertion.overwritingPropertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1766:35)
+      at Reflect.get (<anonymous>)
+      at Object.proxyGetter [as get] (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1696:22)
+      at Context.<anonymous> (test/SubscriptionOffering.test.ts:92:113)
+
+  8) Subscription milestone 2 — currency, configuration and registry
+       blocks outsiders, another authorised issuer and revoked issuers from offering this asset:
+     AssertionError: The .reverted matcher has been deprecated. Use .revert(ethers) instead.
+      at _Assertion.<anonymous> (node_modules/@nomicfoundation/hardhat-ethers-chai-matchers/src/internal/matchers/reverted/legacyReverted.ts:15:16)
+      at _Assertion.propertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1607:27)
+      at doAsserterAsyncAndAddThen (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:340:16)
+      at _Assertion.<anonymous> (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:329:15)
+      at _Assertion.overwritingPropertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1766:35)
+      at Reflect.get (<anonymous>)
+      at Object.proxyGetter [as get] (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1696:22)
+      at Context.<anonymous> (test/SubscriptionOffering.test.ts:100:104)
+
+  9) Subscription milestone 3 — escrow and time window
+       requires issuer, whitelist, allowance, positive bounded deposits and permits partial funding:
+     AssertionError: The .reverted matcher has been deprecated. Use .revert(ethers) instead.
+      at _Assertion.<anonymous> (node_modules/@nomicfoundation/hardhat-ethers-chai-matchers/src/internal/matchers/reverted/legacyReverted.ts:15:16)
+      at _Assertion.propertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1607:27)
+      at doAsserterAsyncAndAddThen (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:340:16)
+      at _Assertion.<anonymous> (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:329:15)
+      at _Assertion.overwritingPropertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1766:35)
+      at Reflect.get (<anonymous>)
+      at Object.proxyGetter [as get] (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1696:22)
+      at Context.<anonymous> (test/SubscriptionOffering.test.ts:109:51)
+
+  10) Subscription milestone 3 — escrow and time window
+       enforces exact start/end boundaries and rejects deposits at start:
+
+      AssertionError: expected 1 to equal 2.
+      + expected - actual
+
+      -1
+      +2
+      
+      at Context.<anonymous> (test/SubscriptionOffering.test.ts:130:41)
+
+  11) Subscription milestone 3 — escrow and time window
+       checks eligibility, multiples, balances and allowances without changing accounting on failure:
+     AssertionError: The .reverted matcher has been deprecated. Use .revert(ethers) instead.
+      at _Assertion.<anonymous> (node_modules/@nomicfoundation/hardhat-ethers-chai-matchers/src/internal/matchers/reverted/legacyReverted.ts:15:16)
+      at _Assertion.propertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1607:27)
+      at doAsserterAsyncAndAddThen (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:340:16)
+      at _Assertion.<anonymous> (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:329:15)
+      at _Assertion.overwritingPropertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1766:35)
+      at Reflect.get (<anonymous>)
+      at Object.proxyGetter [as get] (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1696:22)
+      at Context.<anonymous> (test/SubscriptionOffering.test.ts:143:54)
+
+  12) Subscription milestones 4–5 — allocation, settlement and independent payouts
+       blocks early and repeated finalisation and all premature settlement/claims/refunds/recovery:
+     AssertionError: The .reverted matcher has been deprecated. Use .revert(ethers) instead.
+      at _Assertion.<anonymous> (node_modules/@nomicfoundation/hardhat-ethers-chai-matchers/src/internal/matchers/reverted/legacyReverted.ts:15:16)
+      at _Assertion.propertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1607:27)
+      at doAsserterAsyncAndAddThen (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:340:16)
+      at _Assertion.<anonymous> (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:329:15)
+      at _Assertion.overwritingPropertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1766:35)
+      at Reflect.get (<anonymous>)
+      at Object.proxyGetter [as get] (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1696:22)
+      at Context.<anonymous> (test/SubscriptionOffering.test.ts:162:124)
+
+  13) Subscription milestones 4–5 — allocation, settlement and independent payouts
+       fails with 700 mUSD, refunds fully after revocation and recovers all inventory:
+     AssertionError: The .reverted matcher has been deprecated. Use .revert(ethers) instead.
+      at _Assertion.<anonymous> (node_modules/@nomicfoundation/hardhat-ethers-chai-matchers/src/internal/matchers/reverted/legacyReverted.ts:15:16)
+      at _Assertion.propertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1607:27)
+      at doAsserterAsyncAndAddThen (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:340:16)
+      at _Assertion.<anonymous> (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:329:15)
+      at _Assertion.overwritingPropertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1766:35)
+      at Reflect.get (<anonymous>)
+      at Object.proxyGetter [as get] (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1696:22)
+      at Context.<anonymous> (test/SubscriptionOffering.test.ts:207:53)
+
+  14) Subscription milestones 4–5 — allocation, settlement and independent payouts
+       preserves refunds when claims are blocked by revocation or pause, then allows reapproved claims:
+     AssertionError: The .reverted matcher has been deprecated. Use .revert(ethers) instead.
+      at _Assertion.<anonymous> (node_modules/@nomicfoundation/hardhat-ethers-chai-matchers/src/internal/matchers/reverted/legacyReverted.ts:15:16)
+      at _Assertion.propertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1607:27)
+      at doAsserterAsyncAndAddThen (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:340:16)
+      at _Assertion.<anonymous> (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:329:15)
+      at _Assertion.overwritingPropertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1766:35)
+      at Reflect.get (<anonymous>)
+      at Object.proxyGetter [as get] (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1696:22)
+      at Context.<anonymous> (test/SubscriptionOffering.test.ts:216:53)
+
+  15) Subscription milestones 4–5 — allocation, settlement and independent payouts
+       prevents repeated payouts, settlement, claiming others and unauthorised issuer actions:
+     AssertionError: The .reverted matcher has been deprecated. Use .revert(ethers) instead.
+      at _Assertion.<anonymous> (node_modules/@nomicfoundation/hardhat-ethers-chai-matchers/src/internal/matchers/reverted/legacyReverted.ts:15:16)
+      at _Assertion.propertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1607:27)
+      at doAsserterAsyncAndAddThen (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:340:16)
+      at _Assertion.<anonymous> (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:329:15)
+      at _Assertion.overwritingPropertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1766:35)
+      at Reflect.get (<anonymous>)
+      at Object.proxyGetter [as get] (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1696:22)
+      at Context.<anonymous> (test/SubscriptionOffering.test.ts:227:60)
+
+  16) Subscription milestones 4–5 — allocation, settlement and independent payouts
+       never credits stablecoin donations as issuer earnings:
+     AssertionError: The .reverted matcher has been deprecated. Use .revert(ethers) instead.
+      at _Assertion.<anonymous> (node_modules/@nomicfoundation/hardhat-ethers-chai-matchers/src/internal/matchers/reverted/legacyReverted.ts:15:16)
+      at _Assertion.propertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1607:27)
+      at doAsserterAsyncAndAddThen (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:340:16)
+      at _Assertion.<anonymous> (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai-as-promised/lib/chai-as-promised.js:329:15)
+      at _Assertion.overwritingPropertyGetter (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1766:35)
+      at Reflect.get (<anonymous>)
+      at Object.proxyGetter [as get] (file:///Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/chai/index.js:1696:22)
+      at Context.<anonymous> (test/SubscriptionOffering.test.ts:244:63)
+
+
+
+

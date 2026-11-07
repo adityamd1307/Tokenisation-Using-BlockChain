@@ -1,0 +1,25 @@
+{
+  "note": "HTTP route readiness only; not browser rendering or MetaMask acceptance",
+  "results": [
+    {
+      "route": "/",
+      "status": 200,
+      "hasRoot": true
+    },
+    {
+      "route": "/subscriptions",
+      "status": 200,
+      "hasRoot": true
+    },
+    {
+      "route": "/issuer",
+      "status": 200,
+      "hasRoot": true
+    },
+    {
+      "route": "/offerings/0x0000000000000000000000000000000000000001",
+      "status": 200,
+      "hasRoot": true
+    }
+  ]
+}

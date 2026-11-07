@@ -1,0 +1,65 @@
+Running Mocha tests
+
+
+  Subscription milestone 2 — currency, configuration and registry
+    ✔ mints six-decimal simulated currency only through its owner (84ms)
+    ✔ preserves the asset registry and assigns the issuer, token, caps and immutable dates
+    ✔ rejects zero supply
+    ✔ rejects zero price
+    ✔ rejects zero softCap
+    ✔ rejects zero start
+    ✔ rejects zero end
+    ✔ rejects EOA/zero tokens, wrong decimals, wrong issuer, overflow and inconsistent caps/times (42ms)
+    ✔ blocks outsiders, another authorised issuer and revoked issuers from offering this asset
+
+  Subscription milestone 3 — escrow and time window
+    ✔ requires issuer, whitelist, allowance, positive bounded deposits and permits partial funding
+    ✔ enforces exact start/end boundaries and rejects deposits at start
+    ✔ rejects underfunded subscriptions even when donated tokens supply the balance
+    ✔ checks eligibility, multiples, balances and allowances without changing accounting on failure
+    ✔ accepts oversubscription, accumulates top-ups and counts distinct subscribers only
+
+  Subscription milestones 4–5 — allocation, settlement and independent payouts
+    ✔ blocks early and repeated finalisation and all premature settlement/claims/refunds/recovery
+    ✔ settles 1800/1400/800 into 450/350/200, protects unsettled deposits and refunds (85ms)
+    ✔ handles 1400 mUSD undersubscription and protects unclaimed entitlements during recovery
+    ✔ fails with 700 mUSD, refunds fully after revocation and recovers all inventory
+    ✔ preserves refunds when claims are blocked by revocation or pause, then allows reapproved claims (45ms)
+    ✔ prevents repeated payouts, settlement, claiming others and unauthorised issuer actions
+    ✔ never credits stablecoin donations as issuer earnings
+
+  Subscription rounding and bounded model invariants
+    ✔ three equal subscribers receive two of seven units each; dust unlocks only after all settle (38ms)
+    ✔ conservatively fails when gross demand exceeds soft cap but rounded funding is not guaranteed
+    ✔ allows zero-token subscribers a full refund without erasing others' entitlement
+    ✔ conserves exact accounting under seeded top-ups and payout ordering (7) (145ms)
+    ✔ conserves exact accounting under seeded top-ups and payout ordering (41) (122ms)
+    ✔ conserves exact accounting under seeded top-ups and payout ordering (2026) (122ms)
+    ✔ handles multiplication beyond 256 bits using full-precision mulDiv
+
+  Subscription milestone 7 — adversarial transfers and escrow
+    ✔ rejects incompatible incoming transfers (mode 1) atomically
+    ✔ rejects incompatible incoming transfers (mode 2) atomically
+    ✔ rejects incompatible incoming transfers (mode 3) atomically
+    ✔ failed refund transfers preserve the credit and all balances (mode 1)
+    ✔ failed refund transfers preserve the credit and all balances (mode 2)
+    ✔ failed refund transfers preserve the credit and all balances (mode 3)
+    ✔ supports no-return standard transfers through SafeERC20 with exact balance deltas
+    ✔ blocks callbacks during commitments with the reentrancy guard
+    ✔ rejects cross-function withdrawRefund callbacks during a refund
+    ✔ rejects cross-function withdrawProceeds callbacks during a refund
+    ✔ rejects cross-function settleSubscription callbacks during a refund
+    ✔ rejects cross-function claimTokens callbacks during a refund
+    ✔ rejects cross-function recoverUnsoldTokens callbacks during a refund
+    ✔ rejects cross-function finalizeOffering callbacks during a refund
+    ✔ guards issuer withdrawals and rolls back accounting if transfers fail
+    ✔ blocks asset callbacks during claims and recovery without double delivery
+    ✔ detects insufficient payment reserves and prevents selective payouts
+    ✔ supports contract investors without redirecting their refund or token ownership
+    ✔ does not double pledge inventory across direct and multiple subscription escrows
+    ✔ documents inherited privileged seizure: finalisation fails safely and stablecoins refund
+
+
+  48 passing (1s)
+
+

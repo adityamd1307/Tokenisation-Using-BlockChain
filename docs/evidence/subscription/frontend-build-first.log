@@ -1,0 +1,10 @@
+
+> rwa-tokenisation-frontend@0.0.1 prebuild
+> node ../scripts/syncFrontend.mjs
+
+Synced all six frontend ABIs from compiled artifacts.
+
+> rwa-tokenisation-frontend@0.0.1 build
+> tsc --noEmit && vite build
+
+src/components/SubscriptionOfferings.tsx(64,408): error TS1005: '}' expected.

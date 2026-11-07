@@ -10,6 +10,7 @@ cache/
 broadcast/*/31337/
 # Phase 5 D18: the local deployment record changes on every node restart; deployments/sepolia.json is kept
 deployments/localhost.json
+deployments/subscription-localhost.json
 
 # Frontend
 node_modules/

@@ -1,0 +1,36 @@
+Traceback (most recent call last):
+  File "/tmp/sc4053-slither/bin/slither", line 8, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/private/tmp/sc4053-slither/lib/python3.13/site-packages/slither/__main__.py", line 815, in main
+    main_impl(all_detector_classes=detectors, all_printer_classes=printers)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/sc4053-slither/lib/python3.13/site-packages/slither/__main__.py", line 936, in main_impl
+    ) = process_all(filename, args, detector_classes, printer_classes)
+        ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/sc4053-slither/lib/python3.13/site-packages/slither/__main__.py", line 100, in process_all
+    compilations = compile_all(target, **vars(args))
+  File "/private/tmp/sc4053-slither/lib/python3.13/site-packages/crytic_compile/crytic_compile.py", line 870, in compile_all
+    compilations.append(CryticCompile(target, **kwargs))
+                        ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/sc4053-slither/lib/python3.13/site-packages/crytic_compile/crytic_compile.py", line 279, in __init__
+    self._compile(**kwargs)
+    ~~~~~~~~~~~~~^^^^^^^^^^
+  File "/private/tmp/sc4053-slither/lib/python3.13/site-packages/crytic_compile/crytic_compile.py", line 725, in _compile
+    self._platform.compile(self, **kwargs)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/private/tmp/sc4053-slither/lib/python3.13/site-packages/crytic_compile/platform/hardhat.py", line 227, in compile
+    hardhat_like_parsing(crytic_compile, self._target, build_directory, hardhat_working_dir)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/sc4053-slither/lib/python3.13/site-packages/crytic_compile/platform/hardhat.py", line 116, in hardhat_like_parsing
+    path = convert_filename(
+        path,
+    ...<2 lines>...
+        working_dir=working_dir,
+    )
+  File "/private/tmp/sc4053-slither/lib/python3.13/site-packages/crytic_compile/utils/naming.py", line 224, in convert_filename
+    filename = _verify_filename_existence(filename, cwd)
+  File "/private/tmp/sc4053-slither/lib/python3.13/site-packages/crytic_compile/utils/naming.py", line 121, in _verify_filename_existence
+    raise InvalidCompilation(_unknown_file_message(filename, cwd))
+crytic_compile.platform.exceptions.InvalidCompilation: Unknown file: contracts/test/SaleCallbackHarness.sol
+  - Verify the path exists (e.g. `ls contracts/test/SaleCallbackHarness.sol`).

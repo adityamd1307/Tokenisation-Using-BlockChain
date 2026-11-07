@@ -5,6 +5,7 @@ import { blockchain } from "../services/blockchain";
 import { assetHistory } from "../services/history";
 import { Address, EmptyState, ErrorMessage, Loading } from "./common";
 import { eth, units } from "../utils/formatting";
+import { musd } from "../utils/subscription";
 export function ActivityTable({ rows }: { rows: Activity[] }) {
   const [visible, setVisible] = useState(20);
   if (!rows.length)
@@ -36,7 +37,12 @@ export function ActivityTable({ rows }: { rows: Activity[] }) {
                   {row.quantity !== undefined
                     ? `${units(row.quantity)} ${row.asset}`
                     : row.asset}
-                  {row.paid !== undefined && <small>{eth(row.paid)} ETH</small>}
+                  {row.paid !== undefined && (
+                    <small>
+                      {row.currency === "mUSD" ? musd(row.paid) : eth(row.paid)}{" "}
+                      {row.currency || "ETH"}
+                    </small>
+                  )}
                 </td>
                 <td>
                   {row.from && <Address value={row.from} />}

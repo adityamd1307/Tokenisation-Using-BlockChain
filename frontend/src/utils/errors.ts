@@ -2,6 +2,17 @@ import { Interface, isError } from "ethers";
 import { abis } from "../config/contracts";
 const interfaces = Object.values(abis).map((abi) => new Interface(abi));
 const messages: Record<string, string> = {
+  WrongStage: "This action is unavailable in the offering’s current stage. Refresh its status.",
+  InvalidAmount: "Enter a positive amount that matches the offering’s price and inventory limits.",
+  InvalidConfiguration: "Check supply, price, caps and future subscription dates.",
+  NotAssetIssuer: "Only the authorised issuer of this asset can create its offerings.",
+  InventoryNotFunded: "The issuer must fully fund the offering before subscriptions open.",
+  InvestorNotEligible: "Your wallet is not approved for this asset. Contact its issuer.",
+  AlreadySettled: "This subscription is already settled. Refresh to view your entitlement.",
+  NotSettled: "Settle your subscription before withdrawing or claiming.",
+  NothingDue: "No balance is available for this action.",
+  UnsupportedTokenBehavior: "The token transfer was incompatible. No funds were accepted by this transaction.",
+  Insolvent: "Escrow reserves are insufficient. The transaction was reverted.",
   NotAdmin: "Only the platform administrator can manage issuers.",
   NotIssuer: "Only this asset’s issuer can manage its offering.",
   IssuerNotAuthorised: "This wallet is not authorised to create assets.",

@@ -1,5 +1,7 @@
 # Where each report section's evidence lives
 
+Subscription enhancement (7 November 2026): the assembled report is now [AI_Audit_Report.md](../AI_Audit_Report.md). Its new specification, mathematics, security review and testing results are under `docs/subscription-*.md`; actual logs and demo receipts are in `docs/evidence/subscription/`. The exact prompt is `docs/spec/subscription-requirements.md`, and the curated session is `docs/ai-logs/subscription-session.md`. This phase made no Git commits or baseline tags. For historical comparisons use the actual phase-specific tags, not the nonexistent generic `ai-baseline` shown in older examples below. Tag creation time alone does not prove when a specification was authored.
+
 | Report section | Evidence |
 |---|---|
 | 1. Initial Specification & System Scope | `docs/spec/spec-v0.md`, git tag `spec-v0` (its date proves it came before AI use) |
