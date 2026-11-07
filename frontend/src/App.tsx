@@ -1,3 +1,4 @@
+import CompliancePage from "./pages/CompliancePage";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { WalletProviderContext, useWallet } from "./context/WalletContext";
 import { DataProvider } from "./context/DataContext";
@@ -22,6 +23,7 @@ export function AppRoutes() {
         <Route path="admin" element={<AdminDashboard key={session} />} />
         <Route path="issuer" element={<IssuerDashboard />} />
         <Route path="portfolio" element={<InvestorPortfolio />} />
+        <Route path="compliance" element={<CompliancePage />} />
         <Route path="subscriptions" element={<SubscriptionOfferings />} />
         <Route path="offerings/:address" element={<SubscriptionPage />} />
         <Route path="investor" element={<Navigate to="/portfolio" replace />} />

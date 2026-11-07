@@ -1,0 +1,19 @@
+
+> rwa-tokenisation@1.0.0 test
+> hardhat test
+
+An unexpected error occurred:
+
+MultiProcessMutexTimeoutError: Timed out waiting to acquire lock at /Users/adityamd/Library/Caches/hardhat-nodejs/compilers-v3/compiler-download-list after 60000ms
+    at MultiProcessMutex.#acquireLock (/Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/@nomicfoundation/hardhat-utils/src/synchronization.ts:229:15)
+    at async MultiProcessMutex.acquire (/Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/@nomicfoundation/hardhat-utils/src/synchronization.ts:190:7)
+    at async MultiProcessMutex.use (/Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/@nomicfoundation/hardhat-utils/src/synchronization.ts:168:21)
+    at async CompilerDownloaderImplementation.updateCompilerListIfNeeded (/Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/hardhat/src/internal/builtin-plugins/solidity/build-system/compiler/downloader.ts:177:5)
+    at async downloadSolcCompilers (/Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/hardhat/dist/src/internal/builtin-plugins/solidity/build-system/compiler/index.js:41:13)
+    at async downloadSolcCompilersHandler (/Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/hardhat/src/internal/builtin-plugins/solidity/solidity-hooks.ts:29:5)
+    at async downloadCompilers (/Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/hardhat/src/internal/builtin-plugins/solidity/hook-handlers/solidity.ts:7:5)
+    at async Promise.all (index 0)
+    at async HookManagerImplementation.runParallelHandlers (/Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/hardhat/src/internal/core/hook-manager.ts:281:12)
+    at async SolidityBuildSystemImplementation.#downloadConfiguredCompilers (/Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/node_modules/hardhat/src/internal/builtin-plugins/solidity/build-system/build-system.ts:1400:5)
+
+If you think this is a bug in Hardhat, please report it here: https://hardhat.org/report-bug

@@ -1,4 +1,4 @@
-import { parseEther } from "ethers";
+import { type TransactionResponse, parseEther } from "ethers";
 import { vi } from "vitest";
 import type { Asset, AssetAccount, WalletProvider } from "../types";
 export const ADMIN = "0x1000000000000000000000000000000000000001";
@@ -46,10 +46,12 @@ export const accountState: AssetAccount = {
   tokenAdmin: false,
 };
 export function mockTransaction(status = 1) {
-  return {
+  const transaction = {
     hash: HASH,
     wait: vi.fn().mockResolvedValue({ hash: HASH, status, logs: [] }),
   };
+  // Deliberately partial test double: application code consumes only hash/wait.
+  return transaction as unknown as TransactionResponse & typeof transaction;
 }
 export class MockWallet implements WalletProvider {
   accounts = [INVESTOR];

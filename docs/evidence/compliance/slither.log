@@ -1,0 +1,76 @@
+
+Detector: arbitrary-send-erc20
+AssetSale.allocate(uint256) (contracts/AssetSale.sol#72-76) uses arbitrary from in transferFrom: assetToken.safeTransferFrom(issuer,address(this),amount) (contracts/AssetSale.sol#74)
+SubscriptionOffering.depositOfferingTokens(uint256) (contracts/SubscriptionOffering.sol#112-120) uses arbitrary from in transferFrom: IERC20(address(assetToken)).safeTransferFrom(issuer,address(this),amount) (contracts/SubscriptionOffering.sol#117)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#arbitrary-from-in-transferfrom
+
+Detector: incorrect-equality
+AssetSale.recoverUnsoldTokens() (contracts/AssetSale.sol#122-128) uses a dangerous strict equality:
+	- amount == 0 (contracts/AssetSale.sol#125)
+AssetSale.sweepExcessETH() (contracts/AssetSale.sol#107-113) uses a dangerous strict equality:
+	- excess == 0 (contracts/AssetSale.sol#109)
+SubscriptionOffering.recoverUnsoldTokens() (contracts/SubscriptionOffering.sol#248-254) uses a dangerous strict equality:
+	- amount == 0 (contracts/SubscriptionOffering.sol#251)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#dangerous-strict-equalities
+
+Detector: reentrancy-benign
+Reentrancy in RegulatedAssetFactory.createRegulatedAsset(RegulatedAssetFactory.RegulatedRequest) (contracts/RegulatedAssetFactory.sol#25-34):
+	External calls:
+	- d = regulatedDeployer.deploy(RegulatedAssetDeployer.Request(r.name,r.symbol,r.supply,r.price,msg.sender,admin,r.maximum,r.accredited)) (contracts/RegulatedAssetFactory.sol#29-30)
+	State variables written after the call(s):
+	- assetId = _registerAsset(r.name,r.symbol,r.description,r.assetType,r.supply,r.price,d.token,d.sale,msg.sender) (contracts/RegulatedAssetFactory.sol#31)
+		- _assets.push(Asset(assetId,name,symbol,description,assetType,totalSupply,token,sale,issuer,unitPriceWei)) (contracts/AssetFactory.sol#105-106)
+	- modules[assetId] = Modules(d.registry,d.policy) (contracts/RegulatedAssetFactory.sol#32)
+	- assetId = _registerAsset(r.name,r.symbol,r.description,r.assetType,r.supply,r.price,d.token,d.sale,msg.sender) (contracts/RegulatedAssetFactory.sol#31)
+		- tokenToSale[token] = sale (contracts/AssetFactory.sol#107)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#reentrancy-vulnerabilities-3
+
+Detector: reentrancy-events
+Reentrancy in RegulatedAssetFactory.createRegulatedAsset(RegulatedAssetFactory.RegulatedRequest) (contracts/RegulatedAssetFactory.sol#25-34):
+	External calls:
+	- d = regulatedDeployer.deploy(RegulatedAssetDeployer.Request(r.name,r.symbol,r.supply,r.price,msg.sender,admin,r.maximum,r.accredited)) (contracts/RegulatedAssetFactory.sol#29-30)
+	Event emitted after the call(s):
+	- AssetCreated(assetId,token,sale,issuer) (contracts/AssetFactory.sol#108)
+		- assetId = _registerAsset(r.name,r.symbol,r.description,r.assetType,r.supply,r.price,d.token,d.sale,msg.sender) (contracts/RegulatedAssetFactory.sol#31)
+	- RegulatedAssetCreated(assetId,d.registry,d.policy) (contracts/RegulatedAssetFactory.sol#33)
+Reentrancy in AssetSale.sweepExcessETH() (contracts/AssetSale.sol#107-113):
+	External calls:
+	- (ok,None) = issuer.call{value: excess}() (contracts/AssetSale.sol#110)
+	Event emitted after the call(s):
+	- ExcessETHSwept(excess) (contracts/AssetSale.sol#112)
+Reentrancy in AssetSale.withdrawProceeds() (contracts/AssetSale.sol#94-101):
+	External calls:
+	- (ok,None) = issuer.call{value: amount}() (contracts/AssetSale.sol#98)
+	Event emitted after the call(s):
+	- ProceedsWithdrawn(amount) (contracts/AssetSale.sol#100)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#reentrancy-vulnerabilities-4
+
+Detector: timestamp
+IdentityRegistryLite.identityStatus(address) (contracts/IdentityRegistryLite.sol#32-40) uses timestamp for comparisons
+	Dangerous comparisons:
+	- block.timestamp >= i.validUntil (contracts/IdentityRegistryLite.sol#37)
+IdentityRegistryLite._write(address,IdentityRegistryLite.IdentityData) (contracts/IdentityRegistryLite.sol#60-66) uses timestamp for comparisons
+	Dangerous comparisons:
+	- investor == address(0) || data.identityId == bytes32(0) || ! supportedCountry(data.country) || data.validUntil <= block.timestamp (contracts/IdentityRegistryLite.sol#62-63)
+SubscriptionOffering.constructor(SubscriptionOffering.Config) (contracts/SubscriptionOffering.sol#83-102) uses timestamp for comparisons
+	Dangerous comparisons:
+	- c.assetToken.code.length == 0 || c.paymentToken.code.length == 0 || c.issuer == address(0) || c.assetToken == c.paymentToken || c.supply == 0 || c.price == 0 || c.supply > type()(uint256).max / c.price || c.softCap == 0 || c.start <= block.timestamp || c.end <= c.start (contracts/SubscriptionOffering.sol#84-87)
+SubscriptionOffering.state() (contracts/SubscriptionOffering.sol#104-109) uses timestamp for comparisons
+	Dangerous comparisons:
+	- block.timestamp < subscriptionStart (contracts/SubscriptionOffering.sol#106)
+	- block.timestamp < subscriptionEnd (contracts/SubscriptionOffering.sol#107)
+SubscriptionOffering.depositOfferingTokens(uint256) (contracts/SubscriptionOffering.sol#112-120) uses timestamp for comparisons
+	Dangerous comparisons:
+	- block.timestamp >= subscriptionStart (contracts/SubscriptionOffering.sol#113)
+SubscriptionOffering.finalizeOffering() (contracts/SubscriptionOffering.sol#140-158) uses timestamp for comparisons
+	Dangerous comparisons:
+	- finalized || block.timestamp < subscriptionEnd (contracts/SubscriptionOffering.sol#141)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#block-timestamp
+
+Detector: low-level-calls
+Low level call in AssetSale.withdrawProceeds() (contracts/AssetSale.sol#94-101):
+	- (ok,None) = issuer.call{value: amount}() (contracts/AssetSale.sol#98)
+Low level call in AssetSale.sweepExcessETH() (contracts/AssetSale.sol#107-113):
+	- (ok,None) = issuer.call{value: excess}() (contracts/AssetSale.sol#110)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#low-level-calls
+. analyzed (43 contracts with 102 detectors), 17 result(s) found

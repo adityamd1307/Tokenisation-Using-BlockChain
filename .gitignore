@@ -25,3 +25,7 @@ types/ethers-contracts/
 # Evidence kit source (unzipped; files already copied to repo root)
 sc4053-evidence-kit/
 sc4053-evidence-kit.zip
+
+# Local compliance deployment and previous UI configuration
+deployments/compliance-localhost.json
+deployments/pre-compliance-localhost.json
