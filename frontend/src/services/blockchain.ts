@@ -1,3 +1,4 @@
+import { transferReason } from "../utils/compliance";
 // Phase 4 §§3, 10: public reads use the configured RPC; signing is wallet-only.
 import {
   BrowserProvider,
@@ -38,28 +39,32 @@ export class Blockchain {
   factory(runner: ContractRunner = this.provider) {
     return new Contract(
       address(this.config.AssetFactory),
-      abis.factory,
+      this.config.regulatedFactory ? abis.regulatedFactory : abis.factory,
       runner,
     );
   }
   token(asset: Asset, runner: ContractRunner = this.provider) {
-    return new Contract(asset.token, abis.token, runner);
+    return new Contract(
+      asset.token,
+      asset.identityRegistry ? abis.regulatedToken : abis.token,
+      runner,
+    );
   }
   sale(asset: Asset, runner: ContractRunner = this.provider) {
     return new Contract(asset.sale, abis.sale, runner);
   }
 
-  async ready() {
+  async ready(provider: JsonRpcProvider | BrowserProvider = this.provider) {
     if (!this.config.AssetFactory)
       throw new Error(
         "Contracts are not configured. Start the local blockchain and run npm run deploy:local, then restart the frontend.",
       );
-    const chain = await this.provider.getNetwork();
+    const chain = await provider.getNetwork();
     if (chain.chainId !== BigInt(this.config.chainId))
       throw new Error(
-        "The public RPC is on the wrong network. Check VITE_RPC_URL and redeploy.",
+        "The RPC is on the wrong network. Check the wallet network and VITE_RPC_URL.",
       );
-    const code = await this.provider.getCode(this.config.AssetFactory);
+    const code = await provider.getCode(this.config.AssetFactory);
     if (code === "0x")
       throw new Error(
         "Factory deployment not found. The local chain may have reset. Redeploy contracts and restart the frontend.",
@@ -72,7 +77,7 @@ export class Blockchain {
         "Factory bytecode differs from this deployment. Regenerate frontend configuration.",
       );
     if (this.config.deployBlockHash) {
-      const block = await this.provider.getBlock(this.config.deployBlock);
+      const block = await provider.getBlock(this.config.deployBlock);
       if (block?.hash !== this.config.deployBlockHash)
         throw new Error(
           "Deployment belongs to an earlier blockchain session. Redeploy and restart the frontend.",
@@ -107,6 +112,7 @@ export class Blockchain {
       issuer: a.issuerAddress,
     };
     const sale = new Contract(base.sale, abis.sale, this.provider);
+    // AUD-019: paused() exists on both token kinds (constant false on regulated tokens).
     const token = new Contract(base.token, abis.token, this.provider);
     const [price, inventory, closed, proceeds, saleEth, paused] =
       await Promise.all([
@@ -117,7 +123,25 @@ export class Blockchain {
         this.provider.getBalance(base.sale),
         token.paused(),
       ]);
-    return { ...base, price, inventory, closed, proceeds, saleEth, paused };
+    let modules: { identityRegistry?: string; compliancePolicy?: string } = {};
+    if (this.config.regulatedFactory) {
+      const m = await this.factory().modules(BigInt(id));
+      if (BigInt(m.identityRegistry) !== 0n)
+        modules = {
+          identityRegistry: m.identityRegistry,
+          compliancePolicy: m.compliance,
+        };
+    }
+    return {
+      ...base,
+      ...modules,
+      price,
+      inventory,
+      closed,
+      proceeds,
+      saleEth,
+      paused,
+    };
   }
   async assets(): Promise<Asset[]> {
     await this.ready();
@@ -134,6 +158,22 @@ export class Blockchain {
   }
   async account(asset: Asset, account: string): Promise<AssetAccount> {
     const token = this.token(asset);
+    if (asset.identityRegistry) {
+      const [balance, eligible, saleEligible, allowance] = await Promise.all([
+        token.balanceOf(account),
+        token.isWhitelisted(account),
+        token.isWhitelisted(asset.sale),
+        token.allowance(account, asset.sale),
+      ]);
+      return {
+        balance,
+        eligible,
+        saleEligible,
+        allowance,
+        compliance: false,
+        tokenAdmin: false,
+      };
+    }
     const [complianceRole, adminRole] = await Promise.all([
       token.COMPLIANCE_ROLE(),
       token.DEFAULT_ADMIN_ROLE(),
@@ -183,10 +223,14 @@ export class Blockchain {
     return Promise.all(
       assets.map(async (asset) => {
         const token = this.token(asset);
+        // Regulated tokens have no AccessControl roles; their compliance is managed
+        // through the identity registry and policy contracts instead.
         const [eligible, compliance, tokenAdmin] = await Promise.all([
           token.isWhitelisted(account),
-          token.hasRole(COMPLIANCE_ROLE, account),
-          token.hasRole(ZeroHash, account),
+          asset.identityRegistry
+            ? false
+            : token.hasRole(COMPLIANCE_ROLE, account),
+          asset.identityRegistry ? false : token.hasRole(ZeroHash, account),
         ]);
         return {
           assetId: asset.id,
@@ -213,7 +257,27 @@ export class Blockchain {
       accounts[0].toLowerCase() !== expectedAccount.toLowerCase()
     )
       throw new Error("Wallet account changed. Review the form and try again.");
-    return new BrowserProvider(wallet, "any").getSigner(expectedAccount);
+    // Subscription/compliance work (origin/main): a regulated deployment must carry a runtime code hash,
+    // so the wallet-side check below always compares factory bytecode.
+    if (this.config.regulatedFactory && !this.config.runtimeCodeHash)
+      throw new Error(
+        "Wallet deployment does not match the configured regulated factory.",
+      );
+    // AUD-030: two local chains can share an ID and deterministic addresses.
+    // Validate the signing RPC against the same deployment fingerprint as reads.
+    const provider = new BrowserProvider(wallet, "any");
+    await this.ready(provider);
+    const [currentChain, currentAccounts] = await Promise.all([
+      wallet.request({ method: "eth_chainId" }),
+      wallet.request({ method: "eth_accounts" }),
+    ]);
+    if (BigInt(currentChain) !== BigInt(this.config.chainId))
+      throw new Error(
+        "Wrong network. Review the wallet network and try again.",
+      );
+    if (currentAccounts[0]?.toLowerCase() !== expectedAccount.toLowerCase())
+      throw new Error("Wallet account changed. Review the form and try again.");
+    return provider.getSigner(expectedAccount);
   }
   async authorizeIssuer(
     wallet: WalletProvider,
@@ -231,10 +295,22 @@ export class Blockchain {
     wallet: WalletProvider,
     account: string,
     input: CreateAssetInput,
+    regulated?: { maximum: string; accredited: boolean },
   ) {
     const args = creationArgs(input);
     if (!(await this.roles(account)).issuer)
       throw new Error("This wallet is not authorised to create assets.");
+    if (regulated) {
+      if (!this.config.regulatedFactory)
+        throw new Error("Regulated issuance is not configured.");
+      return this.factory(
+        await this.signer(wallet, account),
+      ).createRegulatedAsset([
+        ...args,
+        quantity(regulated.maximum),
+        regulated.accredited,
+      ]);
+    }
     return this.factory(await this.signer(wallet, account)).createAsset(
       ...args,
     );
@@ -246,6 +322,8 @@ export class Blockchain {
     investor: string,
     approved: boolean,
   ) {
+    if (asset.identityRegistry)
+      throw new Error("Manage credentials and policies in Compliance.");
     const to = address(investor);
     if (!(await this.account(asset, account)).compliance)
       throw new Error("This wallet does not hold the token compliance role.");
@@ -316,6 +394,7 @@ export class Blockchain {
     ]);
     if (fresh.closed) throw new Error("This offering is permanently closed.");
     if (fresh.paused) throw new Error(PAUSED);
+    await this.preflight(asset, asset.sale, account, amount);
     if (!state.eligible)
       throw new Error("Your wallet is not approved for this asset.");
     if (!state.saleEligible)
@@ -347,9 +426,10 @@ export class Blockchain {
       this.asset(asset.id),
     ]);
     if (fresh.paused) throw new Error(PAUSED);
-    if (!state.eligible)
+    await this.preflight(asset, account, to, amount);
+    if (!asset.identityRegistry && !state.eligible)
       throw new Error("Your wallet is not approved to send this asset.");
-    if (!approved)
+    if (!asset.identityRegistry && !approved)
       throw new Error(
         "This recipient is not authorised to hold the selected asset. The issuer must approve the recipient before this transfer can succeed.",
       );
@@ -437,6 +517,39 @@ export class Blockchain {
     return grant
       ? token.grantRole(COMPLIANCE_ROLE, to)
       : token.revokeRole(COMPLIANCE_ROLE, to);
+  }
+  /** Regulated assets (origin/main): AssetToken-compatible transferStatus pre-flight. */
+  async preflight(asset: Asset, from: string, to: string, amount: bigint) {
+    if (!asset.identityRegistry) return;
+    const reason = Number(
+      await this.token(asset).transferStatus(
+        address(from),
+        address(to),
+        amount,
+      ),
+    );
+    if (reason === 1 || reason === 2) {
+      const registry = new Contract(
+        asset.identityRegistry,
+        abis.identity,
+        this.provider,
+      );
+      const detail = Number(
+        await registry.identityStatus(reason === 1 ? from : to),
+      );
+      const reasons = [
+        "Valid",
+        "Identity not registered",
+        "Simulated KYC not approved",
+        "Credential revoked",
+        "KYC credential expired",
+        "Credential attestor no longer trusted",
+      ];
+      throw new Error(
+        `${reason === 1 ? "Sender" : "Recipient"}: ${reasons[detail] || "identity invalid"}.`,
+      );
+    }
+    if (reason !== 0) throw new Error(transferReason(reason));
   }
   async manageSale(
     wallet: WalletProvider,

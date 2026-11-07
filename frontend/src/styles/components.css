@@ -222,6 +222,40 @@ a.address__text svg {
   font-size: var(--text-sm);
 }
 
+/* ---------- Meter (subscription demand) ---------- */
+.meter {
+  position: relative;
+  height: var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--color-line);
+  overflow: visible;
+}
+.meter__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: var(--radius-sm);
+  background: var(--color-accent);
+}
+.meter__mark {
+  position: absolute;
+  top: calc(var(--space-1) * -1);
+  bottom: calc(var(--space-1) * -1);
+  width: var(--rule-width);
+  background: var(--color-ink);
+}
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-md);
+}
+.checkbox input {
+  width: var(--icon-md);
+  height: var(--icon-md);
+  margin: 0;
+  accent-color: var(--color-accent);
+}
+
 /* ---------- Page structure ---------- */
 .page {
   display: flex;

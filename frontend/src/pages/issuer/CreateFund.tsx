@@ -10,6 +10,7 @@ import type { Asset } from "../../types";
 import { Address, Facts } from "../../components/ui/display";
 import {
   ActionButton,
+  CheckboxField,
   SelectField,
   Summary,
   TextAreaField,
@@ -34,6 +35,12 @@ function CreateForm() {
   const [input, setInput] = useState(initial),
     [created, setCreated] = useState<Asset>(),
     [note, setNote] = useState("");
+  // main (PRs #3 and #4): regulated issuance when the regulated factory is deployed.
+  const [regulated, setRegulated] = useState(
+      !!blockchain.config.regulatedFactory,
+    ),
+    [maximum, setMaximum] = useState("500"),
+    [accredited, setAccredited] = useState(true);
   const set = (key: keyof CreateAssetInput) => (value: string) =>
     setInput((previous) => ({ ...previous, [key]: value }));
   let args: ReturnType<typeof creationArgs> | undefined,
@@ -48,7 +55,12 @@ function CreateForm() {
     setCreated(undefined);
     setNote("");
     const receipt = await tx.run("Create fund", () =>
-      blockchain.createAsset(wallet.provider!, wallet.account!, input),
+      blockchain.createAsset(
+        wallet.provider!,
+        wallet.account!,
+        input,
+        regulated ? { maximum, accredited } : undefined,
+      ),
     );
     if (!receipt) return;
     try {
@@ -132,6 +144,43 @@ function CreateForm() {
             hint="Fixed at creation. It cannot be changed later."
             error={touched && input.supply && input.price ? error : undefined}
           />
+          {blockchain.config.regulatedFactory && (
+            <>
+              <SelectField
+                label="Compliance mode"
+                value={regulated ? "regulated" : "legacy"}
+                onChange={(value) => setRegulated(value === "regulated")}
+                options={[
+                  {
+                    value: "regulated",
+                    label: "Regulated (ERC-3643-inspired Lite)",
+                  },
+                  { value: "legacy", label: "Whitelist" },
+                ]}
+              />
+              {regulated && (
+                <>
+                  <TextField
+                    label="Maximum investor wallet holdings"
+                    value={maximum}
+                    onChange={setMaximum}
+                    inputMode="numeric"
+                    mono
+                    suffix="units"
+                  />
+                  <CheckboxField
+                    label="Require simulated accreditation"
+                    checked={accredited}
+                    onChange={setAccredited}
+                  />
+                  <p className="muted small">
+                    After creation, open Compliance to allow countries and trust
+                    attestors. Investor access starts closed.
+                  </p>
+                </>
+              )}
+            </>
+          )}
           {args && (
             <Summary
               sentence={`Creates ${args[1]} with ${units(args[4])} units minted to your wallet, offered at ${eth(args[5])} ETH per unit.`}

@@ -1,0 +1,32 @@
+{
+  "generatedAt": "2026-11-07T09:28:55.986421+00:00",
+  "branch": "auction",
+  "baseCommit": "d9ff2f5976ca79c3cfdf3c6d69f7fac3dc2183b1",
+  "uncommitted": true,
+  "baseline": {
+    "contracts": 194,
+    "frontend": 131,
+    "productionBuild": "failed: AUD-017"
+  },
+  "final": {
+    "contracts": 229,
+    "frontend": 140,
+    "realChainIntegration": 3,
+    "productionBuild": "passed",
+    "rootTypecheck": "passed",
+    "lineCoveragePercent": 96.11,
+    "slitherReports": 17,
+    "browserMetaMask": "not verified; no browser available"
+  },
+  "demo": {
+    "expectedRejections": 8,
+    "finalCPTBalances": {
+      "issuer": 9000,
+      "D": 500,
+      "F": 500,
+      "reserved": 0
+    }
+  },
+  "localDemo": "http://127.0.0.1:5173",
+  "noCommitsOrPublicDeployment": true
+}

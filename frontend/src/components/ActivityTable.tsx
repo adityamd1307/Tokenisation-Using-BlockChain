@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from "react";
 import type { Activity } from "../types";
 import { formatTime } from "../utils/formatting";
-import { Address, Eth, Units } from "./ui/display";
+import { Address, Eth, Musd, Units } from "./ui/display";
 import { DataTable, type Column } from "./ui/table";
 import { ErrorNotice } from "./ui/layout";
 
@@ -55,7 +55,11 @@ const columns: Column<Activity>[] = [
           )}
           {row.paid !== undefined && (
             <span className={row.quantity !== undefined ? "muted" : undefined}>
-              <Eth value={row.paid} />
+              {row.currency === "mUSD" ? (
+                <Musd value={row.paid} />
+              ) : (
+                <Eth value={row.paid} />
+              )}
             </span>
           )}
         </span>

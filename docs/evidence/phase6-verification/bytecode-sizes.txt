@@ -1,0 +1,8 @@
+﻿default profile (npx hardhat compile --force):
+AssetFactory: 13545 bytes (11031 below EIP-170)
+AssetToken: 4124 bytes (20452 below EIP-170)
+AssetSale: 3132 bytes (21444 below EIP-170)
+production profile (--build-profile production):
+AssetFactory: 13545 bytes (11031 below EIP-170)
+AssetToken: 4124 bytes (20452 below EIP-170)
+AssetSale: 3132 bytes (21444 below EIP-170)

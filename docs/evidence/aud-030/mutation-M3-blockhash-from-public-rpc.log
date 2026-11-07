@@ -1,0 +1,74 @@
+﻿
+> rwa-tokenisation-frontend@0.0.1 pretest
+> node ../scripts/syncFrontend.mjs
+
+Synced all three frontend ABIs from compiled artifacts.
+
+> rwa-tokenisation-frontend@0.0.1 test
+> vitest run
+
+
+ RUN  v4.1.12 C:/Users/laksh/AppData/Local/Temp/claude/aeb57e520ad1640f/f349e0d7-844e-41a7-826c-851a9fd89743/scratchpad/p6-verify/frontend
+
+ ❯ src/test/signingDeployment.security.test.ts (4 tests | 2 failed) 196ms
+     × rejects different local chain session on the wallet RPC despite matching chain ID 82ms
+     × returns the intended signer when both RPCs agree on the deployment 40ms
+node.exe : 
+At line:1 char:1
++ & "C:\Users\laksh\AppData\Local\Microsoft\WinGet\Packages\OpenJS.Node ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/signingDeployment.security.test.ts > Signing deployment security (AUD-016) > rejects different local 
+chain session on the wallet RPC despite matching chain ID
+AssertionError: promise resolved "JsonRpcSigner{ …(2) }" instead of rejecting
+
+- Expected
++ Received
+
+- Error {
+-   "message": "rejected promise",
++ JsonRpcSigner {
++   "address": "0x3000000000000000000000000000000000000003",
++   "provider": BrowserProvider {},
+  }
+
+ ❯ src/test/signingDeployment.security.test.ts:37:46
+     35|   ])("rejects %s on the wallet RPC despite matching chain ID", async (…
+     36|     const { api, wallet, request } = fixture(code, hash);
+     37|     await expect(api.signer(wallet, INVESTOR)).rejects.toThrow(error);
+       |                                              ^
+     38|     expect(request.mock.calls.some(([r]) => /eth_sendTransaction|eth_r…
+     39|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/test/signingDeployment.security.test.ts > Signing deployment security (AUD-016) > returns the intended 
+signer when both RPCs agree on the deployment
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ src/test/signingDeployment.security.test.ts:44:83
+     42|     expect(await (await api.signer(wallet, INVESTOR)).getAddress()).to…
+     43|     expect(request.mock.calls.some(([r]) => r.method === "eth_getCode"…
+     44|     expect(request.mock.calls.some(([r]) => r.method === "eth_getBlock…
+       |                                                                                   ^
+     45|   });
+     46| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed | 9 passed (10)
+      Tests  2 failed | 120 passed (122)
+   Start at  14:50:50
+   Duration  22.38s (transform 8.02s, setup 17.99s, import 22.43s, tests 21.69s, environment 36.52s)
+

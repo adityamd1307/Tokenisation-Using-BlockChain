@@ -8,6 +8,8 @@ import { PAUSED } from "../utils/errors";
 import { address, quantity } from "../utils/validation";
 import { units } from "../utils/formatting";
 import { useAccountState, useEligibility } from "../hooks/data";
+import { useAsync } from "../hooks/useAsync";
+import { useData } from "../context/DataContext";
 import { useFundRoute } from "../hooks/useFundRoute";
 import type { Asset } from "../types";
 import {
@@ -63,18 +65,41 @@ function TransferForm({ fund }: { fund: Asset }) {
   const eligibility = useEligibility(fund, to);
   const data = state.data;
   const recipientOk = to ? eligibility.data : undefined;
-  const checks: Check[] = [
-    {
-      label: "Your wallet is a verified investor in this fund",
-      ok: data?.eligible,
-      reason:
-        "Your eligibility for this fund has been revoked. Contact the issuer before transferring.",
-    },
-    {
-      label: "The recipient is a verified investor in this fund",
-      ok: to ? recipientOk : true,
-      reason: `Recipient is not a verified investor in ${fund.symbol}. The issuer must verify it first.`,
-    },
+  // Regulated funds (main): the token's own transferStatus decides, with the reason.
+  const { revision } = useData();
+  const regulated = !!fund.identityRegistry;
+  const policy = useAsync(
+    `transfer-status:${fund.id}:${wallet.account}:${to}:${amount}:${revision}`,
+    () => blockchain.preflight(fund, wallet.account!, to, amount!),
+    regulated && !!wallet.account && !!to && amount !== undefined,
+  );
+  const checks: Check[] = regulated
+    ? [
+        {
+          label: "Identity and fund policy allow this transfer",
+          ok:
+            !to || amount === undefined
+              ? true
+              : policy.loading
+                ? undefined
+                : !policy.error,
+          reason: policy.error,
+        },
+      ]
+    : [
+        {
+          label: "Your wallet is a verified investor in this fund",
+          ok: data?.eligible,
+          reason:
+            "Your eligibility for this fund has been revoked. Contact the issuer before transferring.",
+        },
+        {
+          label: "The recipient is a verified investor in this fund",
+          ok: to ? recipientOk : true,
+          reason: `Recipient is not a verified investor in ${fund.symbol}. The issuer must verify it first.`,
+        },
+      ];
+  checks.push(
     { label: "Transfers are not paused", ok: !fund.paused, reason: PAUSED },
     {
       label: "Your balance covers the amount",
@@ -88,7 +113,7 @@ function TransferForm({ fund }: { fund: Asset }) {
         <Units value={data.balance} symbol={fund.symbol} />
       ) : undefined,
     },
-  ];
+  );
   const reason = tx.pending
     ? "Another transaction is in progress."
     : addressError || amountError

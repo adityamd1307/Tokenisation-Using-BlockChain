@@ -2,6 +2,7 @@ import { useState, type ReactNode } from "react";
 import { Check, Copy, ExternalLink } from "lucide-react";
 import { explorerUrl } from "../../config/networks";
 import { eth, shortAddress, units } from "../../utils/formatting";
+import { musd } from "../../utils/subscription";
 
 /**
  * An address or transaction hash: truncated (0x1234…abcd) in mono, full value on
@@ -89,6 +90,45 @@ export function Eth({ value }: { value: bigint }) {
       <span className="amount__value">{eth(value)}</span>{" "}
       <span className="amount__unit">ETH</span>
     </span>
+  );
+}
+
+/** A Mock USD amount (6 decimals) with its unit. */
+export function Musd({ value }: { value: bigint }) {
+  return (
+    <span className="amount">
+      <span className="amount__value">{musd(value)}</span>{" "}
+      <span className="amount__unit">mUSD</span>
+    </span>
+  );
+}
+
+/**
+ * A plain horizontal meter (no gradient): fill to `value`, optional tick marks.
+ * Percentages are presentation only; the figures beside it are exact.
+ */
+export function Meter({
+  label,
+  percent,
+  marks = [],
+}: {
+  label: string;
+  percent: number;
+  marks?: { at: number; label: string }[];
+}) {
+  const clamp = (n: number) => Math.max(0, Math.min(100, n));
+  return (
+    <div className="meter" role="img" aria-label={label}>
+      <span className="meter__fill" style={{ width: `${clamp(percent)}%` }} />
+      {marks.map((mark) => (
+        <span
+          key={mark.label}
+          className="meter__mark"
+          style={{ left: `${clamp(mark.at)}%` }}
+          title={mark.label}
+        />
+      ))}
+    </div>
   );
 }
 

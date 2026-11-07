@@ -11,6 +11,7 @@ import {
 } from "ethers";
 import { abis } from "../config/contracts";
 import { rpcError } from "../types";
+import { transferReason } from "./compliance";
 
 const interfaces = Object.values(abis).map((abi) => new Interface(abi));
 
@@ -57,7 +58,7 @@ export const messages: Record<string, Message> = {
   ForcedTransferFromZeroAddress: "A forced transfer needs a source address.",
   ForcedTransferFromWhitelisted: ([a]) =>
     `Address ${short(a)} is still verified. Revoke its eligibility before a forced transfer.`,
-  // OpenZeppelin Pausable (AUD-016)
+  // OpenZeppelin Pausable (AUD-019)
   EnforcedPause: PAUSED,
   ExpectedPause: "This asset is not paused.",
   // OpenZeppelin AccessControl
@@ -91,6 +92,44 @@ export const messages: Record<string, Message> = {
   NoUnsoldTokens: "There are no unsold units to recover.",
   NoExcessETH: "There is no excess ETH to recover.",
   SafeERC20FailedOperation: "The token transfer inside the sale failed.",
+  // Regulated assets and subscription offerings (origin/main, PRs #3 and #4).
+  InvalidCustody:
+    "Only the asset issuer can authorise this platform’s matching subscription escrow.",
+  SelfAttestation: "Trusted attestors cannot approve their own wallet.",
+  AlreadyRegistered: "This wallet is already registered. Use renewal instead.",
+  NotRegistered: "Investor identity is not registered.",
+  InvalidIdentity:
+    "Use a nonzero synthetic ID, a supported country and a future credential expiry.",
+  NotAdministrator:
+    "Only this asset’s policy administrator can change these settings.",
+  AdministratorLocked: "The registry administrator’s role cannot be removed.",
+  InvalidBinding: "The compliance policy is already bound to another token.",
+  UnsupportedCountry: "This country is not supported by the demo policy.",
+  InvalidSubscriptionFactory: "The subscription factory address is invalid.",
+  WrongStage:
+    "This action is unavailable in the offering’s current stage. Refresh its status.",
+  InvalidAmount:
+    "Enter a positive amount that matches the offering’s price and inventory limits.",
+  InvalidConfiguration:
+    "Check supply, price, caps and future subscription dates.",
+  NotAssetIssuer:
+    "Only the authorised issuer of this asset can create its offerings.",
+  InventoryNotFunded:
+    "The issuer must fully fund the offering before subscriptions open.",
+  InvestorNotEligible:
+    "Your wallet is not approved for this asset. Contact its issuer.",
+  AlreadySettled:
+    "This subscription is already settled. Refresh to view your entitlement.",
+  NotSettled: "Settle your subscription before withdrawing or claiming.",
+  NothingDue: "No balance is available for this action.",
+  UnsupportedTokenBehavior:
+    "The token transfer was incompatible. No funds were accepted by this transaction.",
+  Insolvent: "Escrow reserves are insufficient. The transaction was reverted.",
+  ReentrancyGuardReentrantCall:
+    "The contract rejected a nested call. No changes were made.",
+  OwnableUnauthorizedAccount: "Only the token owner can do this.",
+  OwnableInvalidOwner: "The new owner address is invalid.",
+  TransferRestricted: ([reason]) => transferReason(Number(reason)),
 };
 
 const GENERIC =

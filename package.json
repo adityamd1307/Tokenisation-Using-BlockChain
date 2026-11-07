@@ -1,7 +1,7 @@
 {
   "name": "rwa-tokenisation",
   "version": "1.0.0",
-  "description": "Tokenisation of real-world and digital assets on Ethereum — SC4053 NTU",
+  "description": "Tokenisation of real-world and digital assets on Ethereum \u2014 SC4053 NTU",
   "type": "module",
   "scripts": {
     "test": "hardhat test",
@@ -14,7 +14,11 @@
     "test:integration": "npm --prefix frontend run test:integration",
     "deploy:sepolia": "hardhat run --build-profile production scripts/deploy.ts --network sepolia",
     "replay:ephemeral": "hardhat run scripts/replay.ts --network hardhatMainnet",
-    "replay:sepolia": "hardhat run --build-profile production scripts/replay.ts --network sepolia"
+    "replay:sepolia": "hardhat run --build-profile production scripts/replay.ts --network sepolia",
+    "deploy:subscriptions:local": "hardhat run scripts/deploySubscriptions.ts --network localhost",
+    "demo:subscriptions": "hardhat run scripts/demoSubscriptionOffering.ts --network hardhatMainnet",
+    "demo:compliance": "hardhat run scripts/demoCompliance.ts --network hardhatMainnet",
+    "deploy:compliance:local": "hardhat run scripts/deployCompliance.ts --network localhost"
   },
   "repository": {
     "type": "git",

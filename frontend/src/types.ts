@@ -33,6 +33,8 @@ declare global {
 }
 
 export interface Asset {
+  identityRegistry?: string;
+  compliancePolicy?: string;
   id: string;
   name: string;
   symbol: string;
@@ -93,11 +95,12 @@ export interface Roles {
 export interface Activity {
   id: string;
   type: string;
-  /** Extra label, e.g. the role named in a RoleGranted event (AUD-017). */
+  /** Extra label, e.g. the role named in a RoleGranted event (AUD-020). */
   detail?: string;
   asset: string;
   quantity?: bigint;
   paid?: bigint;
+  currency?: "ETH" | "mUSD";
   from?: string;
   to?: string;
   hash: string;

@@ -22,6 +22,10 @@ import Offering from "./pages/issuer/Offering";
 import TokenControls from "./pages/issuer/TokenControls";
 import CreateFund, { IssuerHome } from "./pages/issuer/CreateFund";
 import Administration from "./pages/Administration";
+// main (PRs #3 and #4): regulated compliance and mUSD subscription offerings.
+import Compliance from "./pages/Compliance";
+import SubscriptionOfferings from "./pages/SubscriptionOfferings";
+import SubscriptionOffering from "./pages/SubscriptionOffering";
 import "./styles/tokens.css";
 import "./styles/base.css";
 import "./styles/components.css";
@@ -58,6 +62,9 @@ export function AppRoutes() {
         <Route path="issuer/:id/offering" element={<Offering />} />
         <Route path="issuer/:id/controls" element={<TokenControls />} />
         <Route path="admin" element={<Administration key={session} />} />
+        <Route path="compliance" element={<Compliance />} />
+        <Route path="subscriptions" element={<SubscriptionOfferings />} />
+        <Route path="offerings/:address" element={<SubscriptionOffering />} />
         <Route path="assets/:id" element={<LegacyAsset />} />
         <Route path="investor" element={<Navigate to="/portfolio" replace />} />
         <Route path="*" element={<NotFound />} />

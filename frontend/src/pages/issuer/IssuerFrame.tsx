@@ -19,6 +19,7 @@ export function IssuerFrame({
   allowed,
   denied,
   actions,
+  regulated,
   children,
 }: {
   title: string;
@@ -28,6 +29,8 @@ export function IssuerFrame({
   /** One sentence saying which role is needed. */
   denied: string;
   actions?: ReactNode;
+  /** Shown instead of the page for regulated funds, which have no AccessControl roles. */
+  regulated?: (fund: Asset) => ReactNode;
   children: (fund: Asset, own: FundAccess) => ReactNode;
 }) {
   const wallet = useWallet();
@@ -92,6 +95,13 @@ export function IssuerFrame({
       );
     return <PageSkeleton title={title} />;
   }
+  if (fund.identityRegistry && regulated)
+    return (
+      <div className="page">
+        {header}
+        {regulated(fund)}
+      </div>
+    );
   if (!allowed(own))
     return (
       <div className="page">

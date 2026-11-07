@@ -10,6 +10,7 @@ cache/
 broadcast/*/31337/
 # Phase 5 D18: the local deployment record changes on every node restart; deployments/sepolia.json is kept
 deployments/localhost.json
+deployments/subscription-localhost.json
 
 # Frontend
 node_modules/
@@ -27,3 +28,7 @@ types/ethers-contracts/
 sc4053-evidence-kit/
 sc4053-evidence-kit.zip
 frontend/.e2e-chain-snapshot.json
+
+# Local compliance deployment and previous UI configuration
+deployments/compliance-localhost.json
+deployments/pre-compliance-localhost.json

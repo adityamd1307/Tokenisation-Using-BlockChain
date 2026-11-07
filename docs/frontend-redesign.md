@@ -24,6 +24,25 @@ The sidebar keeps the four Phase 4 workspaces. Issuer dashboard and Administrati
 
 "Freeze" is shown as **Revoke eligibility**, following D5.
 
+## Merge with main (Phase 6, PRs #3 and #4)
+
+While the redesign was in progress, main gained regulated (ERC-3643-inspired Lite) funds and mUSD subscription offerings, built on the old pages. The merge ports them into the new design. Their services (`compliance.ts`, `subscriptions.ts`) and contracts are unchanged:
+
+| Feature | New location |
+|---|---|
+| Subscription offerings list | Marketplace → Subscription offerings (`/subscriptions`), shown only when the subscription deployment is configured |
+| Offering detail | `/offerings/:address`. Investor: approve mUSD, then commit, as visible steps, then settle, refund and claim. Issuer: custody/eligibility, approve, deposit, proceeds, recovery |
+| Create offering | Issuer dashboard → Offering (`/issuer/:id/offering`), below the ETH sale controls |
+| Compliance | My portfolio → Compliance (`/compliance`), shown only when a regulated fund exists. Identity, transfer checker, credentials, attestors and policy, with admin sections gated by on-chain roles |
+| Regulated issuance | Create fund → Compliance mode |
+| Regulated funds elsewhere | Transfers use the token's `transferStatus` pre-flight. Investor registry and Token controls point to Compliance, because regulated tokens have no whitelist, pause or roles |
+
+In the merged code, the AUD-019 pause pre-flight and main's regulated pre-flight both run before signing. `access()` skips role reads on regulated tokens. The error map covers the new contracts' errors, including `TransferRestricted`.
+
+main's `compliance.test.tsx` and `subscription.test.tsx` were ported, not rewritten. Their assertions are unchanged except for mounting through `renderApp`, the "Connect wallet" text, "Label: Confirmed" status text, and offering creation on `/issuer/0/offering`. One behaviour was restored during the port: the "not fully funded" notice now shows alongside other blocking reasons.
+
+The redesign's AUD-016 and AUD-017 were renumbered AUD-019 and AUD-020, because main had already published 016 to 018.
+
 ## Contract functions still without UI
 
 - `transferFrom`
@@ -42,8 +61,8 @@ The sidebar keeps the four Phase 4 workspaces. Issuer dashboard and Administrati
 
 ## Bugs found in the old frontend's contract wiring
 
-- [AUD-016](issues/AUD-016-frontend-ignores-the-d5-pause-no-pre-flight-check-.md): pause was never read or checked before signing, and `EnforcedPause` was shown as a raw error name.
-- [AUD-017](issues/AUD-017-activity-history-drops-pause-unpause-and-role-chan.md): the activity log silently dropped `Paused`, `Unpaused`, `RoleGranted` and `RoleRevoked`.
+- [AUD-019](issues/AUD-019-frontend-ignores-the-d5-pause-no-pre-flight-check-.md) (raised as AUD-016): pause was never read or checked before signing, and `EnforcedPause` was shown as a raw error name.
+- [AUD-020](issues/AUD-020-activity-history-drops-pause-unpause-and-role-chan.md) (raised as AUD-017): the activity log silently dropped `Paused`, `Unpaused`, `RoleGranted` and `RoleRevoked`.
 
 Found in the old code but not raised as issues:
 - Delegated compliance agents had no console. Phase 4 §7.3 only asked for issuer-owned assets.
@@ -53,7 +72,7 @@ Found in the old code but not raised as issues:
 
 - `useAssets()` started a separate registry fetch in every component that called it; the shared `DataProvider` now does one read (b79d085). Found by the RPC-failure unit test.
 - `keepPrevious` would have shown the previous wallet's data while a new account loaded (AUD-009 risk). `useAsync` now keeps data only within a scope (55a2295).
-- Fund state went stale after another user's action: the investor's page stayed enabled after the issuer paused. The registry is now re-read on navigation and on window focus. Found by e2e flow 8. The AUD-016 service check would still have blocked the signature.
+- Fund state went stale after another user's action: the investor's page stayed enabled after the issuer paused. The registry is now re-read on navigation and on window focus. Found by e2e flow 8. The AUD-019 service check would still have blocked the signature.
 - Duplicate React keys in the sidebar when no fund is selected. Found by the e2e console check.
 - Screenshot review:
   - the sidebar column ended at viewport height on long pages;

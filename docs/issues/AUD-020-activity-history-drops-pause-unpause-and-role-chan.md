@@ -1,4 +1,4 @@
-# AUD-017: Activity history drops pause, unpause and role-change events
+# AUD-020: Activity history drops pause, unpause and role-change events
 
 | Field | Value |
 |---|---|
@@ -12,6 +12,8 @@
 | Baseline commit | 714366d (`ai-baseline-d5`); history code from f943f9c (`ai-baseline-phase4`) |
 | Regression test commit | 538a483 |
 | Fix commit | 3f7e0c4 |
+
+> Numbering: raised as AUD-017 on the unmerged `frontend-redesign` branch, renumbered AUD-020 before merging, because main had already published AUD-017 for another issue. Its commits, `docs/evidence/aud-017/` and the `AUD-017-before/after` evidence runs keep the provisional number.
 
 ## What is wrong
 
@@ -54,7 +56,7 @@ Spec-v1 §1 claims a publicly auditable record of how the share register is cont
 - Adds "Role granted" and "Role revoked" rows, with the sender as `from` and the grantee as `to`. The role is named ("Token admin" / "Compliance agent") in a new optional `Activity.detail` field.
 - The investor (account) view filter is unchanged.
 
-New CLAUDE.md rule: see the AUD-017 entry under "Rules learned from audit findings".
+New CLAUDE.md rule: see the AUD-020 entry under "Rules learned from audit findings".
 
 ## 4. Evidence the fix works
 

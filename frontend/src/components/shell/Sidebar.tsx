@@ -1,6 +1,10 @@
 import { NavLink } from "react-router-dom";
+import { useAssets } from "../../context/DataContext";
+import { subscriptions } from "../../services/subscriptions";
 import {
   ArrowLeftRight,
+  BadgeCheck,
+  CalendarClock,
   Briefcase,
   FilePlus,
   KeyRound,
@@ -50,6 +54,7 @@ export function Sidebar({
 }) {
   const { fund } = useSelectedFund();
   const workspace = useWorkspace();
+  const hasRegulated = !!useAssets().data?.some((a) => a.identityRegistry);
   const fundPath = (suffix = "") => (fund ? `/funds/${fund.id}${suffix}` : "/");
   const managedId =
     workspace.managed.find((a) => a.assetId === fund?.id)?.assetId ??
@@ -86,6 +91,15 @@ export function Sidebar({
               end: true,
             },
             { to: fundPath("/subscribe"), label: "Subscribe", icon: Wallet },
+            ...(subscriptions.enabled
+              ? [
+                  {
+                    to: "/subscriptions",
+                    label: "Subscription offerings",
+                    icon: CalendarClock,
+                  },
+                ]
+              : []),
           ]}
         />
         <Group
@@ -98,6 +112,9 @@ export function Sidebar({
               icon: ArrowLeftRight,
             },
             { to: "/activity", label: "Activity", icon: ScrollText },
+            ...(hasRegulated
+              ? [{ to: "/compliance", label: "Compliance", icon: BadgeCheck }]
+              : []),
           ]}
         />
         {workspace.issuer && (

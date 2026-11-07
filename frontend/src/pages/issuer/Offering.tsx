@@ -28,6 +28,8 @@ import {
   Panel,
 } from "../../components/ui/layout";
 import { IssuerFrame } from "./IssuerFrame";
+import { subscriptions } from "../../services/subscriptions";
+import { CreateOffering } from "../SubscriptionOfferings";
 
 type Operation =
   "withdrawProceeds" | "closeSale" | "recoverUnsoldTokens" | "sweepExcessETH";
@@ -442,7 +444,15 @@ export default function Offering() {
       denied="Only this fund's issuer (AssetSale.issuer) can manage its offering."
     >
       {(fund) => (
-        <OfferingConsole key={`${wallet.session}:${fund.id}`} fund={fund} />
+        <>
+          <OfferingConsole key={`${wallet.session}:${fund.id}`} fund={fund} />
+          {subscriptions.enabled && (
+            <CreateOffering
+              key={`subscription:${wallet.session}:${fund.id}`}
+              asset={fund}
+            />
+          )}
+        </>
       )}
     </IssuerFrame>
   );

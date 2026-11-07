@@ -1,0 +1,42 @@
+[
+  {
+    "contract": "AssetFactory",
+    "runtimeBytes": 13598,
+    "initCodeBytesWithoutArguments": 13790
+  },
+  {
+    "contract": "RegulatedAssetFactory",
+    "runtimeBytes": 15716,
+    "initCodeBytesWithoutArguments": 34771
+  },
+  {
+    "contract": "RegulatedAssetDeployer",
+    "runtimeBytes": 18697,
+    "initCodeBytesWithoutArguments": 18754
+  },
+  {
+    "contract": "IdentityRegistryLite",
+    "runtimeBytes": 3523,
+    "initCodeBytesWithoutArguments": 4058
+  },
+  {
+    "contract": "ComplianceLite",
+    "runtimeBytes": 2810,
+    "initCodeBytesWithoutArguments": 3151
+  },
+  {
+    "contract": "RegulatedAssetToken",
+    "runtimeBytes": 4701,
+    "initCodeBytesWithoutArguments": 6452
+  },
+  {
+    "contract": "SubscriptionFactory",
+    "runtimeBytes": 12202,
+    "initCodeBytesWithoutArguments": 12610
+  },
+  {
+    "contract": "SubscriptionOffering",
+    "runtimeBytes": 8308,
+    "initCodeBytesWithoutArguments": 10055
+  }
+]

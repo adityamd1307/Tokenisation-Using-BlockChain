@@ -1,4 +1,4 @@
-// AUD-016: spec-v1 §5 "D5 functions" — while an AssetToken is paused, transfer,
+// AUD-019 (raised as AUD-016 on frontend-redesign): spec-v1 §5 "D5 functions" — while an AssetToken is paused, transfer,
 // AssetSale.allocate, buyTokens and recoverUnsoldTokens all revert (invariant 5).
 // The frontend must say so before the user signs, and decode EnforcedPause.
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -48,7 +48,7 @@ beforeEach(() => {
   vi.spyOn(provider, "getBalance").mockResolvedValue(parseEther("1"));
 });
 
-describe("AUD-016 paused token", () => {
+describe("AUD-019 paused token", () => {
   it("blocks a purchase before the wallet is asked to sign", async () => {
     await expect(api.buy(wallet, INVESTOR, asset, "1")).rejects.toThrow(
       /paused/i,

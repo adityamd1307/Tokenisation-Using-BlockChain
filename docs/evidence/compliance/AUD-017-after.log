@@ -1,0 +1,20 @@
+
+> rwa-tokenisation-frontend@0.0.1 prebuild
+> node ../scripts/syncFrontend.mjs
+
+Synced frontend ABIs from compiled artifacts.
+
+> rwa-tokenisation-frontend@0.0.1 build
+> tsc --noEmit && vite build
+
+vite v6.4.5 building for production...
+transforming...
+✓ 230 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                     0.75 kB │ gzip:   0.41 kB
+dist/assets/index-C60SWmfz.css     19.52 kB │ gzip:   5.22 kB
+dist/assets/index-s5SEoqGe.js     162.69 kB │ gzip:  34.34 kB
+dist/assets/react-B97MW7Pg.js     181.77 kB │ gzip:  59.88 kB
+dist/assets/ethereum-CEei2K7A.js  274.47 kB │ gzip: 101.21 kB
+✓ built in 1.16s

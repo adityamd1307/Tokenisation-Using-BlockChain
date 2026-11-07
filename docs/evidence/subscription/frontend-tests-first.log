@@ -1,0 +1,18 @@
+
+> rwa-tokenisation-frontend@0.0.1 pretest
+> node ../scripts/syncFrontend.mjs
+
+Synced all six frontend ABIs from compiled artifacts.
+
+> rwa-tokenisation-frontend@0.0.1 test
+> vitest run
+
+
+ RUN  v4.1.12 /Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/frontend
+
+
+ Test Files  10 passed (10)
+      Tests  131 passed (131)
+   Start at  15:39:18
+   Duration  2.89s (transform 1.56s, setup 2.95s, import 3.09s, tests 2.96s, environment 7.55s)
+

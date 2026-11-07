@@ -140,7 +140,7 @@ describe("On-chain event history", () => {
       });
     }
   });
-  // AUD-017: D5 pause/unpause and AccessControl role changes are token operations too.
+  // AUD-020 (raised as AUD-017 on frontend-redesign): D5 pause/unpause and AccessControl role changes are token operations too.
   // Phase 4 §8.4 requires each row's transaction type; AUD-013's rule requires every
   // event consumer to label new operations.
   it("labels pause, unpause and role changes instead of dropping them", async () => {

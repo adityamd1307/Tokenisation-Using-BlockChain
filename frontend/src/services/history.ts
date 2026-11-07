@@ -162,7 +162,7 @@ export async function assetHistory(
         case "SaleClosed":
           rows.push({ ...base, type: "Offering closed", from: asset.issuer });
           break;
-        // AUD-017: D5 pause (OpenZeppelin Pausable) and AccessControl role changes.
+        // AUD-020: D5 pause (OpenZeppelin Pausable) and AccessControl role changes.
         case "Paused":
           rows.push({ ...base, type: "Paused", from: a.account });
           break;

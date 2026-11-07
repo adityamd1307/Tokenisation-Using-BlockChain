@@ -1,4 +1,4 @@
-# AUD-016: Frontend ignores the D5 pause: no pre-flight check and a raw EnforcedPause error
+# AUD-019: Frontend ignores the D5 pause: no pre-flight check and a raw EnforcedPause error
 
 | Field | Value |
 |---|---|
@@ -12,6 +12,8 @@
 | Baseline commit | 714366d (`ai-baseline-d5`); frontend code from f943f9c (`ai-baseline-phase4`) |
 | Regression test commit | 8d4cca5 |
 | Fix commit | fd74329 |
+
+> Numbering: raised as AUD-016 on the unmerged `frontend-redesign` branch, renumbered AUD-019 before merging, because main had already published AUD-016 for another issue. Its commits, `docs/evidence/aud-016/` and the `AUD-016-before/after` evidence runs keep the provisional number.
 
 ## What is wrong
 
@@ -53,7 +55,7 @@ fd74329:
 
 The redesigned frontend (branch `frontend-redesign`) also shows the paused state on the fund factsheet and disables each affected action, with the reason shown next to it.
 
-New CLAUDE.md rule: see the AUD-016 entry under "Rules learned from audit findings".
+New CLAUDE.md rule: see the AUD-019 entry under "Rules learned from audit findings".
 
 ## 4. Evidence the fix works
 

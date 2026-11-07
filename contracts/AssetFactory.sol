@@ -93,22 +93,19 @@ contract AssetFactory {
         AssetToken token = new AssetToken(name, symbol, totalSupply, msg.sender);
         AssetSale sale = new AssetSale(address(token), unitPriceWei, msg.sender);
 
-        assetId = _assets.length;
-        _assets.push(Asset({
-            assetId: assetId,
-            name: name,
-            symbol: symbol,
-            description: description,
-            assetType: assetType,
-            totalSupply: totalSupply,
-            tokenContract: address(token),
-            saleContract: address(sale),
-            issuerAddress: msg.sender,
-            unitPriceWei: unitPriceWei
-        }));
-        tokenToSale[address(token)] = address(sale);
+        assetId = _registerAsset(name, symbol, description, assetType, totalSupply,
+            unitPriceWei, address(token), address(sale), msg.sender);
+    }
 
-        emit AssetCreated(assetId, address(token), address(sale), msg.sender);
+    /// @dev Enhancement C §7: shared registry insertion for legacy and regulated creation.
+    function _registerAsset(string memory name, string memory symbol, string memory description,
+        AssetType assetType, uint256 totalSupply, uint256 unitPriceWei,
+        address token, address sale, address issuer) internal returns (uint256 assetId) {
+        assetId = _assets.length;
+        _assets.push(Asset(assetId, name, symbol, description, assetType, totalSupply,
+            token, sale, issuer, unitPriceWei));
+        tokenToSale[token] = sale;
+        emit AssetCreated(assetId, token, sale, issuer);
     }
 
     /// @dev Phase 3 §3.1: asset IDs are sequential from 0.

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { RefreshCw } from "lucide-react";
 import { useData } from "../../context/DataContext";
 import { useWallet } from "../../context/WalletContext";
@@ -346,6 +346,23 @@ export default function InvestorRegistry() {
       description="Verify investors, revoke eligibility and review who holds units. A revoked holder keeps their balance but cannot send, receive or subscribe."
       allowed={(own) => own.compliance || own.tokenAdmin || own.saleIssuer}
       denied="This wallet holds no issuer, compliance agent or token admin role for this fund."
+      regulated={(fund) => (
+        <Notice
+          title="Regulated fund"
+          action={
+            <Link
+              className="btn btn--secondary"
+              to={`/compliance?asset=${fund.id}`}
+            >
+              Open Compliance
+            </Link>
+          }
+        >
+          {fund.symbol} uses simulated identity credentials and a per-fund
+          policy instead of a whitelist. Its sale contract is authorised for
+          custody permanently.
+        </Notice>
+      )}
       actions={
         <button className="btn btn--secondary" onClick={refresh}>
           <RefreshCw aria-hidden />

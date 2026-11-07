@@ -1,0 +1,204 @@
+
+> rwa-tokenisation@1.0.0 demo:compliance
+> hardhat run scripts/demoCompliance.ts --network hardhatMainnet
+
+
+{
+  "network": "hardhatMainnet",
+  "description": "Synthetic identity and mock money only; expected failures are estimates, not mined receipts",
+  "contracts": {
+    "factory": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+    "token": "0xb385A0bAA2F8f30C660ABd207e8624863fcf30AE",
+    "registry": "0x8Ff3801288a85ea261E4277d44E1131Ea736F77B",
+    "policy": "0x4CEc804494d829bEA93AB8eA7045A7efBED3c229",
+    "offering": "0x61c36a8d610163660E21a8b7359e1Cac0C9133e1"
+  },
+  "checks": [
+    "E lacks accreditation",
+    "F credential expired",
+    "G country restricted",
+    "D cannot exceed 500",
+    "Revoked D cannot send",
+    "Revoked D cannot receive",
+    "Invalid F cannot claim",
+    "Issuer cannot recover F reserved allocation"
+  ],
+  "records": [
+    {
+      "action": "Authorize issuer",
+      "hash": "0x469bc9bc26222d1b5a2c5cd1d0240f05f9514fa5c6ab53c6cb5717835441d3c1",
+      "gas": "45475"
+    },
+    {
+      "action": "Create regulated CPT",
+      "hash": "0x21a2b061e26f2a717caed74348b3e0298cb5007374f03b01dc64fec7a337495a",
+      "gas": "3540969"
+    },
+    {
+      "action": "Trust attestor",
+      "hash": "0xf711eab0f185d2141284579bf89843259cdd00576e7e31d8f0bd9341930d790a",
+      "gas": "52786"
+    },
+    {
+      "action": "Allow Singapore",
+      "hash": "0xb0095c8123833444373fb0dea412d07c2a6c1284baaf0ed634f67e331a9acf5e",
+      "gas": "48826"
+    },
+    {
+      "action": "Register 0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+      "hash": "0x7b68439fc6c7d6600c18d161d4b1c4e654e3903845252c15c548a7c1a652f262",
+      "gas": "75451"
+    },
+    {
+      "action": "Register 0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65",
+      "hash": "0x28fe5887ffe9d0235aa430dce56a347f454d95aafe5246763372dbe39fe1c3cb",
+      "gas": "75439"
+    },
+    {
+      "action": "Register 0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc",
+      "hash": "0xbda6bdedef4fcd99962eb252ed9568eec27f958706c4f7d11b132ef3494564d7",
+      "gas": "75451"
+    },
+    {
+      "action": "Register 0x976EA74026E726554dB657fA54763abd0C3a0aa9",
+      "hash": "0xd8cc8a15982e070579461ecc4e4e02472e9fc7bb168780c48d5e79bb2ce96937",
+      "gas": "75476"
+    },
+    {
+      "action": "Transfer 100 CPT to D",
+      "hash": "0x10491177b6c91855b3eb7d3c6f002124deb91ce89e1de496330cadff6a5fb864",
+      "gas": "87469"
+    },
+    {
+      "action": "Increase D to 450",
+      "hash": "0x88e50f7d52b5eb1ad027fd35a336af2c9ff827f4b7195e5c58f120693afa7da7",
+      "gas": "70381"
+    },
+    {
+      "action": "D reaches exactly 500",
+      "hash": "0x9b2805151952f387dad46a9ac6b8d8755dcf1a9586dc43682abfc6a495d83236",
+      "gas": "70369"
+    },
+    {
+      "action": "Revoke D",
+      "hash": "0xcdc2b9a81a608195d5770619f68f4b552f31f1505c731c6a2e2f4386f8c34cf2",
+      "gas": "50043"
+    },
+    {
+      "action": "Renew D",
+      "hash": "0x11327a32986b2fbb248e8a54de62d1c2176837c5d7667ed852dd66839e56ac8e",
+      "gas": "33339"
+    },
+    {
+      "action": "D returns inventory to make claim capacity",
+      "hash": "0x62c269dd4dd48ef0867e75d6744bd1d49bf956dcdfeb711a86f8ff200cec2bc3",
+      "gas": "55036"
+    },
+    {
+      "action": "Renew F for offering",
+      "hash": "0x89328214b9e07925c10162e2398c769678dbfa548a845928a6bf4feb8d054146",
+      "gas": "38139"
+    },
+    {
+      "action": "Bind subscription factory",
+      "hash": "0x7f204093cff73f3d5050a80f09701ca7780b22373a6e982bd8ec8a035ff10988",
+      "gas": "48607"
+    },
+    {
+      "action": "Create subscription",
+      "hash": "0xe3fd05b9d1a75442c68652330f105bfac80e7e6adb6ed1ed4ce7939a15e8d418",
+      "gas": "1862578"
+    },
+    {
+      "action": "Authorize exact escrow",
+      "hash": "0xb053a9ae1d2d93e6be906787af3aa81bf4152d7978e881458bdc5f237f702d7e",
+      "gas": "60704"
+    },
+    {
+      "action": "Approve inventory",
+      "hash": "0x09418adacd8530e19ef630f769a34f16105c87528ba33832fac0c01346f553a3",
+      "gas": "46336"
+    },
+    {
+      "action": "Deposit inventory",
+      "hash": "0xb23775b9c1a356d8bae2c9eb35dd17328a1ea97bcf09fc6b761370bc11de7bf0",
+      "gas": "96281"
+    },
+    {
+      "action": "Mint mock USD",
+      "hash": "0xfa7f869af432f51d8746cb656395335ca6a13c095b9aa2127b1a2026c03c4469",
+      "gas": "70655"
+    },
+    {
+      "action": "Approve mock USD",
+      "hash": "0x71a2832eb2b87200eb1dafe74a4384b1fce3610ad2333fa64dee23991ed80cb8",
+      "gas": "46331"
+    },
+    {
+      "action": "Mint mock USD",
+      "hash": "0x4b5d636ab175c230f039fe34cf14552d0f16e5af65b797dfd7093f4085c8727a",
+      "gas": "53555"
+    },
+    {
+      "action": "Approve mock USD",
+      "hash": "0x9c059b28ac6e862d041dace3dbad4a8e701923b51e1a83ef3d84c922d8816d1a",
+      "gas": "46331"
+    },
+    {
+      "action": "Commit 2000 mUSD",
+      "hash": "0x086510ed2b380caeb29ce13f031558188009d4e4a0ef583948d6cc1eeb96aa9e",
+      "gas": "172725"
+    },
+    {
+      "action": "Commit 2000 mUSD",
+      "hash": "0x80872d45bfd5a264fd3531e08b0d6fb470cd01b278dc436b63d41c57d5f8d9d2",
+      "gas": "121425"
+    },
+    {
+      "action": "Finalize offering",
+      "hash": "0x9e5bb086b96d232b126c5990dd3e60af0074c2dd97b18004e96d81adb01c00ed",
+      "gas": "119102"
+    },
+    {
+      "action": "Settle subscription",
+      "hash": "0x09227c92ae0f62e3871424f7654898dc53907ddefedae8e5dbd5225d7e0e4e11",
+      "gas": "241511"
+    },
+    {
+      "action": "Settle subscription",
+      "hash": "0x9ecb2fac5e7c5868c375c7f68dacb979febee6511f625b285b13da4fd3250012",
+      "gas": "156011"
+    },
+    {
+      "action": "D compliant claim",
+      "hash": "0x6959076d0dcea8dbf159a4c4718c787f1a25356d8dc68dff67e9088a82aac8e7",
+      "gas": "126076"
+    },
+    {
+      "action": "Revoke F after commitment",
+      "hash": "0xaa35a059ca927c8fd181203b6f94e3138c3a1c5b0f8afb59aaf8983427e8b513",
+      "gas": "50043"
+    },
+    {
+      "action": "Invalid F still receives refund",
+      "hash": "0xe5db9edd290ffcb4578bd82040eccfbe0cfc77f9bef854af19525fe7be158677",
+      "gas": "101566"
+    },
+    {
+      "action": "Restore F credential",
+      "hash": "0x0edd5afd4840a321f6bff14ab61e263b945ac2d163bb05355c3483b0f0f2de45",
+      "gas": "33339"
+    },
+    {
+      "action": "F delayed claim",
+      "hash": "0xabf88c22ebee97d33467fb6b342d264df98065ac797f8c404f543e0c8a2a411c",
+      "gas": "104176"
+    }
+  ],
+  "balances": {
+    "D": "500",
+    "F": "500",
+    "issuer": "9000",
+    "reserved": "0"
+  }
+}

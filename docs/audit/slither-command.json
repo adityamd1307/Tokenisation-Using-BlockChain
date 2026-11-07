@@ -1,0 +1,16 @@
+{
+  "command": "VIRTUAL_ENV=/private/tmp/sc4053-slither /private/tmp/sc4053-slither/bin/slither . --hardhat-ignore-compile --filter-paths '' --json docs/audit/slither-results.json",
+  "exitCode": 255,
+  "success": true,
+  "versions": {
+    "slither": "0.11.6",
+    "cryticCompile": "0.4.2"
+  },
+  "detectorFindings": 29,
+  "severityCounts": {
+    "High": 2,
+    "Medium": 4,
+    "Low": 7,
+    "Informational": 16
+  }
+}

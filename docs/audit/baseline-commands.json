@@ -1,0 +1,8 @@
+[
+  {
+    "command": "npm run compile",
+    "exitCode": 1,
+    "seconds": 61.93,
+    "log": "logs/baseline-compile.log"
+  }
+]

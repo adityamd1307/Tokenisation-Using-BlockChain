@@ -1,0 +1,25 @@
+
+Compiled 1 Solidity file with solc 0.8.24 (evm target: shanghai)
+
+Running Mocha tests
+
+
+  Phase 6 security
+    ✔ rejects the full outsider privilege matrix without changing either asset (105ms)
+    ✔ rolls back payment, allowance and inventory when the sale or issuer is revoked
+    ✔ reverts uint256 payment overflow without accepting ETH or delivering tokens
+    ✔ rejects a buyer without ETH at RPC admission without changing sale state
+    ✔ failed factory inputs preserve sequential IDs and do not register partial assets
+    ✔ conserves supply, inventory and proceeds across 48 seeded operations (seed 7) (177ms)
+    ✔ conserves supply, inventory and proceeds across 48 seeded operations (seed 41) (169ms)
+    ✔ conserves supply, inventory and proceeds across 48 seeded operations (seed 2026) (170ms)
+
+  Phase 6 withdrawal callbacks
+    ✔ sweeping cannot recursively sweep twice; nested withdrawal only pays owed proceeds once
+    ✔ withdrawal callback can sweep excess but cannot withdraw proceeds twice
+    ✔ rejected sweep preserves both excess ETH and owed proceeds for retry
+
+
+  11 passing (697ms)
+
+

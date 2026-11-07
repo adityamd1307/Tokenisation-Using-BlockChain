@@ -1,0 +1,25 @@
+
+> rwa-tokenisation-frontend@0.0.1 prebuild
+> node ../scripts/syncFrontend.mjs
+
+Synced all six frontend ABIs from compiled artifacts.
+
+> rwa-tokenisation-frontend@0.0.1 build
+> tsc --noEmit && vite build
+
+src/test/subscription.test.tsx(91,55): error TS2345: Argument of type '{ hash: string; wait: Mock<Procedure>; }' is not assignable to parameter of type 'TransactionResponse'.
+  Type '{ hash: string; wait: Mock<Procedure>; }' is missing the following properties from type 'TransactionResponse': #private, provider, blockNumber, blockHash, and 29 more.
+src/test/subscription.test.tsx(161,7): error TS2345: Argument of type '(_w: WalletProvider, _who: string, _at: string, op: "recoverUnsoldTokens" | "withdrawProceeds" | "claimTokens" | "commit" | "finalizeOffering" | "settleSubscription" | ... 4 more ... | "whitelistOffering") => Promise<...>' is not assignable to parameter of type '(wallet: WalletProvider, who: string, at: string, operation: "recoverUnsoldTokens" | "withdrawProceeds" | "claimTokens" | "commit" | "finalizeOffering" | "settleSubscription" | ... 4 more ... | "whitelistOffering", amount?: string | undefined) => Promise<...>'.
+  Type 'Promise<{ hash: string; wait: Mock<Procedure>; }>' is not assignable to type 'Promise<TransactionResponse>'.
+    Type '{ hash: string; wait: Mock<Procedure>; }' is missing the following properties from type 'TransactionResponse': #private, provider, blockNumber, blockHash, and 29 more.
+src/test/subscription.test.tsx(244,7): error TS2345: Argument of type '(_w: WalletProvider, _who: string, _at: string, op: "recoverUnsoldTokens" | "withdrawProceeds" | "claimTokens" | "commit" | "finalizeOffering" | "settleSubscription" | ... 4 more ... | "whitelistOffering") => Promise<...>' is not assignable to parameter of type '(wallet: WalletProvider, who: string, at: string, operation: "recoverUnsoldTokens" | "withdrawProceeds" | "claimTokens" | "commit" | "finalizeOffering" | "settleSubscription" | ... 4 more ... | "whitelistOffering", amount?: string | undefined) => Promise<...>'.
+  Type 'Promise<{ hash: string; wait: Mock<Procedure>; }>' is not assignable to type 'Promise<TransactionResponse>'.
+    Type '{ hash: string; wait: Mock<Procedure>; }' is missing the following properties from type 'TransactionResponse': #private, provider, blockNumber, blockHash, and 29 more.
+src/test/subscription.test.tsx(269,56): error TS2345: Argument of type '() => Promise<{ hash: string; wait: Mock<Procedure>; }>' is not assignable to parameter of type '(wallet: WalletProvider, who: string, at: string, operation: "recoverUnsoldTokens" | "withdrawProceeds" | "claimTokens" | "commit" | "finalizeOffering" | "settleSubscription" | ... 4 more ... | "whitelistOffering", amount?: string | undefined) => Promise<...>'.
+  Type 'Promise<{ hash: string; wait: Mock<Procedure>; }>' is not assignable to type 'Promise<TransactionResponse>'.
+    Type '{ hash: string; wait: Mock<Procedure>; }' is missing the following properties from type 'TransactionResponse': #private, provider, blockNumber, blockHash, and 29 more.
+src/test/subscription.test.tsx(299,7): error TS2345: Argument of type '(_w: WalletProvider, _who: string, _at: string, op: "recoverUnsoldTokens" | "withdrawProceeds" | "claimTokens" | "commit" | "finalizeOffering" | "settleSubscription" | ... 4 more ... | "whitelistOffering") => Promise<...>' is not assignable to parameter of type '(wallet: WalletProvider, who: string, at: string, operation: "recoverUnsoldTokens" | "withdrawProceeds" | "claimTokens" | "commit" | "finalizeOffering" | "settleSubscription" | ... 4 more ... | "whitelistOffering", amount?: string | undefined) => Promise<...>'.
+  Type 'Promise<{ hash: string; wait: Mock<Procedure>; }>' is not assignable to type 'Promise<TransactionResponse>'.
+    Type '{ hash: string; wait: Mock<Procedure>; }' is missing the following properties from type 'TransactionResponse': #private, provider, blockNumber, blockHash, and 29 more.
+src/test/subscription.test.tsx(348,57): error TS2345: Argument of type '{ hash: string; wait: Mock<Procedure>; }' is not assignable to parameter of type 'TransactionResponse'.
+  Type '{ hash: string; wait: Mock<Procedure>; }' is missing the following properties from type 'TransactionResponse': #private, provider, blockNumber, blockHash, and 29 more.

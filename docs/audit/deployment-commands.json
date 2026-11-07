@@ -1,0 +1,22 @@
+[
+  {
+    "command": "npm run deploy:local",
+    "exitCode": 0,
+    "log": "logs/deploy-local.log"
+  },
+  {
+    "command": "npm run demo:local",
+    "exitCode": 0,
+    "log": "logs/seed-local.log"
+  },
+  {
+    "command": "npx hardhat compile --build-profile production --force",
+    "exitCode": 0,
+    "log": "logs/production-compile.log"
+  },
+  {
+    "command": "npm audit --omit=dev --json",
+    "exitCode": 0,
+    "log": "logs/root-production-audit.log"
+  }
+]

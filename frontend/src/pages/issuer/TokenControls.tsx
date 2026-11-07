@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useWallet } from "../../context/WalletContext";
 import { useTransaction } from "../../context/TransactionContext";
 import { blockchain } from "../../services/blockchain";
@@ -19,7 +19,12 @@ import {
   Checklist,
   type Check,
 } from "../../components/ui/forms";
-import { ConfirmDialog, EmptyState, Panel } from "../../components/ui/layout";
+import {
+  ConfirmDialog,
+  EmptyState,
+  Notice,
+  Panel,
+} from "../../components/ui/layout";
 import { IssuerFrame } from "./IssuerFrame";
 
 const parseAddress = (value: string) => {
@@ -363,6 +368,13 @@ export default function TokenControls() {
       description="Emergency and administrative controls for the token contract. Each action requires the token admin role."
       allowed={(own) => own.tokenAdmin}
       denied="Only a token admin of this fund (DEFAULT_ADMIN_ROLE) can use these controls."
+      regulated={(fund) => (
+        <Notice title="Not available for regulated funds">
+          The regulated token for {fund.symbol} has no pause, forced transfer or
+          compliance-agent roles. Transfer rules are set in{" "}
+          <Link to={`/compliance?asset=${fund.id}`}>Compliance</Link>.
+        </Notice>
+      )}
     >
       {(fund) => <Controls key={`${wallet.session}:${fund.id}`} fund={fund} />}
     </IssuerFrame>

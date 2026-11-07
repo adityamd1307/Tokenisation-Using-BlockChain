@@ -43,3 +43,7 @@ New CLAUDE.md rule citing AUD-007.
 - Before: `docs/evidence/runs/20261023T084218Z_947b4b7_AUD-007-before/test.log`. 104 passing, **3 failing**: "function selector was not recognized". No recovery path exists.
 - After: `docs/evidence/runs/20261023T084542Z_3659cce_AUD-007-after/test.log`. **107 passing, 0 failing.**
 - Not tested: a sweep that is re-entered by a contract issuer. The invariant 8 harness re-enters `withdrawProceeds`, not `sweepExcessETH`.
+
+## Phase 6 follow-up — 6 November 2026
+
+The previously untested sweep callback is now covered by `test/security/Phase6.security.test.ts`: recursive sweep fails; cross-function withdrawal during sweep pays owed proceeds once; sweep during withdrawal pays only excess; rejected sweep preserves both balances for retry. All three new callback tests pass (`docs/audit/logs/final-retry-security-tests.log`). No production Solidity change was needed.
