@@ -41,6 +41,7 @@ beforeEach(() => {
     saleEligible: false,
   });
   vi.spyOn(blockchain, "eligibility").mockResolvedValue(false);
+  vi.spyOn(blockchain, "access").mockResolvedValue([]);
   vi.spyOn(history, "assetHistory").mockResolvedValue([]);
   for (const method of [
     "whitelist",
@@ -63,7 +64,7 @@ async function mount() {
       </DataProvider>
     </WalletProviderContext>,
   );
-  fireEvent.click(screen.getByRole("button", { name: /Connect Wallet/ }));
+  fireEvent.click(screen.getByRole("button", { name: /Connect wallet/i }));
   await screen.findByRole("heading", { name: "Investor eligibility" });
 }
 describe("Issuer controls", () => {
@@ -75,7 +76,7 @@ describe("Issuer controls", () => {
     fireEvent.click(screen.getByRole("button", { name: "Check eligibility" }));
     await screen.findByText("Not approved");
     fireEvent.click(screen.getByRole("button", { name: "Approve Investor" }));
-    await screen.findByText(/Eligibility approval · Confirmed/);
+    await screen.findByText(/Eligibility approval: Confirmed/);
     expect(blockchain.whitelist).toHaveBeenCalledWith(
       provider,
       ISSUER,
@@ -113,7 +114,7 @@ describe("Issuer controls", () => {
     fireEvent.click(
       screen.getByRole("button", { name: "Approve Sale Contract" }),
     );
-    await screen.findByText(/Eligibility approval · Confirmed/);
+    await screen.findByText(/Eligibility approval: Confirmed/);
     expect(blockchain.whitelist).toHaveBeenCalledWith(
       provider,
       ISSUER,
@@ -160,7 +161,7 @@ describe("Issuer controls", () => {
     fireEvent.click(
       screen.getByRole("button", { name: "1. Approve Token Spending" }),
     );
-    await screen.findByText(/Token spending approval · Confirmed/);
+    await screen.findByText(/Token spending approval: Confirmed/);
     expect(blockchain.deposit).not.toHaveBeenCalled();
     await waitFor(() =>
       expect(
@@ -168,7 +169,7 @@ describe("Issuer controls", () => {
       ).toBeEnabled(),
     );
     fireEvent.click(screen.getByRole("button", { name: "2. Deposit Tokens" }));
-    await screen.findByText(/Inventory deposit · Confirmed/);
+    await screen.findByText(/Inventory deposit: Confirmed/);
     expect(blockchain.approve).toHaveBeenCalledWith(
       provider,
       ISSUER,
@@ -196,7 +197,7 @@ describe("Issuer controls", () => {
     fireEvent.click(
       screen.getByRole("button", { name: "1. Approve Token Spending" }),
     );
-    await screen.findByText(/Token spending approval · Rejected/);
+    await screen.findByText(/Token spending approval: Rejected/);
     expect(
       screen.getByRole("button", { name: "2. Deposit Tokens" }),
     ).toBeDisabled();
@@ -237,7 +238,7 @@ describe("Issuer controls", () => {
       { ...asset, closed: true },
     ]);
     fireEvent.click(screen.getByRole("button", { name: "Confirm" }));
-    await screen.findByText(/Permanently close offering\? · Confirmed/);
+    await screen.findByText(/Permanently close offering\?: Confirmed/);
     await waitFor(() =>
       expect(
         screen.getByRole("button", { name: "Close Offering" }),
@@ -288,13 +289,13 @@ describe("Issuer controls", () => {
     fireEvent.click(
       screen.getByRole("button", { name: "Approve Sale Contract" }),
     );
-    await screen.findByText(/Eligibility approval · Confirmed/);
+    await screen.findByText(/Eligibility approval: Confirmed/);
     act(() => {
       provider.accounts = [INVESTOR];
       provider.emit("accountsChanged", [INVESTOR]);
     });
     expect(
-      screen.queryByText(/Eligibility approval · Confirmed/),
+      screen.queryByText(/Eligibility approval: Confirmed/),
     ).not.toBeInTheDocument();
     expect(screen.queryByText("Investor eligibility")).not.toBeInTheDocument();
   });

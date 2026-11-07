@@ -1,7 +1,7 @@
 // Keyed on-chain reads shared by the pages. Account-dependent keys include the
 // wallet session, so a wallet or chain change never shows the previous account's
 // data (AUD-009). Public registry reads keep their last value while refreshing.
-import { useAssets, useData } from "../context/DataContext";
+import { useAccess, useAssets, useData } from "../context/DataContext";
 import { useWallet } from "../context/WalletContext";
 import { blockchain } from "../services/blockchain";
 import { assetHistory } from "../services/history";
@@ -9,7 +9,7 @@ import { investorRegistry, issuerDirectory } from "../services/registry";
 import type { Asset } from "../types";
 import { useAsync } from "./useAsync";
 
-export { useAssets };
+export { useAccess, useAssets };
 
 export function useFund(id: string | undefined) {
   const assets = useAssets();
@@ -32,22 +32,6 @@ export function useAccountState(asset: Asset | undefined) {
     `${scope}${revision}`,
     () => blockchain.account(asset!, wallet.account!),
     connected && !!asset,
-    scope,
-  );
-}
-
-/** Per-fund roles for every fund (navigation, role badge). */
-export function useAccess() {
-  const wallet = useWallet(),
-    assets = useAssets(),
-    { revision } = useData(),
-    connected = useConnected();
-  const ids = assets.data?.map((asset) => asset.id).join(",");
-  const scope = `access:${wallet.session}:`;
-  return useAsync(
-    `${scope}${revision}:${ids}`,
-    () => blockchain.access(assets.data!, wallet.account!),
-    connected && !!assets.data,
     scope,
   );
 }

@@ -46,7 +46,7 @@ function mount(path = "/") {
   );
 }
 async function connect() {
-  fireEvent.click(screen.getByRole("button", { name: /Connect Wallet/ }));
+  fireEvent.click(screen.getByRole("button", { name: /Connect wallet/i }));
   await waitFor(() => expect(blockchain.roles).toHaveBeenCalled());
 }
 const change = (label: string | RegExp, value: string) =>
@@ -68,6 +68,7 @@ beforeEach(() => {
     { asset: digital, balance: 50n, eligible: true },
   ]);
   vi.spyOn(blockchain, "eligibility").mockResolvedValue(true);
+  vi.spyOn(blockchain, "access").mockResolvedValue([]);
   vi.spyOn(history, "assetHistory").mockResolvedValue([]);
   for (const name of [
     "buy",
@@ -223,7 +224,7 @@ describe("Creation and administrative permissions", () => {
       const before = vi.mocked(blockchain.assets).mock.calls.length;
       fireEvent.click(screen.getByRole("button", { name: "Create Asset" }));
       expect(
-        await screen.findByText(/Asset creation · Pending confirmation/),
+        await screen.findByText(/Asset creation: Pending/),
       ).toBeInTheDocument();
       expect(
         screen.getByRole("button", { name: "Create Asset" }),
@@ -253,7 +254,7 @@ describe("Creation and administrative permissions", () => {
     await issuer();
     fill();
     fireEvent.click(screen.getByRole("button", { name: "Create Asset" }));
-    await screen.findByText(/Asset creation · Failed/);
+    await screen.findByText(/Asset creation: Failed/);
     expect(
       screen.queryByText("Asset Created Successfully"),
     ).not.toBeInTheDocument();
@@ -280,7 +281,7 @@ describe("Creation and administrative permissions", () => {
     );
     await screen.findByText("Not authorised");
     fireEvent.click(screen.getByRole("button", { name: "Authorise Issuer" }));
-    await screen.findByText(/Issuer authorisation · Confirmed/);
+    await screen.findByText(/Issuer authorisation: Confirmed/);
     expect(blockchain.authorizeIssuer).toHaveBeenCalledWith(
       provider,
       INVESTOR,
@@ -312,7 +313,7 @@ describe("Administrative confirmation sessions", () => {
     );
     expect(blockchain.authorizeIssuer).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole("button", { name: "Confirm" }));
-    await screen.findByText(/Issuer revocation · Confirmed/);
+    await screen.findByText(/Issuer revocation: Confirmed/);
     expect(blockchain.authorizeIssuer).toHaveBeenCalledWith(
       provider,
       INVESTOR,
@@ -361,7 +362,7 @@ describe("Purchase feedback and data refresh", () => {
     expect(screen.getByText("0.1000 ETH")).toBeInTheDocument();
     const before = vi.mocked(blockchain.asset).mock.calls.length;
     fireEvent.click(screen.getByRole("button", { name: /Purchase Tokens/ }));
-    await screen.findByText(/Token purchase · Confirmed/);
+    await screen.findByText(/Token purchase: Confirmed/);
     await waitFor(() =>
       expect(vi.mocked(blockchain.asset).mock.calls.length).toBeGreaterThan(
         before,
@@ -391,16 +392,16 @@ describe("Purchase feedback and data refresh", () => {
     ).toBeDisabled();
   });
   it.each([
-    ["Rejected by user", { code: 4001 }],
-    ["Failed or reverted", new Error("RPC unavailable")],
+    ["Rejected in wallet", { code: 4001 }],
+    ["Failed", new Error("RPC unavailable")],
   ])("reports %s without claiming success", async (label, error) => {
     vi.mocked(blockchain.buy).mockRejectedValue(error);
     await purchase();
     change(/Quantity of tokens/, "1");
     fireEvent.click(screen.getByRole("button", { name: /Purchase Tokens/ }));
-    await screen.findByText(`Token purchase · ${label}`);
+    await screen.findByText(`Token purchase: ${label}`);
     expect(
-      screen.queryByText(/Token purchase · Confirmed/),
+      screen.queryByText(/Token purchase: Confirmed/),
     ).not.toBeInTheDocument();
   });
   it("reports a reverted purchase receipt", async () => {
@@ -408,7 +409,7 @@ describe("Purchase feedback and data refresh", () => {
     await purchase();
     change(/Quantity of tokens/, "1");
     fireEvent.click(screen.getByRole("button", { name: /Purchase Tokens/ }));
-    await screen.findByText("Token purchase · Failed or reverted");
+    await screen.findByText("Token purchase: Failed");
   });
   it("keeps a timed-out submitted transaction unconfirmed and checks its receipt before allowing another purchase", async () => {
     const transaction = mockTransaction();
@@ -424,12 +425,12 @@ describe("Purchase feedback and data refresh", () => {
     await purchase();
     change(/Quantity of tokens/, "1");
     fireEvent.click(screen.getByRole("button", { name: /Purchase Tokens/ }));
-    await screen.findByText("Token purchase · Confirmation not yet verified");
+    await screen.findByText("Token purchase: Not yet verified");
     expect(
       screen.getByRole("button", { name: /Purchase Tokens/ }),
     ).toBeDisabled();
     fireEvent.click(screen.getByRole("button", { name: "Check confirmation" }));
-    await screen.findByText("Token purchase · Confirmed successfully");
+    await screen.findByText("Token purchase: Confirmed");
     expect(blockchain.provider.getTransactionReceipt).toHaveBeenCalledWith(
       HASH,
     );
@@ -454,7 +455,7 @@ describe("Portfolio and transfers", () => {
     change("Transfer quantity", "20");
     await screen.findByText("Recipient is approved for this asset.");
     fireEvent.click(screen.getByRole("button", { name: "Transfer Tokens" }));
-    await screen.findByText(/Token transfer · Confirmed/);
+    await screen.findByText(/Token transfer: Confirmed/);
     expect(blockchain.transfer).toHaveBeenCalledWith(
       provider,
       INVESTOR,

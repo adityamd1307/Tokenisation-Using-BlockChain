@@ -1,8 +1,9 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { WalletProviderContext, useWallet } from "./context/WalletContext";
 import { DataProvider } from "./context/DataContext";
+import { FundProvider } from "./context/FundContext";
 import { TransactionProvider } from "./context/TransactionContext";
-import { AppLayout } from "./components/AppLayout";
+import { AppShell } from "./components/shell/AppShell";
 import Marketplace from "./pages/Marketplace";
 import AssetPage from "./pages/AssetPage";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -17,7 +18,7 @@ export function AppRoutes() {
   const { session } = useWallet();
   return (
     <Routes>
-      <Route element={<AppLayout />}>
+      <Route element={<AppShell />}>
         <Route index element={<Marketplace />} />
         <Route path="assets/:id" element={<AssetPage />} />
         <Route path="admin" element={<AdminDashboard key={session} />} />
@@ -40,11 +41,13 @@ export default function App() {
   return (
     <WalletProviderContext>
       <DataProvider>
-        <TransactionProvider>
-          <BrowserRouter>
-            <AppRoutes />
-          </BrowserRouter>
-        </TransactionProvider>
+        <FundProvider>
+          <TransactionProvider>
+            <BrowserRouter>
+              <AppRoutes />
+            </BrowserRouter>
+          </TransactionProvider>
+        </FundProvider>
       </DataProvider>
     </WalletProviderContext>
   );

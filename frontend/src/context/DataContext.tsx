@@ -2,13 +2,38 @@ import { createContext, useContext, useState, type ReactNode } from "react";
 import { blockchain } from "../services/blockchain";
 import { useAsync } from "../hooks/useAsync";
 import { useWallet } from "./WalletContext";
-const DataContext = createContext<{ revision: number; refresh: () => void }>({
-  revision: 0,
-  refresh: () => {},
-});
+import type { Asset, FundAccess } from "../types";
+
+type Read<T> = ReturnType<typeof useAsync<T>>;
+interface Data {
+  revision: number;
+  refresh: () => void;
+  /** The fund registry, read once and shared by the shell and every page. */
+  assets: Read<Asset[]>;
+  /** The connected wallet's per-fund roles, read once and shared. */
+  access: Read<FundAccess[]>;
+}
+const DataContext = createContext<Data | null>(null);
+
 export function DataProvider({ children }: { children: ReactNode }) {
   const [revision, setRevision] = useState(0);
   const wallet = useWallet();
+  // Only public registry data is retained during refresh. Account reads always invalidate.
+  const assets = useAsync(
+    `registry:${revision}`,
+    () => blockchain.assets(),
+    true,
+    true,
+  );
+  const connected = !!wallet.account && !wallet.wrongNetwork;
+  const ids = assets.data?.map((asset) => asset.id).join(",");
+  const scope = `access:${wallet.session}:`;
+  const access = useAsync(
+    `${scope}${revision}:${ids}`,
+    () => blockchain.access(assets.data!, wallet.account!),
+    connected && !!assets.data,
+    scope,
+  );
   return (
     <DataContext.Provider
       value={{
@@ -17,20 +42,19 @@ export function DataProvider({ children }: { children: ReactNode }) {
           setRevision((r) => r + 1);
           wallet.refresh();
         },
+        assets,
+        access,
       }}
     >
       {children}
     </DataContext.Provider>
   );
 }
-export const useData = () => useContext(DataContext);
-// Only public registry data is retained during refresh. Account reads always invalidate.
-export function useAssets() {
-  const { revision } = useData();
-  return useAsync(
-    `registry:${revision}`,
-    () => blockchain.assets(),
-    true,
-    true,
-  );
+
+export function useData() {
+  const value = useContext(DataContext);
+  if (!value) throw new Error("Data context missing");
+  return value;
 }
+export const useAssets = () => useData().assets;
+export const useAccess = () => useData().access;
