@@ -1,0 +1,97 @@
+{
+  "scannerSuccess": true,
+  "reportedCount": 13,
+  "findings": [
+    {
+      "id": "67a34b649541d2c75b83a633b93bd3ea552aa86e09be583328bfe663bbc6974e",
+      "detector": "arbitrary-send-erc20",
+      "severity": "High",
+      "description": "AssetSale.allocate(uint256) (contracts/AssetSale.sol#72-76) uses arbitrary from in transferFrom: assetToken.safeTransferFrom(issuer,address(this),amount) (contracts/AssetSale.sol#74)\n",
+      "disposition": "False positive for arbitrary-source theft: issuer-only function, immutable issuer source, escrow destination and ERC-20 allowance."
+    },
+    {
+      "id": "a02f9ec2fd4fed9d7062c4d5e8cf0f96ac1c49be4834f4f447e6005c8af76d1c",
+      "detector": "arbitrary-send-erc20",
+      "severity": "High",
+      "description": "SubscriptionOffering.depositOfferingTokens(uint256) (contracts/SubscriptionOffering.sol#112-120) uses arbitrary from in transferFrom: IERC20(address(assetToken)).safeTransferFrom(issuer,address(this),amount) (contracts/SubscriptionOffering.sol#117)\n",
+      "disposition": "False positive for arbitrary-source theft: issuer-only function, immutable issuer source, escrow destination and ERC-20 allowance."
+    },
+    {
+      "id": "1c2a3c368cbf68993b6d63e92feec24d2164a38b79a18d1a4f8be0a91400b18b",
+      "detector": "incorrect-equality",
+      "severity": "Medium",
+      "description": "SubscriptionOffering.recoverUnsoldTokens() (contracts/SubscriptionOffering.sol#248-254) uses a dangerous strict equality:\n\t- amount == 0 (contracts/SubscriptionOffering.sol#251)\n",
+      "disposition": "Intentional zero-available-amount guard, not a fragile equality against externally controlled balances."
+    },
+    {
+      "id": "5d3d341541b1e689bd8fb9a51c604121db9ccc6e7628462f9d30b432ca091230",
+      "detector": "incorrect-equality",
+      "severity": "Medium",
+      "description": "AssetSale.sweepExcessETH() (contracts/AssetSale.sol#107-113) uses a dangerous strict equality:\n\t- excess == 0 (contracts/AssetSale.sol#109)\n",
+      "disposition": "Intentional zero-available-amount guard, not a fragile equality against externally controlled balances."
+    },
+    {
+      "id": "7528d8f3cc9dcf4581b9af8d143ace512ab36c3af0a0572eb66adc7b70788c53",
+      "detector": "incorrect-equality",
+      "severity": "Medium",
+      "description": "AssetSale.recoverUnsoldTokens() (contracts/AssetSale.sol#122-128) uses a dangerous strict equality:\n\t- amount == 0 (contracts/AssetSale.sol#125)\n",
+      "disposition": "Intentional zero-available-amount guard, not a fragile equality against externally controlled balances."
+    },
+    {
+      "id": "3a04dee8d62af41968e6615a19cfe29014c5f1279e0bbeb72d0fa8cd6e6cdecf",
+      "detector": "reentrancy-events",
+      "severity": "Low",
+      "description": "Reentrancy in AssetSale.sweepExcessETH() (contracts/AssetSale.sol#107-113):\n\tExternal calls:\n\t- (ok,None) = issuer.call{value: excess}() (contracts/AssetSale.sol#110)\n\tEvent emitted after the call(s):\n\t- ExcessETHSwept(excess) (contracts/AssetSale.sol#112)\n",
+      "disposition": "Existing AssetSale event-order warning; no demonstrated double payout. Original accounting and tests retained; new offering uses nonReentrant."
+    },
+    {
+      "id": "dca9cd9191fa285307d3b967f7be371455045449abc1c7f9d98ba6c1dfdcaf44",
+      "detector": "reentrancy-events",
+      "severity": "Low",
+      "description": "Reentrancy in AssetSale.withdrawProceeds() (contracts/AssetSale.sol#94-101):\n\tExternal calls:\n\t- (ok,None) = issuer.call{value: amount}() (contracts/AssetSale.sol#98)\n\tEvent emitted after the call(s):\n\t- ProceedsWithdrawn(amount) (contracts/AssetSale.sol#100)\n",
+      "disposition": "Existing AssetSale event-order warning; no demonstrated double payout. Original accounting and tests retained; new offering uses nonReentrant."
+    },
+    {
+      "id": "785aee050fa368e0629c8b5616caaaa9666cb55c58a7a0e9fd941ab3becaf216",
+      "detector": "timestamp",
+      "severity": "Low",
+      "description": "SubscriptionOffering.finalizeOffering() (contracts/SubscriptionOffering.sol#140-158) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- finalized || block.timestamp < subscriptionEnd (contracts/SubscriptionOffering.sol#141)\n",
+      "disposition": "Intended subscription start/end boundary, tested without randomness or second-level fairness claims."
+    },
+    {
+      "id": "9025cbb5eab9fb157b9c87ec012110237b6bd16ac932e40c9271e7c10cf05f1c",
+      "detector": "timestamp",
+      "severity": "Low",
+      "description": "SubscriptionOffering.depositOfferingTokens(uint256) (contracts/SubscriptionOffering.sol#112-120) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- block.timestamp >= subscriptionStart (contracts/SubscriptionOffering.sol#113)\n",
+      "disposition": "Intended subscription start/end boundary, tested without randomness or second-level fairness claims."
+    },
+    {
+      "id": "a0b57ff3fec719869954d75b8786295c52847eaad26f4a00d75b54cf89787cb2",
+      "detector": "timestamp",
+      "severity": "Low",
+      "description": "SubscriptionOffering.constructor(SubscriptionOffering.Config) (contracts/SubscriptionOffering.sol#83-102) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- c.assetToken.code.length == 0 || c.paymentToken.code.length == 0 || c.issuer == address(0) || c.assetToken == c.paymentToken || c.supply == 0 || c.price == 0 || c.supply > type()(uint256).max / c.price || c.softCap == 0 || c.start <= block.timestamp || c.end <= c.start (contracts/SubscriptionOffering.sol#84-87)\n",
+      "disposition": "Intended subscription start/end boundary, tested without randomness or second-level fairness claims."
+    },
+    {
+      "id": "a3e1891ad87a76547a82f35518acdaf07031c5566e25abd28e45dc468b59b1fd",
+      "detector": "timestamp",
+      "severity": "Low",
+      "description": "SubscriptionOffering.state() (contracts/SubscriptionOffering.sol#104-109) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- block.timestamp < subscriptionStart (contracts/SubscriptionOffering.sol#106)\n\t- block.timestamp < subscriptionEnd (contracts/SubscriptionOffering.sol#107)\n",
+      "disposition": "Intended subscription start/end boundary, tested without randomness or second-level fairness claims."
+    },
+    {
+      "id": "8ccfef9580db83a2517396b2b46481e7613a5b571c4a971cefc5b6076384ece6",
+      "detector": "low-level-calls",
+      "severity": "Informational",
+      "description": "Low level call in AssetSale.withdrawProceeds() (contracts/AssetSale.sol#94-101):\n\t- (ok,None) = issuer.call{value: amount}() (contracts/AssetSale.sol#98)\n",
+      "disposition": "Existing checked ETH payment to immutable issuer; new offering only uses SafeERC20."
+    },
+    {
+      "id": "b5669b12a1e4326cd2a72a445aace6d83b5fcd58798421edfba11d0c214482d1",
+      "detector": "low-level-calls",
+      "severity": "Informational",
+      "description": "Low level call in AssetSale.sweepExcessETH() (contracts/AssetSale.sol#107-113):\n\t- (ok,None) = issuer.call{value: excess}() (contracts/AssetSale.sol#110)\n",
+      "disposition": "Existing checked ETH payment to immutable issuer; new offering only uses SafeERC20."
+    }
+  ]
+}

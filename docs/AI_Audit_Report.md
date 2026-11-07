@@ -1,5 +1,7 @@
 # SC4053 AI Audit Report
 
+> **Two AI Audit Reports exist (7 November 2026).** This file is the Phase 6 report (adityamd with Codex, c7cb0d1), verified before merge by a separate Claude Code session ([verification](phase6-verification.md)). The subscription and ERC-3643-lite compliance work wrote its own eight-section report in parallel, kept unchanged as [AI_Audit_Report-subscription.md](AI_Audit_Report-subscription.md). The team must consolidate the two into one submission report.
+
 **Tokenisation of Real-World and Digital Assets on Ethereum**  
 NTU SC4053, AY2026–2027 Semester 1. Evidence cut-off: 6 November 2026 (Asia/Singapore). Baseline revision: `0b1249e`. The Codex session made no commits, by explicit instruction; adityamd committed its result afterwards as `c7cb0d1`, merged into main as `07f0cf8`.
 

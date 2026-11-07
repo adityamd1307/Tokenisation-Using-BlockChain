@@ -1,0 +1,15 @@
+frontend/src/components/SubscriptionOfferings.tsx 113ms
+frontend/src/pages/SubscriptionPage.tsx 57ms
+frontend/src/services/subscriptions.ts 33ms
+frontend/src/utils/subscription.ts 5ms
+frontend/src/test/subscription.test.tsx 25ms
+frontend/integration/subscriptions.test.ts 20ms
+test/SubscriptionOffering.test.ts 51ms
+test/SubscriptionSecurity.test.ts 16ms
+scripts/deploySubscriptions.ts 8ms
+scripts/demoSubscriptionOffering.ts 12ms
+frontend/src/config/contracts.ts 2ms
+frontend/src/components/TransactionHistory.tsx 9ms
+frontend/src/components/AppLayout.tsx 4ms
+frontend/src/pages/IssuerDashboard.tsx 5ms
+frontend/src/App.tsx 3ms (unchanged)

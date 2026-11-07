@@ -1,0 +1,38 @@
+[
+  {
+    "contract": "AssetFactory",
+    "runtimeBytes": 13545,
+    "limit": 24576,
+    "underLimit": true
+  },
+  {
+    "contract": "AssetToken",
+    "runtimeBytes": 4124,
+    "limit": 24576,
+    "underLimit": true
+  },
+  {
+    "contract": "AssetSale",
+    "runtimeBytes": 3132,
+    "limit": 24576,
+    "underLimit": true
+  },
+  {
+    "contract": "MockUSD",
+    "runtimeBytes": 2200,
+    "limit": 24576,
+    "underLimit": true
+  },
+  {
+    "contract": "SubscriptionFactory",
+    "runtimeBytes": 12202,
+    "limit": 24576,
+    "underLimit": true
+  },
+  {
+    "contract": "SubscriptionOffering",
+    "runtimeBytes": 8308,
+    "limit": 24576,
+    "underLimit": true
+  }
+]

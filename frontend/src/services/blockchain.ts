@@ -1,3 +1,4 @@
+import { transferReason } from "../utils/compliance";
 // Phase 4 §§3, 10: public reads use the configured RPC; signing is wallet-only.
 import {
   BrowserProvider,
@@ -26,12 +27,16 @@ export class Blockchain {
   factory(runner: ContractRunner = this.provider) {
     return new Contract(
       address(this.config.AssetFactory),
-      abis.factory,
+      this.config.regulatedFactory ? abis.regulatedFactory : abis.factory,
       runner,
     );
   }
   token(asset: Asset, runner: ContractRunner = this.provider) {
-    return new Contract(asset.token, abis.token, runner);
+    return new Contract(
+      asset.token,
+      asset.identityRegistry ? abis.regulatedToken : abis.token,
+      runner,
+    );
   }
   sale(asset: Asset, runner: ContractRunner = this.provider) {
     return new Contract(asset.sale, abis.sale, runner);
@@ -102,7 +107,16 @@ export class Blockchain {
       sale.unclaimedProceeds(),
       this.provider.getBalance(base.sale),
     ]);
-    return { ...base, price, inventory, closed, proceeds, saleEth };
+    let modules: { identityRegistry?: string; compliancePolicy?: string } = {};
+    if (this.config.regulatedFactory) {
+      const m = await this.factory().modules(BigInt(id));
+      if (BigInt(m.identityRegistry) !== 0n)
+        modules = {
+          identityRegistry: m.identityRegistry,
+          compliancePolicy: m.compliance,
+        };
+    }
+    return { ...base, ...modules, price, inventory, closed, proceeds, saleEth };
   }
   async assets(): Promise<Asset[]> {
     await this.ready();
@@ -119,6 +133,22 @@ export class Blockchain {
   }
   async account(asset: Asset, account: string): Promise<AssetAccount> {
     const token = this.token(asset);
+    if (asset.identityRegistry) {
+      const [balance, eligible, saleEligible, allowance] = await Promise.all([
+        token.balanceOf(account),
+        token.isWhitelisted(account),
+        token.isWhitelisted(asset.sale),
+        token.allowance(account, asset.sale),
+      ]);
+      return {
+        balance,
+        eligible,
+        saleEligible,
+        allowance,
+        compliance: false,
+        tokenAdmin: false,
+      };
+    }
     const [complianceRole, adminRole] = await Promise.all([
       token.COMPLIANCE_ROLE(),
       token.DEFAULT_ADMIN_ROLE(),
@@ -175,6 +205,12 @@ export class Blockchain {
       accounts[0].toLowerCase() !== expectedAccount.toLowerCase()
     )
       throw new Error("Wallet account changed. Review the form and try again.");
+    // Subscription/compliance work (origin/main): a regulated deployment must carry a runtime code hash,
+    // so the wallet-side check below always compares factory bytecode.
+    if (this.config.regulatedFactory && !this.config.runtimeCodeHash)
+      throw new Error(
+        "Wallet deployment does not match the configured regulated factory.",
+      );
     // AUD-030: two local chains can share an ID and deterministic addresses.
     // Validate the signing RPC against the same deployment fingerprint as reads.
     const provider = new BrowserProvider(wallet, "any");
@@ -205,10 +241,22 @@ export class Blockchain {
     wallet: WalletProvider,
     account: string,
     input: CreateAssetInput,
+    regulated?: { maximum: string; accredited: boolean },
   ) {
     const args = creationArgs(input);
     if (!(await this.roles(account)).issuer)
       throw new Error("This wallet is not authorised to create assets.");
+    if (regulated) {
+      if (!this.config.regulatedFactory)
+        throw new Error("Regulated issuance is not configured.");
+      return this.factory(
+        await this.signer(wallet, account),
+      ).createRegulatedAsset([
+        ...args,
+        quantity(regulated.maximum),
+        regulated.accredited,
+      ]);
+    }
     return this.factory(await this.signer(wallet, account)).createAsset(
       ...args,
     );
@@ -220,6 +268,8 @@ export class Blockchain {
     investor: string,
     approved: boolean,
   ) {
+    if (asset.identityRegistry)
+      throw new Error("Manage credentials and policies in Compliance.");
     const to = address(investor);
     if (!(await this.account(asset, account)).compliance)
       throw new Error("This wallet does not hold the token compliance role.");
@@ -288,6 +338,7 @@ export class Blockchain {
       this.account(asset, account),
     ]);
     if (fresh.closed) throw new Error("This offering is permanently closed.");
+    await this.preflight(asset, asset.sale, account, amount);
     if (!state.eligible)
       throw new Error("Your wallet is not approved for this asset.");
     if (!state.saleEligible)
@@ -317,9 +368,10 @@ export class Blockchain {
       this.account(asset, account),
       this.eligibility(asset, to),
     ]);
-    if (!state.eligible)
+    await this.preflight(asset, account, to, amount);
+    if (!asset.identityRegistry && !state.eligible)
       throw new Error("Your wallet is not approved to send this asset.");
-    if (!approved)
+    if (!asset.identityRegistry && !approved)
       throw new Error(
         "This recipient is not authorised to hold the selected asset. The issuer must approve the recipient before this transfer can succeed.",
       );
@@ -328,6 +380,38 @@ export class Blockchain {
       to,
       amount,
     );
+  }
+  async preflight(asset: Asset, from: string, to: string, amount: bigint) {
+    if (!asset.identityRegistry) return;
+    const reason = Number(
+      await this.token(asset).transferStatus(
+        address(from),
+        address(to),
+        amount,
+      ),
+    );
+    if (reason === 1 || reason === 2) {
+      const registry = new Contract(
+        asset.identityRegistry,
+        abis.identity,
+        this.provider,
+      );
+      const detail = Number(
+        await registry.identityStatus(reason === 1 ? from : to),
+      );
+      const reasons = [
+        "Valid",
+        "Identity not registered",
+        "Simulated KYC not approved",
+        "Credential revoked",
+        "KYC credential expired",
+        "Credential attestor no longer trusted",
+      ];
+      throw new Error(
+        `${reason === 1 ? "Sender" : "Recipient"}: ${reasons[detail] || "identity invalid"}.`,
+      );
+    }
+    if (reason !== 0) throw new Error(transferReason(reason));
   }
   async manageSale(
     wallet: WalletProvider,

@@ -4,7 +4,7 @@ import { Contract, type EventLog, type Log } from "ethers";
 import type { Activity, Asset } from "../types";
 import { Blockchain } from "./blockchain";
 
-async function logs(
+export async function logs(
   contract: Contract,
   filter: any,
   from: number,

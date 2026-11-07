@@ -1,0 +1,1303 @@
+
+> rwa-tokenisation-frontend@0.0.1 pretest
+> node ../scripts/syncFrontend.mjs
+
+Synced all six frontend ABIs from compiled artifacts.
+
+> rwa-tokenisation-frontend@0.0.1 test
+> vitest run
+
+
+ RUN  v4.1.12 /Users/adityamd/Desktop/NTU/Year_4/Sem_1/BlockChain/Tokenisation-Using-BlockChain/frontend
+
+ ❯ src/test/ui.test.tsx (30 tests | 1 failed) 2169ms
+     × reports an RPC failure with retry 1018ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/ui.test.tsx > Marketplace > reports an RPC failure with retry
+TestingLibraryElementError: Unable to find role="alert"
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"app-shell"[39m
+    [36m>[39m
+      [36m<aside[39m
+        [33mclass[39m=[32m"sidebar"[39m
+      [36m>[39m
+        [36m<a[39m
+          [33maria-current[39m=[32m"page"[39m
+          [33mclass[39m=[32m"brand active"[39m
+          [33mdata-discover[39m=[32m"true"[39m
+          [33mhref[39m=[32m"/"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"brand-mark"[39m
+          [36m>[39m
+            [0ma[0m
+            [36m<span>[39m
+              [0mt[0m
+            [36m</span>[39m
+          [36m</span>[39m
+          [36m<div>[39m
+            [0mAssetToken[0m
+            [36m<small>[39m
+              [0mASSET MANAGEMENT[0m
+            [36m</small>[39m
+          [36m</div>[39m
+        [36m</a>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"nav-label"[39m
+        [36m>[39m
+          [0mWORKSPACE[0m
+        [36m</div>[39m
+        [36m<nav[39m
+          [33maria-label[39m=[32m"Main navigation"[39m
+        [36m>[39m
+          [36m<a[39m
+            [33maria-current[39m=[32m"page"[39m
+            [33mclass[39m=[32m"active"[39m
+            [33mdata-discover[39m=[32m"true"[39m
+            [33mhref[39m=[32m"/"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+            [36m>[39m
+              [0m▦[0m
+            [36m</span>[39m
+            [0mMarketplace[0m
+          [36m</a>[39m
+          [36m<a[39m
+            [33mclass[39m=[32m""[39m
+            [33mdata-discover[39m=[32m"true"[39m
+            [33mhref[39m=[32m"/issuer"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+            [36m>[39m
+              [0m▤[0m
+            [36m</span>[39m
+            [0mIssuer dashboard[0m
+          [36m</a>[39m
+          [36m<a[39m
+            [33mclass[39m=[32m""[39m
+            [33mdata-discover[39m=[32m"true"[39m
+            [33mhref[39m=[32m"/subscriptions"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+            [36m>[39m
+              [0m◷[0m
+            [36m</span>[39m
+            [0mSubscriptions[0m
+          [36m</a>[39m
+          [36m<a[39m
+            [33mclass[39m=[32m""[39m
+            [33mdata-discover[39m=[32m"true"[39m
+            [33mhref[39m=[32m"/portfolio"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+            [36m>[39m
+              [0m◈[0m
+            [36m</span>[39m
+            [0mMy portfolio[0m
+          [36m</a>[39m
+          [36m<a[39m
+            [33mclass[39m=[32m""[39m
+            [33mdata-discover[39m=[32m"true"[39m
+            [33mhref[39m=[32m"/admin"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+            [36m>[39m
+              [0m⚙[0m
+            [36m</span>[39m
+            [0mAdministration[0m
+          [36m</a>[39m
+        [36m</nav>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"sidebar-bottom"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"wallet-summary"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"eyebrow"[39m
+            [36m>[39m
+              [0mWallet overview[0m
+            [36m</span>[39m
+            [36m<strong>[39m
+              [0mExplore without a wallet[0m
+            [36m</strong>[39m
+            [36m<span>[39m
+              [0mConnect to manage assets and view your holdings.[0m
+            [36m</span>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"environment"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"dot"[39m
+            [36m/>[39m
+            [0mLocal Ethereum[0m
+            [36m<span>[39m
+              [0mACADEMIC DEMO[0m
+            [36m</span>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</aside>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"main-shell"[39m
+      [36m>[39m
+        [36m<header[39m
+          [33mclass[39m=[32m"topbar"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"breadcrumb"[39m
+          [36m>[39m
+            [0mWorkspace [0m
+            [36m<span>[39m
+              [0m/[0m
+            [36m</span>[39m
+            [0m [0m
+            [36m<strong>[39m
+              [0mTokenisation platform[0m
+            [36m</strong>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"topbar-actions"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"network-label"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"dot"[39m
+              [36m/>[39m
+              [0mLocal Ethereum[0m
+            [36m</span>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"wallet-controls"[39m
+            [36m>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"button"[39m
+              [36m>[39m
+                [0mConnect Wallet[0m
+                [36m<span[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                [36m>[39m
+                  [0m ↗[0m
+                [36m</span>[39m
+              [36m</button>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</header>[39m
+        [36m<main>[39m
+          [36m<header[39m
+            [33mclass[39m=[32m"page-header"[39m
+          [36m>[39m
+            [36m<div>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"eyebrow"[39m
+              [36m>[39m
+                [0mExplore the registry[0m
+              [36m</p>[39m
+              [36m<h1>[39m
+                [0mAsset marketplace[0m
+              [36m</h1>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"page-description"[39m
+              [36m>[39m
+                [0mDiscover tokenised real-world and digital assets. Every offering, recorded on Ethereum.[0m
+              [36m</p>[39m
+            [36m</div>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"button secondary"[39m
+            [36m>[39m
+              [0m↻ Refresh registry[0m
+            [36m</button>[39m
+          [36m</header>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"overview-grid"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"overview-stat"[39m
+            [36m>[39m
+              [36m<span>[39m
+                [0mRegistered assets[0m
+              [36m</span>[39m
+              [36m<strong>[39m
+                [0m02[0m
+              [36m</strong>[39m
+              [36m<small>[39m
+                [0mIndependent token contracts[0m
+              [36m</small>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"overview-stat"[39m
+            [36m>[39m
+              [36m<span>[39m
+                [0mActive offerings[0m
+              [36m</span>[39m
+              [36m<strong>[39m
+                [0m02[0m
+              [36m</strong>[39m
+              [36m<small>[39m
+                [0mOpen for eligible investors[0m
+              [36m</small>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"overview-stat feature-stat"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"eyebrow"[39m
+              [36m>[39m
+                [0mBuilt on Ethereum[0m
+              [36m</span>[39m
+              [36m<strong>[39m
+                [0mTransparent by design.[0m
+              [36m</strong>[39m
+              [36m<small>[39m
+                [0mFixed supply. On-chain eligibility. Direct settlement.[0m
+              [36m</small>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+          [36m<section>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"section-heading"[39m
+            [36m>[39m
+              [36m<div>[39m
+                [36m<h2>[39m
+                  [0mExplore assets[0m
+                [36m</h2>[39m
+                [36m<p>[39m
+                  [0mBrowse the primary issuance registry[0m
+                [36m</p>[39m
+              [36m</div>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"subtle-tag"[39m
+              [36m>[39m
+                [0mERC-20 · Whole units[0m
+              [36m</span>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"filter-bar"[39m
+            [36m>[39m
+              [36m<label[39m
+                [33mclass[39m=[32m"search-input"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                [36m>[39m
+                  [0m⌕[0m
+                [36m</span>[39m
+                [36m<input[39m
+                  [33maria-label[39m=[32m"Search assets"[39m
+                  [33mplaceholder[39m=[32m"Search by asset name or symbol…"[39m
+                  [33mvalue[39m=[32m""[39m
+                [36m/>[39m
+              [36m</label>[39m
+              [36m<select[39m
+                [33maria-label[39m=[32m"Asset category filter"[39m
+              [36m>[39m
+                [36m<option[39m
+                  [33mvalue[39m=[32m"all"[39m
+                [36m>[39m
+                  [0mAll asset categories[0m
+                [36m</option>[39m
+                [36m<option[39m
+                  [33mvalue[39m=[32m"0"[39m
+                [36m>[39m
+                  [0mReal-world assets[0m
+                [36m</option>[39m
+                [36m<option[39m
+                  [33mvalue[39m=[32m"1"[39m
+                [36m>[39m
+                  [0mDigital assets[0m
+                [36m</option>[39m
+              [36m</select>[39m
+              [36m<select[39m
+                [33maria-label[39m=[32m"Offering status filter"[39m
+              [36m>[39m
+                [36m<option[39m
+                  [33mvalue[39m=[32m"all"[39m
+                [36m>[39m
+                  [0mAll offering statuses[0m
+                [36m</option>[39m
+                [36m<option[39m
+                  [33mvalue[39m=[32m"active"[39m
+                [36m>[39m
+                  [0mActive offerings[0m
+                [36m</option>[39m
+                [36m<option[39m
+                  [33mvalue[39m=[32m"closed"[39m
+                [36m>[39m
+                  [0mClosed offerings[0m
+                [36m</option>[39m
+              [36m</select>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"asset-grid"[39m
+            [36m>[39m
+              [36m<article[39m
+                [33mclass[39m=[32m"asset-card"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"asset-banner category-0"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"asset-symbol"[39m
+                  [36m>[39m
+                    [0mCPT[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"asset-category"[39m
+                  [36m>[39m
+                    [0mReal-world asset[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33maria-hidden[39m=[32m"true"[39m
+                    [33mclass[39m=[32m"asset-pattern"[39m
+                  [36m>[39m
+                    [0m▤[0m
+                  [36m</span>[39m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"asset-card-body"[39m
+                [36m>[39m
+                  [36m<p[39m
+                    [33mclass[39m=[32m"eyebrow"[39m
+                  [36m>[39m
+                    [0mDirect sale · ETH · instant delivery[0m
+                  [36m</p>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"card-meta"[39m
+                  [36m>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"badge positive"[39m
+                    [36m>[39m
+                      [36m<span[39m
+                        [33mclass[39m=[32m"dot"[39m
+                      [36m/>[39m
+                      [0mActive offering[0m
+                    [36m</span>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"muted"[39m
+                    [36m>[39m
+                      [0m#[0m
+                      [0m000[0m
+                    [36m</span>[39m
+                  [36m</div>[39m
+                  [36m<h2>[39m
+                    [36m<a[39m
+                      [33mdata-discover[39m=[32m"true"[39m
+                      [33mhref[39m=[32m"/assets/0"[39m
+                    [36m>[39m
+                      [0mCampus Property Token[0m
+                    [36m</a>[39m
+                  [36m</h2>[39m
+                  [36m<p[39m
+                    [33mclass[39m=[32m"card-description"[39m
+                  [36m>[39m
+                    [0mSimulated campus property fund[0m
+                  [36m</p>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"card-issuer"[39m
+                  [36m>[39m
+                    [36m<span>[39m
+                      [0mIssuer[0m
+                    [36m</span>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"address-wrap"[39m
+                    [36m>[39m
+                      [36m<code[39m
+                        [33mtitle[39m=[32m"0x2000000000000000000000000000000000000002"[39m
+                      [36m>[39m
+                        [0m0x2000…0002[0m
+                      [36m</code>[39m
+                      [36m<button[39m
+                        [33maria-label[39m=[32m"Copy 0x2000000000000000000000000000000000000002"[39m
+                        [33mclass[39m=[32m"copy-button"[39m
+                        [33mtype[39m=[32m"button"[39m
+                      [36m>[39m
+                        [0mCopy[0m
+                      [36m</button>[39m
+                    [36m</span>[39m
+                  [36m</div>[39m
+                  [36m<dl[39m
+                    [33mclass[39m=[32m"asset-metrics"[39m
+                  [36m>[39m
+                    [36m<div>[39m
+                      [36m<dt>[39m
+                        [0mPrice per token[0m
+                      [36m</dt>[39m
+                      [36m<dd>[39m
+                        [0m0.001[0m
+                        [0m [0m
+                        [36m<small>[39m
+                          [0mETH[0m
+                        [36m</small>[39m
+                      [36m</dd>[39m
+                    [36m</div>[39m
+                    [36m<div>[39m
+                      [36m<dt>[39m
+                        [0mAvailable inventory[0m
+                      [36m</dt>[39m
+                      [36m<dd>[39m
+                        [0m5,000[0m
+                        [0m [0m
+                        [36m<small>[39m
+                          [0mCPT[0m
+                        [36m</small>[39m
+                      [36m</dd>[39m
+                    [36m</div>[39m
+                  [36m</dl>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"card-bottom"[39m
+                  [36m>[39m
+                    [36m<span>[39m
+                      [0m10,000[0m
+                      [0m total supply[0m
+                    [36m</span>[39m
+                    [36m<a[39m
+                      [33mclass[39m=[32m"text-link"[39m
+                      [33mdata-discover[39m=[32m"true"[39m
+                      [33mhref[39m=[32m"/assets/0"[39m
+                    [36m>[39m
+                      [0mView asset [0m
+                      [36m<span[39m
+                        [33maria-hidden[39m=[32m"true"[39m
+                      [36m>[39m
+                        [0m↗[0m
+                      [36m</span>[39m
+                    [36m</a>[39m
+                  [36m</div>[39m
+                [36m</div>[39m
+              [36m</article>[39m
+              [36m<article[39m
+                [33mclass[39m=[32m"asset-card"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"asset-banner category-1"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"asset-symbol"[39m
+                  [36m>[39m
+                    [0mDLT[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"asset-category"[39m
+                  [36m>[39m
+                    [0mDigital asset[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33maria-hidden[39m=[32m"true"[39m
+                    [33mclass[39m=[32m"asset-pattern"[39m
+                  [36m>[39m
+                    [0m▤[0m
+                  [36m</span>[39m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"asset-card-body"[39m
+                [36m>[39m
+                  [36m<p[39m
+                    [33mclass[39m=[32m"eyebrow"[39m
+                  [36m>[39m
+                    [0mDirect sale · ETH · instant delivery[0m
+                  [36m</p>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"card-meta"[39m
+                  [36m>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"badge positive"[39m
+                    [36m>[39m
+                      [36m<span[39m
+                        [33mclass[39m=[32m"dot"[39m
+                      [36m/>[39m
+                      [0mActive offering[0m
+                    [36m</span>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"muted"[39m
+                    [36m>[39m
+                      [0m#[0m
+                      [0m001[0m
+                    [36m</span>[39m
+                  [36m</div>[39m
+                  [36m<h2>[39m
+                    [36m<a[39m
+                      [33mdata-discover[39m=[32m"true"[39m
+                      [33mhref[39m=[32m"/assets/1"[39m
+                    [36m>[39m
+                      [0mDigital Licensing Token[0m
+                    [36m</a>[39m
+                  [36m</h2>[39m
+                  [36m<p[39m
+                    [33mclass[39m=[32m"card-description"[39m
+                  [36m>[39m
+                    [0mSimulated digital licensing portfolio[0m
+                  [36m</p>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"card-issuer"[39m
+                  [36m>[39m
+                    [36m<span>[39m
+                      [0mIssuer[0m
+                    [36m</span>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"address-wrap"[39m
+                    [36m>[39m
+                      [36m<code[39m
+                        [33mtitle[39m=[32m"0x2000000000000000000000000000000000000002"[39m
+                      [36m>[39m
+                        [0m0x2000…0002[0m
+                      [36m</code>[39m
+                      [36m<button[39m
+                        [33maria-label[39m=[32m"Copy 0x2000000000000000000000000000000000000002"[39m
+                        [33mclass[39m=[32m"copy-button"[39m
+                        [33mtype[39m=[32m"button"[39m
+                      [36m>[39m
+                        [0mCopy[0m
+                      [36m</button>[39m
+                    [36m</span>[39m
+                  [36m</div>[39m
+                  [36m<dl[39m
+                    [33mclass[39m=[32m"asset-metrics"[39m
+                  [36m>[39m
+                    [36m<div>[39m
+                      [36m<dt>[39m
+                        [0mPrice per token[0m
+                      [36m</dt>[39m
+                      [36m<dd>[39m
+                        [0m0.002[0m
+                        [0m [0m
+                        [36m<small>[39m
+                          [0mETH[0m
+                        [36m</small>[39m
+                      [36m</dd>[39m
+                    [36m</div>[39m
+                    [36m<div>[39m
+                      [36m<dt>[39m
+                        [0mAvailable inventory[0m
+                      [36m</dt>[39m
+                      [36m<dd>[39m
+                        [0m5,000[0m
+                        [0m [0m
+                        [36m<small>[39m
+                          [0mDLT[0m
+                        [36m</small>[39m
+                      [36m</dd>[39m
+                    [36m</div>[39m
+                  [36m</dl>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"card-bottom"[39m
+                  [36m>[39m
+                    [36m<span>[39m
+                      [0m5,000[0m
+                      [0m total supply[0m
+                    [36m</span>[39m
+                    [36m<a[39m
+                      [33mclass[39m=[32m"text-link"[39m
+                      [33mdata-discover[39m=[32m"true"[39m
+                      [33mhref[39m=[32m"/assets/1"[39m
+                    [36m>[39m
+                      [0mView asset [0m
+                      [36m<span[39m
+                        [33maria-hidden[39m=[32m"true"[39m
+                      [36m>[39m
+                        [0m↗[0m
+                      [36m</span>[39m
+                    [36m</a>[39m
+                  [36m</div>[39m
+                [36m</div>[39m
+              [36m</article>[39m
+            [36m</div>[39m
+          [36m</section>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"market-note"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mclass[39m=[32m"note-icon"[39m
+            [36m>[39m
+              [0mⓘ[0m
+            [36m</span>[39m
+            [36m<div>[39m
+              [36m<strong>[39m
+                [0mEligibility is specific to each asset.[0m
+              [36m</strong>[39m
+              [36m<p>[39m
+                [0mBrowse freely. To purchase or transfer tokens, your wallet must be approved by that asset’s issuer.[0m
+              [36m</p>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</main>[39m
+        [36m<footer>[39m
+          [36m<span>[39m
+            [0mAssetToken [0m
+            [36m<span[39m
+              [33mclass[39m=[32m"footer-divider"[39m
+            [36m>[39m
+              [0m/[0m
+            [36m</span>[39m
+            [0m SC4053 Blockchain Technology[0m
+          [36m</span>[39m
+          [36m<p>[39m
+            [0mAcademic demonstration only. Assets and token prices are simulated. Tokens do not represent legally enforceable ownership or investment claims.[0m
+          [36m</p>[39m
+        [36m</footer>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"app-shell"[39m
+    [36m>[39m
+      [36m<aside[39m
+        [33mclass[39m=[32m"sidebar"[39m
+      [36m>[39m
+        [36m<a[39m
+          [33maria-current[39m=[32m"page"[39m
+          [33mclass[39m=[32m"brand active"[39m
+          [33mdata-discover[39m=[32m"true"[39m
+          [33mhref[39m=[32m"/"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"brand-mark"[39m
+          [36m>[39m
+            [0ma[0m
+            [36m<span>[39m
+              [0mt[0m
+            [36m</span>[39m
+          [36m</span>[39m
+          [36m<div>[39m
+            [0mAssetToken[0m
+            [36m<small>[39m
+              [0mASSET MANAGEMENT[0m
+            [36m</small>[39m
+          [36m</div>[39m
+        [36m</a>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"nav-label"[39m
+        [36m>[39m
+          [0mWORKSPACE[0m
+        [36m</div>[39m
+        [36m<nav[39m
+          [33maria-label[39m=[32m"Main navigation"[39m
+        [36m>[39m
+          [36m<a[39m
+            [33maria-current[39m=[32m"page"[39m
+            [33mclass[39m=[32m"active"[39m
+            [33mdata-discover[39m=[32m"true"[39m
+            [33mhref[39m=[32m"/"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+            [36m>[39m
+              [0m▦[0m
+            [36m</span>[39m
+            [0mMarketplace[0m
+          [36m</a>[39m
+          [36m<a[39m
+            [33mclass[39m=[32m""[39m
+            [33mdata-discover[39m=[32m"true"[39m
+            [33mhref[39m=[32m"/issuer"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+            [36m>[39m
+              [0m▤[0m
+            [36m</span>[39m
+            [0mIssuer dashboard[0m
+          [36m</a>[39m
+          [36m<a[39m
+            [33mclass[39m=[32m""[39m
+            [33mdata-discover[39m=[32m"true"[39m
+            [33mhref[39m=[32m"/subscriptions"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+            [36m>[39m
+              [0m◷[0m
+            [36m</span>[39m
+            [0mSubscriptions[0m
+          [36m</a>[39m
+          [36m<a[39m
+            [33mclass[39m=[32m""[39m
+            [33mdata-discover[39m=[32m"true"[39m
+            [33mhref[39m=[32m"/portfolio"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+            [36m>[39m
+              [0m◈[0m
+            [36m</span>[39m
+            [0mMy portfolio[0m
+          [36m</a>[39m
+          [36m<a[39m
+            [33mclass[39m=[32m""[39m
+            [33mdata-discover[39m=[32m"true"[39m
+            [33mhref[39m=[32m"/admin"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+            [36m>[39m
+              [0m⚙[0m
+            [36m</span>[39m
+            [0mAdministration[0m
+          [36m</a>[39m
+        [36m</nav>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"sidebar-bottom"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"wallet-summary"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"eyebrow"[39m
+            [36m>[39m
+              [0mWallet overview[0m
+            [36m</span>[39m
+            [36m<strong>[39m
+              [0mExplore without a wallet[0m
+            [36m</strong>[39m
+            [36m<span>[39m
+              [0mConnect to manage assets and view your holdings.[0m
+            [36m</span>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"environment"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"dot"[39m
+            [36m/>[39m
+            [0mLocal Ethereum[0m
+            [36m<span>[39m
+              [0mACADEMIC DEMO[0m
+            [36m</span>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</aside>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"main-shell"[39m
+      [36m>[39m
+        [36m<header[39m
+          [33mclass[39m=[32m"topbar"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"breadcrumb"[39m
+          [36m>[39m
+            [0mWorkspace [0m
+            [36m<span>[39m
+              [0m/[0m
+            [36m</span>[39m
+            [0m [0m
+            [36m<strong>[39m
+              [0mTokenisation platform[0m
+            [36m</strong>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"topbar-actions"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"network-label"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"dot"[39m
+              [36m/>[39m
+              [0mLocal Ethereum[0m
+            [36m</span>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"wallet-controls"[39m
+            [36m>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"button"[39m
+              [36m>[39m
+                [0mConnect Wallet[0m
+                [36m<span[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                [36m>[39m
+                  [0m ↗[0m
+                [36m</span>[39m
+              [36m</button>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</header>[39m
+        [36m<main>[39m
+          [36m<header[39m
+            [33mclass[39m=[32m"page-header"[39m
+          [36m>[39m
+            [36m<div>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"eyebrow"[39m
+              [36m>[39m
+                [0mExplore the registry[0m
+              [36m</p>[39m
+              [36m<h1>[39m
+                [0mAsset marketplace[0m
+              [36m</h1>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"page-description"[39m
+              [36m>[39m
+                [0mDiscover tokenised real-world and digital assets. Every offering, recorded on Ethereum.[0m
+              [36m</p>[39m
+            [36m</div>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"button secondary"[39m
+            [36m>[39m
+              [0m↻ Refresh registry[0m
+            [36m</button>[39m
+          [36m</header>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"overview-grid"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"overview-stat"[39m
+            [36m>[39m
+              [36m<span>[39m
+                [0mRegistered assets[0m
+              [36m</span>[39m
+              [36m<strong>[39m
+                [0m02[0m
+              [36m</strong>[39m
+              [36m<small>[39m
+                [0mIndependent token contracts[0m
+              [36m</small>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"overview-stat"[39m
+            [36m>[39m
+              [36m<span>[39m
+                [0mActive offerings[0m
+              [36m</span>[39m
+              [36m<strong>[39m
+                [0m02[0m
+              [36m</strong>[39m
+              [36m<small>[39m
+                [0mOpen for eligible investors[0m
+              [36m</small>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"overview-stat feature-stat"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"eyebrow"[39m
+              [36m>[39m
+                [0mBuilt on Ethereum[0m
+              [36m</span>[39m
+              [36m<strong>[39m
+                [0mTransparent by design.[0m
+              [36m</strong>[39m
+              [36m<small>[39m
+                [0mFixed supply. On-chain eligibility. Direct settlement.[0m
+              [36m</small>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+          [36m<section>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"section-heading"[39m
+            [36m>[39m
+              [36m<div>[39m
+                [36m<h2>[39m
+                  [0mExplore assets[0m
+                [36m</h2>[39m
+                [36m<p>[39m
+                  [0mBrowse the primary issuance registry[0m
+                [36m</p>[39m
+              [36m</div>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"subtle-tag"[39m
+              [36m>[39m
+                [0mERC-20 · Whole units[0m
+              [36m</span>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"filter-bar"[39m
+            [36m>[39m
+              [36m<label[39m
+                [33mclass[39m=[32m"search-input"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                [36m>[39m
+                  [0m⌕[0m
+                [36m</span>[39m
+                [36m<input[39m
+                  [33maria-label[39m=[32m"Search assets"[39m
+                  [33mplaceholder[39m=[32m"Search by asset name or symbol…"[39m
+                  [33mvalue[39m=[32m""[39m
+                [36m/>[39m
+              [36m</label>[39m
+              [36m<select[39m
+                [33maria-label[39m=[32m"Asset category filter"[39m
+              [36m>[39m
+                [36m<option[39m
+                  [33mvalue[39m=[32m"all"[39m
+                [36m>[39m
+                  [0mAll asset categories[0m
+                [36m</option>[39m
+                [36m<option[39m
+                  [33mvalue[39m=[32m"0"[39m
+                [36m>[39m
+                  [0mReal-world assets[0m
+                [36m</option>[39m
+                [36m<option[39m
+                  [33mvalue[39m=[32m"1"[39m
+                [36m>[39m
+                  [0mDigital assets[0m
+                [36m</option>[39m
+              [36m</select>[39m
+              [36m<select[39m
+                [33maria-label[39m=[32m"Offering status filter"[39m
+              [36m>[39m
+                [36m<option[39m
+                  [33mvalue[39m=[32m"all"[39m
+                [36m>[39m
+                  [0mAll offering statuses[0m
+                [36m</option>[39m
+                [36m<option[39m
+                  [33mvalue[39m=[32m"active"[39m
+                [36m>[39m
+                  [0mActive offerings[0m
+                [36m</option>[39m
+                [36m<option[39m
+                  [33mvalue[39m=[32m"closed"[39m
+                [36m>[39m
+                  [0mClosed offerings[0m
+                [36m</option>[39m
+              [36m</select>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"asset-grid"[39m
+            [36m>[39m
+              [36m<article[39m
+                [33mclass[39m=[32m"asset-card"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"asset-banner category-0"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"asset-symbol"[39m
+                  [36m>[39m
+                    [0mCPT[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"asset-category"[39m
+                  [36m>[39m
+                    [0mReal-world asset[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33maria-hidden[39m=[32m"true"[39m
+                    [33mclass[39m=[32m"asset-pattern"[39m
+                  [36m>[39m
+                    [0m▤[0m
+                  [36m</span>[39m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"asset-card-body"[39m
+                [36m>[39m
+                  [36m<p[39m
+                    [33mclass[39m=[32m"eyebrow"[39m
+                  [36m>[39m
+                    [0mDirect sale · ETH · instant delivery[0m
+                  [36m</p>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"card-meta"[39m
+                  [36m>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"badge positive"[39m
+                    [36m>[39m
+                      [36m<span[39m
+                        [33mclass[39m=[32m"dot"[39m
+                      [36m/>[39m
+                      [0mActive offering[0m
+                    [36m</span>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"muted"[39m
+                    [36m>[39m
+                      [0m#[0m
+                      [0m000[0m
+                    [36m</span>[39m
+                  [36m</div>[39m
+                  [36m<h2>[39m
+                    [36m<a[39m
+                      [33mdata-discover[39m=[32m"true"[39m
+                      [33mhref[39m=[32m"/assets/0"[39m
+                    [36m>[39m
+                      [0mCampus Property Token[0m
+                    [36m</a>[39m
+                  [36m</h2>[39m
+                  [36m<p[39m
+                    [33mclass[39m=[32m"card-description"[39m
+                  [36m>[39m
+                    [0mSimulated campus property fund[0m
+                  [36m</p>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"card-issuer"[39m
+                  [36m>[39m
+                    [36m<span>[39m
+                      [0mIssuer[0m
+                    [36m</span>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"address-wrap"[39m
+                    [36m>[39m
+                      [36m<code[39m
+                        [33mtitle[39m=[32m"0x2000000000000000000000000000000000000002"[39m
+                      [36m>[39m
+                        [0m0x2000…0002[0m
+                      [36m</code>[39m
+                      [36m<button[39m
+                        [33maria-label[39m=[32m"Copy 0x2000000000000000000000000000000000000002"[39m
+                        [33mclass[39m=[32m"copy-button"[39m
+                        [33mtype[39m=[32m"button"[39m
+                      [36m>[39m
+                        [0mCopy[0m
+                      [36m</button>[39m
+                    [36m</span>[39m
+                  [36m</div>[39m
+                  [36m<dl[39m
+                    [33mclass[39m=[32m"asset-metrics"[39m
+                  [36m>[39m
+                    [36m<div>[39m
+                      [36m<dt>[39m
+                        [0mPrice per token[0m
+                      [36m</dt>[39m
+                      [36m<dd>[39m
+                        [0m0.001[0m
+                        [0m [0m
+                        [36m<small>[39m
+                          [0mETH[0m
+                        [36m</small>[39m
+                      [36m</dd>[39m
+                    [36m</div>[39m
+                    [36m<div>[39m
+                      [36m<dt>[39m
+                        [0mAvailable inventory[0m
+                      [36m</dt>[39m
+                      [36m<dd>[39m
+                        [0m5,000[0m
+                        [0m [0m
+                        [36m<small>[39m
+                          [0mCPT[0m
+                        [36m</small>[39m
+                      [36m</dd>[39m
+                    [36m</div>[39m
+                  [36m</dl>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"card-bottom"[39m
+                  [36m>[39m
+                    [36m<span>[39m
+                      [0m10,000[0m
+                      [0m total supply[0m
+                    [36m</span>[39m
+                    [36m<a[39m
+                      [33mclass[39m=[32m"text-link"[39m
+                      [33mdata-discover[39m=[32m"true"[39m
+                      [33mhref[39m=[32m"/assets/0"[39m
+                    [36m>[39m
+                      [0mView asset [0m
+                      [36m<span[39m
+                        [33maria-hidden[39m=[32m"true"[39m
+                      [36m>[39m
+                        [0m↗[0m
+                      [36m</span>[39m
+                    [36m</a>[39m
+                  [36m</div>[39m
+                [36m</div>[39m
+              [36m</article>[39m
+              [36m<article[39m
+                [33mclass[39m=[32m"asset-card"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"asset-banner category-1"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"asset-symbol"[39m
+                  [36m>[39m
+                    [0mDLT[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"asset-category"[39m
+                  [36m>[39m
+                    [0mDigital asset[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33maria-hidden[39m=[32m"true"[39m
+                    [33mclass[39m=[32m"asset-pattern"[39m
+                  [36m>[39m
+                    [0m▤[0m
+                  [36m</span>[39m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"asset-card-body"[39m
+                [36m>[39m
+                  [36m<p[39m
+                    [33mclass[39m=[32m"eyebrow"[39m
+                  [36m>[39m
+                    [0mDirect sale · ETH · instant delivery[0m
+                  [36m</p>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"card-meta"[39m
+                  [36m>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"badge positive"[39m
+                    [36m>[39m
+                      [36m<span[39m
+                        [33mclass[39m=[32m"dot"[39m
+                      [36m/>[39m
+                      [0mActive offering[0m
+                    [36m</span>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"muted"[39m
+                    [36m>[39m
+                      [0m#[0m
+                      [0m001[0m
+                    [36m</span>[39m
+                  [36m</div>[39m
+                  [36m<h2>[39m
+                    [36m<a[39m
+                      [33mdata-discover[39m=[32m"true"[39m
+                      [33mhref[39m=[32m"/assets/1"[39m
+                    [36m>[39m
+                      [0mDigital Licensing Token[0m
+                    [36m</a>[39m
+                  [36m</h2>[39m
+                  [36m<p[39m
+                    [33mclass[39m=[32m"card-description"[39m
+                  [36m>[39m
+                    [0mSimulated digital licensing portfolio[0m
+                  [36m</p>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"card-issuer"[39m
+                  [36m>[39m
+                    [36m<span>[39m
+                      [0mIssuer[0m
+                    [36m</span>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"address-wrap"[39m
+                    [36m>[39m
+                      [36m<code[39m
+                        [33mtitle[39m=[32m"0x2000000000000000000000000000000000000002"[39m
+                      [36m>[39m
+                        [0m0x2000…0002[0m
+                      [36m</code>[39m
+                      [36m<button[39m
+                        [33maria-label[39m=[32m"Copy 0x2000000000000000000000000000000000000002"[39m
+                        [33mclass[39m=[32m"copy-button"[39m
+                        [33mtype[39m=[32m"button"[39m
+                      [36m>[39m
+                        [0mCopy[0m
+                      [36m</button>[39m
+                    [36m</span>[39m
+                  [36m</div>[39m
+                  [36m<dl[39m
+                    [33mclass[39m=[32m"asset-metrics"[39m
+                  [36m>[39m
+                    [36m<div>[39m
+                      [36m<dt>[39m
+                        [0mPrice per token[0m
+                      [36m</dt>[39m
+                      [36m<dd>[39m
+                        [0m0.002[0m
+                        [0m [0m
+                        [36m<small>[39m
+                          [0mETH[0m
+                        [36m</small>[39m
+                      [36m</dd>[39m
+                    [36m</div>[39m
+                    [36m<div>[39m
+                      [36m<dt>[39m
+                        [0mAvailable inventory[0m
+                      [36m</dt>[39m
+                      [36m<dd>[39m
+                        [0m5,000[0m
+                        [0m [0m
+                        [36m<small>[39m
+                          [0mDLT[0m
+                        [36m</small>[39m
+                      [36m</dd>[39m
+                    [36m</div>[39m
+                  [36m</dl>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"card-bottom"[39m
+                  [36m>[39m
+                    [36m<span>[39m
+                      [0m5,000[0m
+                      [0m total supply[0m
+                    [36m</span>[39m
+                    [36m<a[39m
+                      [33mclass[39m=[32m"text-link"[39m
+                      [33mdata-discover[39m=[32m"true"[39m
+                      [33mhref[39m=[32m"/assets/1"[39m
+                    [36m>[39m
+                      [0mView asset [0m
+                      [36m<span[39m
+                        [33maria-hidden[39m=[32m"true"[39m
+                      [36m>[39m
+                        [0m↗[0m
+                      [36m</span>[39m
+                    [36m</a>[39m
+                  [36m</div>[39m
+                [36m</div>[39m
+              [36m</article>[39m
+            [36m</div>[39m
+          [36m</section>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"market-note"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mclass[39m=[32m"note-icon"[39m
+            [36m>[39m
+              [0mⓘ[0m
+            [36m</span>[39m
+            [36m<div>[39m
+              [36m<strong>[39m
+                [0mEligibility is specific to each asset.[0m
+              [36m</strong>[39m
+              [36m<p>[39m
+                [0mBrowse freely. To purchase or transfer tokens, your wallet must be approved by that asset’s issuer.[0m
+              [36m</p>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</main>[39m
+        [36m<footer>[39m
+          [36m<span>[39m
+            [0mAssetToken [0m
+            [36m<span[39m
+              [33mclass[39m=[32m"footer-divider"[39m
+            [36m>[39m
+              [0m/[0m
+            [36m</span>[39m
+            [0m SC4053 Blockchain Technology[0m
+          [36m</span>[39m
+          [36m<p>[39m
+            [0mAcademic demonstration only. Assets and token prices are simulated. Tokens do not represent legally enforceable ownership or investment claims.[0m
+          [36m</p>[39m
+        [36m</footer>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ src/test/ui.test.tsx:153:25
+    151|     );
+    152|     mount();
+    153|     expect(await screen.findByRole("alert")).toHaveTextContent("RPC of…
+       |                         ^
+    154|     fireEvent.click(screen.getByRole("button", { name: "Retry" }));
+    155|     expect(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 8 passed (9)
+      Tests  1 failed | 117 passed (118)
+   Start at  15:35:06
+   Duration  4.34s (transform 1.72s, setup 3.98s, import 3.09s, tests 3.42s, environment 9.29s)
+

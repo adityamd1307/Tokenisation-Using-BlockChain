@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useState } from "react";
 import type { Asset } from "../types";
 import { useWallet } from "../context/WalletContext";
@@ -124,138 +125,153 @@ export function IssuerManagement({ asset }: { asset: Asset }) {
         </p>
       </section>
       <div className="management-grid">
-        <section className="panel">
-          <p className="eyebrow">01 / Investor compliance</p>
-          <h2>Investor eligibility</h2>
-          <p>
-            Eligibility applies only to {asset.symbol}. Revocation blocks both
-            sending and receiving.
-          </p>
-          {!current.compliance && (
-            <div className="notice warning">
-              <p>This wallet does not hold COMPLIANCE_ROLE.</p>
-              {current.tokenAdmin && (
+        {asset.identityRegistry ? (
+          <section className="panel">
+            <h2>Institutional compliance</h2>
+            <p>
+              This asset uses simulated identity credentials and per-asset
+              policies. Its sale is permanently authorized for custody.
+            </p>
+            <Link to={`/compliance?asset=${asset.id}`}>
+              Manage credentials and asset policy →
+            </Link>
+          </section>
+        ) : (
+          <section className="panel">
+            <p className="eyebrow">01 / Investor compliance</p>
+            <h2>Investor eligibility</h2>
+            <p>
+              Eligibility applies only to {asset.symbol}. Revocation blocks both
+              sending and receiving.
+            </p>
+            {!current.compliance && (
+              <div className="notice warning">
+                <p>This wallet does not hold COMPLIANCE_ROLE.</p>
+                {current.tokenAdmin && (
+                  <button
+                    className="button secondary"
+                    disabled={tx.pending}
+                    onClick={() =>
+                      write("Restore compliance role", () =>
+                        blockchain.restoreCompliance(
+                          wallet.provider!,
+                          wallet.account!,
+                          asset,
+                        ),
+                      )
+                    }
+                  >
+                    Restore my compliance role
+                  </button>
+                )}
+              </div>
+            )}
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                try {
+                  setLookup(address(investor));
+                  setError("");
+                } catch (error) {
+                  setError((error as Error).message);
+                }
+              }}
+            >
+              <Field label="Investor Ethereum address">
+                <input
+                  value={investor}
+                  onChange={(e) => {
+                    setInvestor(e.target.value);
+                    setLookup("");
+                  }}
+                  placeholder="0x…"
+                />
+              </Field>
+              <button className="button secondary" disabled={tx.pending}>
+                Check eligibility
+              </button>
+            </form>
+            {error && <ErrorMessage message={error} />}
+            {lookup && (
+              <div className="lookup-result">
+                {eligibility.loading ? (
+                  <Loading>Checking investor eligibility…</Loading>
+                ) : eligibility.error ? (
+                  <ErrorMessage
+                    message={eligibility.error}
+                    retry={eligibility.reload}
+                  />
+                ) : (
+                  <>
+                    <p>
+                      {eligibility.data ? "Approved investor" : "Not approved"}
+                    </p>
+                    <div className="actions">
+                      <button
+                        className="button"
+                        disabled={
+                          tx.pending || !current.compliance || eligibility.data
+                        }
+                        onClick={() => whitelist(lookup, true)}
+                      >
+                        Approve Investor
+                      </button>
+                      <button
+                        className="button danger"
+                        disabled={
+                          tx.pending || !current.compliance || !eligibility.data
+                        }
+                        onClick={() =>
+                          setConfirm({
+                            title: "Revoke investor eligibility?",
+                            message: `Revoking eligibility blocks this address from sending or receiving this asset’s tokens, even if it already holds tokens. Address: ${lookup}`,
+                            execute: () => whitelist(lookup, false),
+                          })
+                        }
+                      >
+                        Revoke eligibility
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
+            <div className="section-divider" />
+            <h3>Sale contract eligibility</h3>
+            <Address value={asset.sale} full />
+            <p
+              className={`badge ${current.saleEligible ? "positive" : "neutral"}`}
+            >
+              {current.saleEligible
+                ? "Sale contract approved"
+                : "Sale contract not approved"}
+            </p>
+            <button
+              className="button secondary"
+              disabled={
+                tx.pending || !current.compliance || current.saleEligible
+              }
+              onClick={() => whitelist(asset.sale, true)}
+            >
+              Approve Sale Contract
+            </button>
+            {!current.eligible && (
+              <div className="notice warning">
+                <p>
+                  Your issuer wallet is not whitelisted; deposits and recovery
+                  are blocked.
+                </p>
                 <button
                   className="button secondary"
-                  disabled={tx.pending}
-                  onClick={() =>
-                    write("Restore compliance role", () =>
-                      blockchain.restoreCompliance(
-                        wallet.provider!,
-                        wallet.account!,
-                        asset,
-                      ),
-                    )
-                  }
+                  disabled={tx.pending || !current.compliance}
+                  onClick={() => whitelist(wallet.account!, true)}
                 >
-                  Restore my compliance role
+                  Restore issuer eligibility
                 </button>
-              )}
-            </div>
-          )}
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              try {
-                setLookup(address(investor));
-                setError("");
-              } catch (error) {
-                setError((error as Error).message);
-              }
-            }}
-          >
-            <Field label="Investor Ethereum address">
-              <input
-                value={investor}
-                onChange={(e) => {
-                  setInvestor(e.target.value);
-                  setLookup("");
-                }}
-                placeholder="0x…"
-              />
-            </Field>
-            <button className="button secondary" disabled={tx.pending}>
-              Check eligibility
-            </button>
-          </form>
-          {error && <ErrorMessage message={error} />}
-          {lookup && (
-            <div className="lookup-result">
-              {eligibility.loading ? (
-                <Loading>Checking investor eligibility…</Loading>
-              ) : eligibility.error ? (
-                <ErrorMessage
-                  message={eligibility.error}
-                  retry={eligibility.reload}
-                />
-              ) : (
-                <>
-                  <p>
-                    {eligibility.data ? "Approved investor" : "Not approved"}
-                  </p>
-                  <div className="actions">
-                    <button
-                      className="button"
-                      disabled={
-                        tx.pending || !current.compliance || eligibility.data
-                      }
-                      onClick={() => whitelist(lookup, true)}
-                    >
-                      Approve Investor
-                    </button>
-                    <button
-                      className="button danger"
-                      disabled={
-                        tx.pending || !current.compliance || !eligibility.data
-                      }
-                      onClick={() =>
-                        setConfirm({
-                          title: "Revoke investor eligibility?",
-                          message: `Revoking eligibility blocks this address from sending or receiving this asset’s tokens, even if it already holds tokens. Address: ${lookup}`,
-                          execute: () => whitelist(lookup, false),
-                        })
-                      }
-                    >
-                      Revoke eligibility
-                    </button>
-                  </div>
-                </>
-              )}
-            </div>
-          )}
-          <div className="section-divider" />
-          <h3>Sale contract eligibility</h3>
-          <Address value={asset.sale} full />
-          <p
-            className={`badge ${current.saleEligible ? "positive" : "neutral"}`}
-          >
-            {current.saleEligible
-              ? "Sale contract approved"
-              : "Sale contract not approved"}
-          </p>
-          <button
-            className="button secondary"
-            disabled={tx.pending || !current.compliance || current.saleEligible}
-            onClick={() => whitelist(asset.sale, true)}
-          >
-            Approve Sale Contract
-          </button>
-          {!current.eligible && (
-            <div className="notice warning">
-              <p>
-                Your issuer wallet is not whitelisted; deposits and recovery are
-                blocked.
-              </p>
-              <button
-                className="button secondary"
-                disabled={tx.pending || !current.compliance}
-                onClick={() => whitelist(wallet.account!, true)}
-              >
-                Restore issuer eligibility
-              </button>
-            </div>
-          )}
-        </section>
+              </div>
+            )}
+          </section>
+        )}
         <section className="panel">
           <p className="eyebrow">02 / Primary inventory</p>
           <h2>Fund this offering</h2>

@@ -1,0 +1,51 @@
+
+Detector: arbitrary-send-erc20
+AssetSale.allocate(uint256) (contracts/AssetSale.sol#72-76) uses arbitrary from in transferFrom: assetToken.safeTransferFrom(issuer,address(this),amount) (contracts/AssetSale.sol#74)
+SubscriptionOffering.depositOfferingTokens(uint256) (contracts/SubscriptionOffering.sol#112-120) uses arbitrary from in transferFrom: IERC20(address(assetToken)).safeTransferFrom(issuer,address(this),amount) (contracts/SubscriptionOffering.sol#117)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#arbitrary-from-in-transferfrom
+
+Detector: incorrect-equality
+AssetSale.recoverUnsoldTokens() (contracts/AssetSale.sol#122-128) uses a dangerous strict equality:
+	- amount == 0 (contracts/AssetSale.sol#125)
+AssetSale.sweepExcessETH() (contracts/AssetSale.sol#107-113) uses a dangerous strict equality:
+	- excess == 0 (contracts/AssetSale.sol#109)
+SubscriptionOffering.recoverUnsoldTokens() (contracts/SubscriptionOffering.sol#248-254) uses a dangerous strict equality:
+	- amount == 0 (contracts/SubscriptionOffering.sol#251)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#dangerous-strict-equalities
+
+Detector: reentrancy-events
+Reentrancy in AssetSale.sweepExcessETH() (contracts/AssetSale.sol#107-113):
+	External calls:
+	- (ok,None) = issuer.call{value: excess}() (contracts/AssetSale.sol#110)
+	Event emitted after the call(s):
+	- ExcessETHSwept(excess) (contracts/AssetSale.sol#112)
+Reentrancy in AssetSale.withdrawProceeds() (contracts/AssetSale.sol#94-101):
+	External calls:
+	- (ok,None) = issuer.call{value: amount}() (contracts/AssetSale.sol#98)
+	Event emitted after the call(s):
+	- ProceedsWithdrawn(amount) (contracts/AssetSale.sol#100)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#reentrancy-vulnerabilities-4
+
+Detector: timestamp
+SubscriptionOffering.constructor(SubscriptionOffering.Config) (contracts/SubscriptionOffering.sol#83-102) uses timestamp for comparisons
+	Dangerous comparisons:
+	- c.assetToken.code.length == 0 || c.paymentToken.code.length == 0 || c.issuer == address(0) || c.assetToken == c.paymentToken || c.supply == 0 || c.price == 0 || c.supply > type()(uint256).max / c.price || c.softCap == 0 || c.start <= block.timestamp || c.end <= c.start (contracts/SubscriptionOffering.sol#84-87)
+SubscriptionOffering.state() (contracts/SubscriptionOffering.sol#104-109) uses timestamp for comparisons
+	Dangerous comparisons:
+	- block.timestamp < subscriptionStart (contracts/SubscriptionOffering.sol#106)
+	- block.timestamp < subscriptionEnd (contracts/SubscriptionOffering.sol#107)
+SubscriptionOffering.depositOfferingTokens(uint256) (contracts/SubscriptionOffering.sol#112-120) uses timestamp for comparisons
+	Dangerous comparisons:
+	- block.timestamp >= subscriptionStart (contracts/SubscriptionOffering.sol#113)
+SubscriptionOffering.finalizeOffering() (contracts/SubscriptionOffering.sol#140-158) uses timestamp for comparisons
+	Dangerous comparisons:
+	- finalized || block.timestamp < subscriptionEnd (contracts/SubscriptionOffering.sol#141)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#block-timestamp
+
+Detector: low-level-calls
+Low level call in AssetSale.withdrawProceeds() (contracts/AssetSale.sol#94-101):
+	- (ok,None) = issuer.call{value: amount}() (contracts/AssetSale.sol#98)
+Low level call in AssetSale.sweepExcessETH() (contracts/AssetSale.sol#107-113):
+	- (ok,None) = issuer.call{value: excess}() (contracts/AssetSale.sol#110)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#low-level-calls
+. analyzed (33 contracts with 102 detectors), 13 result(s) found

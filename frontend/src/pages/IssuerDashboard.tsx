@@ -3,6 +3,7 @@ import { useWallet } from "../context/WalletContext";
 import { useAssets, useData } from "../context/DataContext";
 import { AssetCreationForm } from "../components/AssetCreationForm";
 import { IssuerManagement } from "../components/IssuerManagement";
+import { SubscriptionCreation } from "../components/SubscriptionOfferings";
 import {
   EmptyState,
   ErrorMessage,
@@ -78,6 +79,10 @@ export default function IssuerDashboard() {
               </section>
               <IssuerManagement
                 key={`${wallet.session}:${asset.id}`}
+                asset={asset}
+              />
+              <SubscriptionCreation
+                key={`subscription:${wallet.session}:${asset.id}`}
                 asset={asset}
               />
             </>

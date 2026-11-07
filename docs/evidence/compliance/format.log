@@ -1,0 +1,16 @@
+frontend/src/pages/CompliancePage.tsx 123ms
+frontend/src/services/compliance.ts 24ms
+frontend/src/test/compliance.test.tsx 25ms
+frontend/src/utils/compliance.ts 2ms
+frontend/integration/compliance.test.ts 19ms
+frontend/src/services/blockchain.ts 28ms
+frontend/src/services/subscriptions.ts 19ms (unchanged)
+frontend/src/components/AssetCreationForm.tsx 9ms
+frontend/src/components/IssuerManagement.tsx 25ms
+frontend/src/components/AppLayout.tsx 4ms
+frontend/src/config/contracts.ts 2ms (unchanged)
+frontend/src/utils/errors.ts 4ms
+frontend/src/test/fixtures.ts 8ms (unchanged)
+test/compliance/Compliance.test.ts 59ms
+scripts/demoCompliance.ts 17ms
+scripts/deployCompliance.ts 9ms

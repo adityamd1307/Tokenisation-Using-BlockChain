@@ -43,7 +43,7 @@ export function TransferForm({ holding }: { holding: Holding }) {
   );
   const enabled =
     !validation &&
-    holding.eligible &&
+    (holding.eligible || !!holding.asset.identityRegistry) &&
     eligibility.data === true &&
     !tx.pending &&
     !wallet.wrongNetwork;
@@ -59,8 +59,17 @@ export function TransferForm({ holding }: { holding: Holding }) {
       </p>
       {!holding.eligible && (
         <p className="notice warning">
-          Your eligibility has been revoked. Contact the issuer before
-          transferring.
+          {holding.asset.identityRegistry ? (
+            <>
+              Your receiving eligibility is not currently met. The transfer
+              check will evaluate your sender identity.{" "}
+              <Link to={`/compliance?asset=${holding.asset.id}`}>
+                Inspect compliance →
+              </Link>
+            </>
+          ) : (
+            "Your eligibility has been revoked. Contact the issuer before transferring."
+          )}
         </p>
       )}
       <form
@@ -199,7 +208,11 @@ export default function InvestorPortfolio() {
                       {units(balance)} <span>{asset.symbol}</span>
                     </div>
                     <p className={`badge ${eligible ? "positive" : "neutral"}`}>
-                      {eligible ? "Approved investor" : "Eligibility revoked"}
+                      {eligible
+                        ? "Approved investor"
+                        : asset.identityRegistry
+                          ? "Not eligible to receive"
+                          : "Eligibility revoked"}
                     </p>
                     <Address value={asset.token} />
                     <button

@@ -13,6 +13,7 @@ export function AssetCard({ asset }: { asset: Asset }) {
         </span>
       </div>
       <div className="asset-card-body">
+        <p className="eyebrow">Direct sale · ETH · instant delivery</p>
         <div className="card-meta">
           <Status closed={asset.closed} />
           <span className="muted">#{asset.id.padStart(3, "0")}</span>

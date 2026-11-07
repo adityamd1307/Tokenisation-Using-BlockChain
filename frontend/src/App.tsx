@@ -1,3 +1,4 @@
+import CompliancePage from "./pages/CompliancePage";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { WalletProviderContext, useWallet } from "./context/WalletContext";
 import { DataProvider } from "./context/DataContext";
@@ -8,6 +9,8 @@ import AssetPage from "./pages/AssetPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import IssuerDashboard from "./pages/IssuerDashboard";
 import InvestorPortfolio from "./pages/InvestorPortfolio";
+import SubscriptionPage from "./pages/SubscriptionPage";
+import { SubscriptionOfferings } from "./components/SubscriptionOfferings";
 import { EmptyState } from "./components/common";
 import "./index.css";
 export function AppRoutes() {
@@ -20,6 +23,9 @@ export function AppRoutes() {
         <Route path="admin" element={<AdminDashboard key={session} />} />
         <Route path="issuer" element={<IssuerDashboard />} />
         <Route path="portfolio" element={<InvestorPortfolio />} />
+        <Route path="compliance" element={<CompliancePage />} />
+        <Route path="subscriptions" element={<SubscriptionOfferings />} />
+        <Route path="offerings/:address" element={<SubscriptionPage />} />
         <Route path="investor" element={<Navigate to="/portfolio" replace />} />
         <Route
           path="*"
