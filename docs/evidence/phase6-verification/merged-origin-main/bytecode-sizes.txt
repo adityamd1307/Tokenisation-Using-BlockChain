@@ -1,0 +1,5 @@
+﻿merged tree c263253 (before docs follow-up), Windows, fresh npm ci
+default and production profiles (identical):
+AssetFactory: 13598 bytes (10978 below EIP-170)
+AssetToken: 4124 bytes (20452 below EIP-170)
+AssetSale: 3132 bytes (21444 below EIP-170)

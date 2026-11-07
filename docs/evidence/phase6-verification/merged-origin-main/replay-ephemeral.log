@@ -1,0 +1,91 @@
+﻿
+> rwa-tokenisation@1.0.0 replay:ephemeral
+> hardhat run scripts/replay.ts --network hardhatMainnet
+
+
+Network: hardhatMainnet (chain 31337)
+Wallet A: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+Wallet B: 0x70997970C51812dc3A010C7d01b50e0d17dc79C8
+Wallet C: 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC
+Wallet D: 0x90F79bf6EB2c4f870365E785982E1f101E93b906
+Funding check at 3.0 gwei max fee per gas:
+  A: has 10000.0 ETH, needs up to 0.0114 ETH
+  B: has 10000.0 ETH, needs up to 0.0171 ETH
+  C: has 10000.0 ETH, needs up to 0.1212 ETH
+  D: has 10000.0 ETH, needs up to 0.0 ETH
+Step 0: Wallet A deploys a separate replay factory (D11)
+  [ok] deploy replay AssetFactory (A) 0xfc20d6ae12261c74f1a35fdf8c173389ac1d6d1e25631e426ecb160bd3165e64 gas 2984535
+Step 1: Wallet A authorises Wallet B as an asset issuer
+  [ok] factory.authorizeIssuer(B) (A) 0x5716305d8c6dc0630b9732964108531ee66875d9c1768a1a2724ee0ed33c3588 gas 45424
+  [check] factory.authorisedIssuers(B) = true
+Step 2: Wallet B creates Campus Property Token with 10,000 units
+  [ok] factory.createAsset(CPT) (B) 0x7a6011887c02b41b8f42828f1b8b850730f90ff21e32d63fa19ed6f9176d6a7c gas 1990605
+  [check] CPT symbol = CPT
+  [check] CPT balance of B = 10000
+Step 3: Wallet B approves the sale contract and deposits 5,000 units
+  [ok] CPT.setWhitelisted(sale, true) (B) 0x3317ece68c14031556469c49916d0f93d6e78ccb9c308029ad559fed19842da4 gas 48799
+  [ok] CPT.approve(sale, 5000) (B) 0x5a8e1db99a7e50863aab66bcb13c092afc17efb7e22258c3cfcb5b278339f372 gas 46371
+  [ok] sale.allocate(5000) (B) 0x6da82d1f6f60ada57ec60100827b22a013e8a9155c8d402fbaa541d31b8f1f00 gas 65084
+  [check] CPT sale inventory = 5000
+Step 4: Wallet B whitelists Wallet C
+  [ok] CPT.setWhitelisted(C, true) (B) 0xdc8ff14d78251626dd63cdfd8300ce11a8796a14c79bade17ab206409662ad4b gas 48787
+  [check] CPT.whitelist(C) = true
+  [check] CPT.whitelist(D) = false
+Step 5: Wallet C purchases 100 CPT for 0.1 testnet ETH
+  [check] cost of 100 CPT = 0.1
+  [ok] sale.buyTokens(100) paying 0.1 ETH (C) 0x134c7c43cdb15eebee9fa02bf00a4b201f6ff134a89cb5e365a894f182d9a6e6 gas 89257
+Step 6: Portfolio dashboard displays Wallet C's 100 CPT
+  [check] CPT balance of C = 100
+Step 7: Wallet C tries transferring 20 CPT to Wallet D; transaction fails
+  [check] simulated revert reason = RecipientNotWhitelisted
+  [REVERTED] CPT.transfer(D, 20) with fixed gas limit (expected to revert) (C) 0x163ad248bfaa5956633f5a6b9866a5519f938154984d5a92f3a6d6ff32001c10 gas 28848
+  [check] scenario 7 receipt status = 0
+  [check] CPT balance of C after the failed transfer = 100
+  [check] CPT balance of D after the failed transfer = 0
+Step 8: Wallet B whitelists Wallet D
+  [ok] CPT.setWhitelisted(D, true) (B) 0x3662bce1f0da37a4a405d2cdc60936c44084c230315e4a2e3f304f2c95b8e79f gas 48799
+  [check] CPT.whitelist(D) = true
+Step 9: Wallet C transfers 20 CPT to Wallet D successfully
+  [ok] CPT.transfer(D, 20) (C) 0x2ec92f64f9c4cfc068f2613409f74be2894c806654d77c428d63b0f2880b672a gas 58256
+Step 10: Portfolio and event history show 80 CPT for C and 20 CPT for D
+  [check] CPT balance of C = 80
+  [check] CPT balance of D = 20
+  [check] Purchased(C) events = 1
+  [check] Purchased(C) quantity = 100
+  [check] Transfer(C -> D) events = 1
+  [check] Transfer(C -> D) value = 20
+Step 11: Wallet B withdraws the ETH proceeds
+  [check] CPT unclaimed proceeds before withdrawal = 100000000000000000
+  [ok] sale.withdrawProceeds() (B) 0xbccf1a199a0c1f7e132d0d271472878f4bebc4c9feca692766f225a500d49b6b gas 29586
+  [check] B's ETH gain net of the withdrawal fee = 100000000000000000
+  [check] CPT unclaimed proceeds after withdrawal = 0
+  [check] CPT sale ETH balance after withdrawal = 0
+Step 12: Wallet B creates a second asset and verifies separate balances
+  [ok] factory.createAsset(DLP) (B) 0x6718779b477a25f2ac863413630e9cb0e48a86b78de4cd244c50bb0e32678631 gas 2013497
+  [check] DLP symbol = DLP
+  [check] registered assets = 2
+  [ok] DLP.setWhitelisted(sale, true) (B) 0xd07c7be13263703e027635e8b2a5ca392723e3cca7aa72f7467530743561d4f7 gas 48799
+  [ok] DLP.setWhitelisted(C, true) (B) 0xc13ea1e002674c8cc0e37fd1bd723591ba9583b2c6bbb6deb35cfa50f62eaf20 gas 48787
+  [ok] DLP.approve(sale, 1000) (B) 0xcadfe897ad986656cd91bc79dd8ec0b4be361ef3016055ff87aaa5cbc513ca56 gas 46371
+  [ok] DLP sale.allocate(1000) (B) 0xf9804b5ad5192a26046cc0d2f6e0a9cd77f3299f0703798b65919c308fe3087c gas 65084
+  [check] cost of 10 DLP = 0.02
+  [ok] DLP sale.buyTokens(10) paying 0.02 ETH (C) 0x81ef9607c1e85a20d7f668dd9817e7220276802f0fe7b078ff630aa37786886e gas 89257
+  [check] CPT balance of C = 80
+  [check] DLP balance of C = 10
+  [check] CPT balance of D = 20
+  [check] DLP balance of D = 0
+  [check] DLP balance of B = 4000
+  [check] CPT total supply = 10000
+  [check] DLP total supply = 5000
+  [check] DLP whitelist is separate: D not approved for DLP = false
+
+Totals per wallet (gas used, fees, ETH sent to contracts):
+  A: 2 tx, gas 3029959, fees 0.003349780488273445 ETH, value 0.0 ETH
+  B: 12 tx, gas 4500569, fees 0.002362610204895124 ETH, value 0.0 ETH
+  C: 4 tx, gas 265618, fees 0.000079048868483172 ETH, value 0.12 ETH
+  D: 0 tx, gas 0, fees 0.0 ETH, value 0.0 ETH
+
+All 12 steps completed with 34 checks passing.
+Replay factory: 0x5FbDB2315678afecb367f032d93F642f64180aa3
+Scenario 7 reverted transaction: 0x163ad248bfaa5956633f5a6b9866a5519f938154984d5a92f3a6d6ff32001c10 (RecipientNotWhitelisted)
+Wrote docs\evidence\phase5\replay-hardhatMainnet-20261107T114418Z.json
