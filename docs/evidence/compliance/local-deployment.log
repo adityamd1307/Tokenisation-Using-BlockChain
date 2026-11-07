@@ -1,0 +1,14 @@
+
+> rwa-tokenisation@1.0.0 deploy:compliance:local
+> hardhat run scripts/deployCompliance.ts --network localhost
+
+
+Warning: "selfdestruct" has been deprecated. Note that, starting from the Cancun hard fork, the underlying opcode no longer deletes the code and data associated with an account and only transfers its Ether to the beneficiary, unless executed in the same transaction in which the contract was created (see EIP-6780). Any use in newly deployed contracts is strongly discouraged even if the new behavior is taken into account. Future changes to the EVM might further reduce the functionality of the opcode.
+ --> ./contracts/test/ForceSendHarness.sol:9:9:
+  |
+9 |         selfdestruct(target);
+  |         ^^^^^^^^^^^^
+
+
+Synced frontend ABIs from compiled artifacts.
+New local regulated registry configured. Wallets 0 admin, 1 issuer, 2 attestor, 3 approved investor, 4 non-accredited, 5 KYC denied, 6 restricted country. Previous UI configuration backed up in deployments/pre-compliance-localhost.json.

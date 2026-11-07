@@ -2,7 +2,9 @@
 
 An academic dApp for NTU SC4053. Authorised issuers tokenise fictional assets as restricted ERC-20 tokens. Investors can buy immediately with ETH or commit simulated mUSD to a subscription offering, then settle an allocation, withdraw refunds and claim tokens after its window closes. All token balances and transfer rules live on Ethereum. The repository also records how AI-written code was tested and audited.
 
-**Status (7 November 2026):** subscription issuance is implemented and locally validated: 194 contract tests, 131 frontend tests and two real-chain service integration tests pass. Existing direct ETH sales remain compatible. Real MetaMask/browser and responsive visual acceptance are still pending; no browser was connected. Public subscription deployment is not claimed, and the original Phase 5 Sepolia execution remains outstanding. See [validation and acceptance](docs/subscription-testing-results.md).
+**Status (7 November 2026):** subscription issuance and ERC-3643-inspired Lite compliance are implemented and locally validated: **229 contract tests, 140 frontend tests and three real-chain service integrations pass**. New regulated assets have synthetic identity credentials, trusted attestors, country/accreditation policies and wallet holding limits; legacy assets remain supported. This is not full ERC-3643 compliance. Browser/MetaMask visual acceptance remains pending because no browser was connected; no public compliance deployment is claimed. See [compliance validation](docs/compliance-test-results.md).
+
+For a step-by-step rehearsal across every major feature, use the [whole-project manual testing guide](MANUAL_TESTING_README.md). It includes wallet setup, exact financial examples, negative cases, local-console commands and a sign-off checklist.
 
 ## What it does
 
@@ -76,6 +78,25 @@ bash scripts/evidence.sh <label>      # build, test, gas, coverage (slither if i
 ```
 
 The integration suites run production frontend services against real local contracts, including direct sales and subscription creation, funding, settlement, refunds and claims. They sign through an EIP-1193 adapter over Hardhat's unlocked accounts, so they do not test MetaMask. Counts are from 7 November 2026; measured aggregate contract line coverage is 98.02% including harnesses. See the [detailed results and limits](docs/subscription-testing-results.md).
+
+## Regulated compliance demo
+
+```bash
+npm run node                       # terminal 1, local chain
+npm run deploy:compliance:local     # terminal 2, fresh regulated registry and CPT
+npm --prefix frontend run dev       # open http://127.0.0.1:5173
+npm run demo:compliance             # separate isolated, assertion-driven demo
+```
+
+The deployment command backs up the previous frontend configuration and selects a new local registry; it does not upgrade old assets. Wallets 0/1/2 are platform admin, issuer and attestor. Wallets 3/4/5/6 demonstrate valid credentials, missing accreditation, denied KYC and restricted country. Open **Compliance** for status, credentials, policies and transfer preflight. New issuance defaults to regulated mode; identity and country access must be configured before investors receive tokens.
+
+Regulated claims retain their allocation when eligibility expires or the wallet cap is reached. Refunds stay accessible independently. Optional pause/freeze/recovery are absent from the regulated token. The permanent issuer/sale/subscription custody classes cannot be granted to arbitrary investor wallets.
+
+- [Lite specification](docs/erc3643-lite-specification.md) and [identity design](docs/identity-registry-design.md)
+- [Architecture and browser workflow](docs/compliance-engine-design.md)
+- [Comparison with official ERC-3643 / T-REX](docs/erc3643-comparison.md)
+- [Threat model and scanner triage](docs/compliance-threat-model.md)
+- [Tests, local setup and manual acceptance](docs/compliance-test-results.md)
 
 ## Subscription offering example
 

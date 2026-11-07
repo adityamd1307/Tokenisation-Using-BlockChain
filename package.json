@@ -16,7 +16,9 @@
     "replay:ephemeral": "hardhat run scripts/replay.ts --network hardhatMainnet",
     "replay:sepolia": "hardhat run --build-profile production scripts/replay.ts --network sepolia",
     "deploy:subscriptions:local": "hardhat run scripts/deploySubscriptions.ts --network localhost",
-    "demo:subscriptions": "hardhat run scripts/demoSubscriptionOffering.ts --network hardhatMainnet"
+    "demo:subscriptions": "hardhat run scripts/demoSubscriptionOffering.ts --network hardhatMainnet",
+    "demo:compliance": "hardhat run scripts/demoCompliance.ts --network hardhatMainnet",
+    "deploy:compliance:local": "hardhat run scripts/deployCompliance.ts --network localhost"
   },
   "repository": {
     "type": "git",

@@ -468,10 +468,17 @@ function WalletWorkspace({
                   className="button secondary"
                   disabled={tx.pending || a.offeringEligible}
                   onClick={() =>
-                    run("Approve offering eligibility", "whitelistOffering")
+                    run(
+                      asset.identityRegistry
+                        ? "Authorize subscription custody"
+                        : "Approve offering eligibility",
+                      "whitelistOffering",
+                    )
                   }
                 >
-                  Approve offering eligibility
+                  {asset.identityRegistry
+                    ? "Authorize subscription custody"
+                    : "Approve offering eligibility"}
                 </button>
                 <button
                   className="button secondary"

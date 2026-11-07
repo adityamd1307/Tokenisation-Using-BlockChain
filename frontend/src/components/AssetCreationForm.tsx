@@ -18,6 +18,11 @@ const initial: CreateAssetInput = {
 export function AssetCreationForm() {
   const wallet = useWallet(),
     tx = useTransaction();
+  const [regulated, setRegulated] = useState(
+    !!blockchain.config.regulatedFactory,
+  );
+  const [maximum, setMaximum] = useState("500"),
+    [accredited, setAccredited] = useState(true);
   const [input, setInput] = useState(initial),
     [error, setError] = useState(""),
     [created, setCreated] = useState<Asset>();
@@ -36,7 +41,12 @@ export function AssetCreationForm() {
       return;
     }
     const receipt = await tx.run("Asset creation", () =>
-      blockchain.createAsset(wallet.provider!, wallet.account!, input),
+      blockchain.createAsset(
+        wallet.provider!,
+        wallet.account!,
+        input,
+        regulated ? { maximum, accredited } : undefined,
+      ),
     );
     if (!receipt) return;
     try {
@@ -73,6 +83,43 @@ export function AssetCreationForm() {
           if (wallet.roles?.issuer && !wallet.wrongNetwork) void submit();
         }}
       >
+        {blockchain.config.regulatedFactory && (
+          <>
+            <Field label="Compliance mode">
+              <select
+                value={regulated ? "regulated" : "legacy"}
+                onChange={(e) => setRegulated(e.target.value === "regulated")}
+              >
+                <option value="regulated">ERC-3643-inspired Lite</option>
+                <option value="legacy">Legacy whitelist</option>
+              </select>
+            </Field>
+            {regulated && (
+              <>
+                <Field label="Maximum investor wallet holdings">
+                  <input
+                    value={maximum}
+                    onChange={(e) => setMaximum(e.target.value)}
+                    required
+                    inputMode="numeric"
+                  />
+                </Field>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={accredited}
+                    onChange={(e) => setAccredited(e.target.checked)}
+                  />{" "}
+                  Require simulated accreditation
+                </label>
+                <p>
+                  After creation, open Compliance to allow countries and
+                  register trusted attestors. Investor access starts closed.
+                </p>
+              </>
+            )}
+          </>
+        )}
         <div className="form-grid">
           <Field label="Asset name">
             <input

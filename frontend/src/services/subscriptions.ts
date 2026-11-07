@@ -332,7 +332,13 @@ export class Subscriptions {
     if (operation === "deposit")
       return c.depositOfferingTokens(quantity(amount || ""));
     if (operation === "whitelistOffering")
-      return this.api.token(asset, signer).setWhitelisted(at, true);
+      return asset.identityRegistry
+        ? this.api.token(asset, signer).registerSubscriptionEscrow(at)
+        : this.api.token(asset, signer).setWhitelisted(at, true);
+    if (operation === "claimTokens") {
+      const allocation = await c.allocationOf(who);
+      await this.api.preflight(asset, at, who, allocation[0]);
+    }
     return c[operation]();
   }
   async history(

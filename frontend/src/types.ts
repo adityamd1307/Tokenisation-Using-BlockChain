@@ -18,6 +18,8 @@ declare global {
 }
 
 export interface Asset {
+  identityRegistry?: string;
+  compliancePolicy?: string;
   id: string;
   name: string;
   symbol: string;

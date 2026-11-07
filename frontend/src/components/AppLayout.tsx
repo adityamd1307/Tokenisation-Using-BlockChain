@@ -25,6 +25,9 @@ export function AppLayout() {
           <NavLink to="/subscriptions">
             <span aria-hidden>◷</span>Subscriptions
           </NavLink>
+          <NavLink to="/compliance">
+            <span aria-hidden>◇</span>Compliance
+          </NavLink>
           <NavLink to="/portfolio">
             <span aria-hidden>◈</span>My portfolio
           </NavLink>

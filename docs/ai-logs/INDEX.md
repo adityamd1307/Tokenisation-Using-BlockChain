@@ -15,3 +15,7 @@ One row per session that mattered. "Context given" means what the tool was shown
 ## Subscription enhancement — 7 November 2026
 
 Codex implemented and validated the subscription engine without commits or subagent delegation. [Curated session](subscription-session.md), [exact request](../spec/subscription-requirements.md), [results](../subscription-testing-results.md) and [AI Audit Report](../AI_Audit_Report.md) preserve scope, decisions, genuine errors and evidence. This entry does not claim a complete conversation export or independent human review.
+
+## Compliance enhancement — 7 November 2026
+
+Codex implemented ERC-3643-inspired Lite identities, policies, regulated tokens, integrated UI and local demos without commits or delegation. [Curated session](compliance-session.md), [exact request](../spec/erc3643-lite-requirements.md), [results](../compliance-test-results.md) and AUD-017/AUD-018 retain the actual errors and corrections. Real browser/MetaMask verification remains outstanding; no full-standard or independent-audit claim is made.
