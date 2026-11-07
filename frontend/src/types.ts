@@ -63,6 +63,29 @@ export interface AssetAccount {
   compliance: boolean;
   tokenAdmin: boolean;
 }
+/** The connected wallet's standing in one fund. */
+export interface FundAccess {
+  assetId: string;
+  eligible: boolean;
+  compliance: boolean;
+  tokenAdmin: boolean;
+  /** AssetSale.issuer: the only caller of allocate/withdraw/close/recover. */
+  saleIssuer: boolean;
+}
+export interface RegistryRow {
+  address: string;
+  eligible: boolean;
+  balance: bigint;
+  compliance: boolean;
+  tokenAdmin: boolean;
+  /** Block of the latest WhitelistUpdated for this address, if any. */
+  changedBlock?: number;
+}
+export interface IssuerRow {
+  address: string;
+  authorised: boolean;
+  changedBlock: number;
+}
 export interface Roles {
   admin: boolean;
   issuer: boolean;

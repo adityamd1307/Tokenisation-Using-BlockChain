@@ -2,23 +2,21 @@
 // forced transfer (D5, AUD-013) is deduplicated so each operation appears once, typed.
 import {
   Contract,
-  id,
   ZeroHash,
   type ContractEventName,
   type EventLog,
   type Log,
 } from "ethers";
 import { rpcError, type Activity, type Asset } from "../types";
-import { Blockchain } from "./blockchain";
+import { COMPLIANCE_ROLE, type Blockchain } from "./blockchain";
 
-const COMPLIANCE_ROLE = id("COMPLIANCE_ROLE");
 export function roleName(role: string) {
   if (role === ZeroHash) return "Token admin";
   if (role === COMPLIANCE_ROLE) return "Compliance agent";
   return `Role ${role.slice(0, 10)}…`;
 }
 
-async function logs(
+export async function logs(
   contract: Contract,
   filter: ContractEventName,
   from: number,

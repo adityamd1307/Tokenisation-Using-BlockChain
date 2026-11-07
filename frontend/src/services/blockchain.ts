@@ -3,13 +3,24 @@ import {
   BrowserProvider,
   Contract,
   FetchRequest,
+  id,
   JsonRpcProvider,
   keccak256,
+  ZeroHash,
   type ContractRunner,
 } from "ethers";
 import { abis, deployment, type Deployment } from "../config/contracts";
 import { targetNetwork } from "../config/networks";
-import type { Asset, AssetAccount, Roles, WalletProvider } from "../types";
+import type {
+  Asset,
+  AssetAccount,
+  FundAccess,
+  Roles,
+  WalletProvider,
+} from "../types";
+
+/** AssetToken.COMPLIANCE_ROLE; DEFAULT_ADMIN_ROLE is ZeroHash (OpenZeppelin). */
+export const COMPLIANCE_ROLE = id("COMPLIANCE_ROLE");
 import {
   address,
   creationArgs,
@@ -160,6 +171,26 @@ export class Blockchain {
           asset,
           balance: balance as bigint,
           eligible: eligible as boolean,
+        };
+      }),
+    );
+  }
+  /** Per-fund roles for navigation and the role badge (spec-v1 §3, Phase 2 delegation). */
+  async access(assets: Asset[], account: string): Promise<FundAccess[]> {
+    return Promise.all(
+      assets.map(async (asset) => {
+        const token = this.token(asset);
+        const [eligible, compliance, tokenAdmin] = await Promise.all([
+          token.isWhitelisted(account),
+          token.hasRole(COMPLIANCE_ROLE, account),
+          token.hasRole(ZeroHash, account),
+        ]);
+        return {
+          assetId: asset.id,
+          eligible: eligible as boolean,
+          compliance: compliance as boolean,
+          tokenAdmin: tokenAdmin as boolean,
+          saleIssuer: asset.issuer.toLowerCase() === account.toLowerCase(),
         };
       }),
     );
@@ -324,6 +355,85 @@ export class Blockchain {
       to,
       amount,
     );
+  }
+  /** spec-v1 §5 D5: `pause()` / `unpause()`, caller DEFAULT_ADMIN_ROLE. */
+  async setPaused(
+    wallet: WalletProvider,
+    account: string,
+    asset: Asset,
+    paused: boolean,
+  ) {
+    const [state, fresh] = await Promise.all([
+      this.account(asset, account),
+      this.asset(asset.id),
+    ]);
+    if (!state.tokenAdmin)
+      throw new Error(
+        "Only a token admin of this fund can pause or unpause it.",
+      );
+    if (fresh.paused === paused)
+      throw new Error(
+        paused ? "This asset is already paused." : "This asset is not paused.",
+      );
+    const token = this.token(asset, await this.signer(wallet, account));
+    return paused ? token.pause() : token.unpause();
+  }
+  /**
+   * spec-v1 §5 D5 `forcedTransfer(from, to, amount)`, caller DEFAULT_ADMIN_ROLE:
+   * `from` must be revoked (not whitelisted), `to` whitelisted, amount ≤ balance.
+   */
+  async forcedTransfer(
+    wallet: WalletProvider,
+    account: string,
+    asset: Asset,
+    source: string,
+    recipient: string,
+    value: string,
+  ) {
+    const from = address(source),
+      to = address(recipient),
+      amount = quantity(value);
+    const [state, fromEligible, toEligible, balance] = await Promise.all([
+      this.account(asset, account),
+      this.eligibility(asset, from),
+      this.eligibility(asset, to),
+      this.token(asset).balanceOf(from) as Promise<bigint>,
+    ]);
+    if (!state.tokenAdmin)
+      throw new Error("Only a token admin of this fund can force a transfer.");
+    if (fromEligible)
+      throw new Error(
+        "The source address is still verified. Revoke its eligibility before a forced transfer.",
+      );
+    if (!toEligible)
+      throw new Error("The recipient is not a verified investor in this fund.");
+    if (amount > balance)
+      throw new Error(
+        `The source address holds only ${balance.toLocaleString("en-US")} units.`,
+      );
+    return this.token(asset, await this.signer(wallet, account)).forcedTransfer(
+      from,
+      to,
+      amount,
+    );
+  }
+  /** Phase 2 delegation: grant or revoke COMPLIANCE_ROLE (caller DEFAULT_ADMIN_ROLE). */
+  async setComplianceRole(
+    wallet: WalletProvider,
+    account: string,
+    asset: Asset,
+    target: string,
+    grant: boolean,
+  ) {
+    const to = address(target);
+    if (!(await this.account(asset, account)).tokenAdmin)
+      throw new Error(
+        "Only a token admin of this fund can change compliance agents.",
+      );
+    const token = this.token(asset, await this.signer(wallet, account));
+    return grant
+      ? token.grantRole(COMPLIANCE_ROLE, to)
+      : token.revokeRole(COMPLIANCE_ROLE, to);
   }
   async manageSale(
     wallet: WalletProvider,
