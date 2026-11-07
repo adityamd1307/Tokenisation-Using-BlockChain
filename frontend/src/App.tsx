@@ -10,6 +10,8 @@ import IssuerDashboard from "./pages/IssuerDashboard";
 import InvestorPortfolio from "./pages/InvestorPortfolio";
 import { EmptyState } from "./components/common";
 import "./index.css";
+import "./styles/tokens.css";
+import "./styles/base.css";
 export function AppRoutes() {
   const { session } = useWallet();
   return (
