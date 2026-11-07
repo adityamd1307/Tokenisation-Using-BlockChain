@@ -11,7 +11,7 @@ html {
 
 body {
   margin: 0;
-  min-width: 320px;
+  min-width: var(--min-viewport);
   background: var(--color-bg);
   color: var(--color-ink);
   font-family: var(--font-sans);
@@ -56,7 +56,7 @@ a {
   color: var(--color-accent);
   text-decoration: underline;
   text-decoration-color: var(--color-line-strong);
-  text-underline-offset: 2px;
+  text-underline-offset: var(--space-half);
 }
 
 a:hover {
@@ -88,9 +88,16 @@ button:disabled {
   cursor: not-allowed;
 }
 
+/* One icon set (lucide), 16px line icons. Components may size specific cases down. */
+.lucide {
+  width: var(--icon-md);
+  height: var(--icon-md);
+  stroke-width: 1.75;
+}
+
 :focus-visible {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 2px;
+  outline: var(--rule-width) solid var(--color-focus);
+  outline-offset: var(--rule-width);
 }
 
 ::selection {
@@ -99,10 +106,10 @@ button:disabled {
 
 .visually-hidden {
   position: absolute;
-  width: 1px;
-  height: 1px;
+  width: var(--hairline-width);
+  height: var(--hairline-width);
   padding: 0;
-  margin: -1px;
+  margin: calc(var(--hairline-width) * -1);
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;

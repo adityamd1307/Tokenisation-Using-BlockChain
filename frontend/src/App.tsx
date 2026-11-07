@@ -12,6 +12,7 @@ import { EmptyState } from "./components/common";
 import "./index.css";
 import "./styles/tokens.css";
 import "./styles/base.css";
+import "./styles/components.css";
 export function AppRoutes() {
   const { session } = useWallet();
   return (

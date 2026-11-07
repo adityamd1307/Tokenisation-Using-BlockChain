@@ -20,6 +20,22 @@ const contrast = (a: string, b: string) => {
   return (hi + 0.05) / (lo + 0.05);
 };
 
+describe("Stylesheets use tokens only", () => {
+  it.each(["src/styles/base.css", "src/styles/components.css"])(
+    "%s has no raw colours, pixel sizes, gradients or extra shadows",
+    (file) => {
+      const source = readFileSync(file, "utf8")
+        .replace(/\/\*[\s\S]*?\*\//g, "")
+        // Breakpoints cannot use CSS variables.
+        .replace(/@media \([^)]*\)/g, "");
+      expect(source).not.toMatch(/#[0-9a-f]{3,8}\b/i);
+      expect(source).not.toMatch(/rgba?\(|hsla?\(/);
+      expect(source).not.toMatch(/\b\d+px\b/);
+      expect(source).not.toMatch(/gradient\(/);
+      expect(source).not.toMatch(/box-shadow:(?!\s*var\(--shadow-overlay\))/);
+    },
+  );
+});
 describe("Design token contrast", () => {
   it.each([
     ["color-ink", "color-bg"],

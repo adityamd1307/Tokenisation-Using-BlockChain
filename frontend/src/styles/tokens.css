@@ -74,7 +74,29 @@
   --topbar-height: 52px;
   --content-max: 1200px;
   --control-height: 32px;
+  --control-height-sm: 28px;
   --row-height: 40px;
+  --pill-height: 24px;
+  --icon-sm: 12px;
+  --icon-md: 16px;
+  --dot-sm: 6px;
+  --dot: 8px;
+  --space-half: 2px; /* optical alignment only */
+  --hairline-width: 1px;
+  --rule-width: 2px;
+  --label-size: var(--text-xs);
+
+  /* Fixed widths for layout regions */
+  --min-viewport: 320px;
+  --aside-width: 340px;
+  --dialog-width: 480px;
+  --toast-width: 380px;
+  --drawer-width: 280px;
+  --facts-label: 180px;
+  --figure-min: 152px;
+  --field-min: 160px;
+  --field-grow: 240px;
+  --skeleton-width: 160px;
 
   /* Motion: colour/opacity only, short. */
   --motion-fast: 120ms ease-out;
