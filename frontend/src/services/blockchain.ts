@@ -156,6 +156,9 @@ export class Blockchain {
       tokenAdmin,
     };
   }
+  async balance(asset: Asset, holder: string): Promise<bigint> {
+    return this.token(asset).balanceOf(address(holder));
+  }
   async eligibility(asset: Asset, account: string): Promise<boolean> {
     return this.token(asset).isWhitelisted(address(account));
   }

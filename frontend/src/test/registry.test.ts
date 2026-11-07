@@ -38,20 +38,18 @@ describe("Investor registry from events", () => {
       [RECIPIENT]: 0n,
     };
     const token = {
-      queryFilter: vi
-        .fn()
-        .mockResolvedValue([
-          log("WhitelistUpdated", { investor: ISSUER, approved: true }, 2),
-          log("Transfer", { from: ZeroAddress, to: ISSUER, value: 10000n }, 2),
-          log("WhitelistUpdated", { investor: SALE, approved: true }, 3),
-          log("Transfer", { from: SALE, to: INVESTOR, value: 100n }, 5),
-          log("WhitelistUpdated", { investor: INVESTOR, approved: false }, 9),
-          log("RoleGranted", {
-            account: RECIPIENT,
-            role: "0x",
-            sender: ISSUER,
-          }),
-        ]),
+      queryFilter: vi.fn().mockResolvedValue([
+        log("WhitelistUpdated", { investor: ISSUER, approved: true }, 2),
+        log("Transfer", { from: ZeroAddress, to: ISSUER, value: 10000n }, 2),
+        log("WhitelistUpdated", { investor: SALE, approved: true }, 3),
+        log("Transfer", { from: SALE, to: INVESTOR, value: 100n }, 5),
+        log("WhitelistUpdated", { investor: INVESTOR, approved: false }, 9),
+        log("RoleGranted", {
+          account: RECIPIENT,
+          role: "0x",
+          sender: ISSUER,
+        }),
+      ]),
       isWhitelisted: vi.fn(async (a: string) => a !== INVESTOR),
       balanceOf: vi.fn(async (a: string) => balances[a]),
       hasRole: vi.fn(async (_role: string, a: string) => a === RECIPIENT),

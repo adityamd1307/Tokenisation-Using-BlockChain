@@ -70,14 +70,12 @@ describe("Subscription", () => {
   it("reports the confirming block number", async () => {
     vi.mocked(blockchain.buy).mockResolvedValue({
       hash: HASH,
-      wait: vi
-        .fn()
-        .mockResolvedValue({
-          hash: HASH,
-          status: 1,
-          logs: [],
-          blockNumber: 42,
-        }),
+      wait: vi.fn().mockResolvedValue({
+        hash: HASH,
+        status: 1,
+        logs: [],
+        blockNumber: 42,
+      }),
     } as never);
     await open();
     change("Units to subscribe", "1");
